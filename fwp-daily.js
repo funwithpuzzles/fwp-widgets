@@ -1,4 +1,4 @@
-<script>
+
 /* ============================================================
    FWP DAILY CHALLENGE — Self-contained embed widget v1.0
    Host this file at: https://www.funwithpuzzles.com/fwp-daily.js
@@ -768,4 +768,4 @@ curPuzzles=pick(activeCats[0],ds*31);
 render();
 
 })(); /* end embed IIFE */
-</script>
+
