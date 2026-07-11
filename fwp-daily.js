@@ -1,108 +1,116 @@
-/* ============================================================
-   FWP DAILY CHALLENGE WIDGET v4
-   Minified + self-contained embed
-   Host: https://cdn.jsdelivr.net/gh/funwithpuzzles/fwp-widgets@latest/fwp-daily.js
-   Embed: <div id="fwp-daily-widget"></div>
-          <script src="...fwp-daily.js"><\/script>
-   ============================================================ */
-(function(){var _0x='fwp4',B='https://www.funwithpuzzles.com',LG='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDi4jf-HGfN5sLOhCuMHA1VaBiuRCIS6rKVxp8buhYkncs5IdKzHWN6gQoH35k95LKE76A6Xl35xk4Bwv-L6S3EGhJ-ulrutR1BGoEz5qNRoRD9s9_R0JPOiw5WOK3CUeeCxERYjaBlA/s64/apple-touch-icon.png',SK=_0x+'s',TK=_0x+'t',EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.net/gh/funwithpuzzles/fwp-widgets@latest/fwp-daily.js"><\/scr'+'ipt>';
+/* FWP Daily Challenge Widget v5 | funwithpuzzles.com */
+(function(){
+'use strict';
+var B='https://www.funwithpuzzles.com';
+var LG='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDi4jf-HGfN5sLOhCuMHA1VaBiuRCIS6rKVxp8buhYkncs5IdKzHWN6gQoH35k95LKE76A6Xl35xk4Bwv-L6S3EGhJ-ulrutR1BGoEz5qNRoRD9s9_R0JPOiw5WOK3CUeeCxERYjaBlA/s64/apple-touch-icon.png';
+var SK='fwpv5s',TK='fwpv5t';
+var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.net/gh/funwithpuzzles/fwp-widgets@latest/fwp-daily.js"><\/scr'+'ipt>';
 
-/* ── Inject CSS once ── */
-if(!document.getElementById(_0x+'-css')){var _s=document.createElement('style');_s.id=_0x+'-css';_s.textContent=[
-/* outer wrapper — max-width caps it on wide screens, centres it */
-'.f4w{width:100%;font-family:Roboto,Arial,sans-serif;font-size:13px;}',
-'.f4w *{box-sizing:border-box;margin:0;padding:0;font-family:inherit;}',
-'.f4wrap{max-width:560px;width:100%;margin:0 auto;}',
-/* card with blue border */
-'.f4card{background:#fff;border-radius:14px;overflow:hidden;border:2.5px solid #0A0AFF;box-shadow:0 3px 16px rgba(10,10,255,.13);}',
-/* head */
-'.f4head{background:#0A0AFF;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}',
-'.f4hl{display:flex;align-items:center;gap:9px;min-width:0;flex:1;}',
-'.f4logo{width:34px;height:34px;border-radius:7px;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,255,255,.35);}',
-'.f4brand{font-size:9px;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:2px;font-weight:700;}',
-'.f4title{font-size:14px;font-weight:700;color:#fff;line-height:1.2;}',
-'.f4streak{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.32);border-radius:30px;padding:4px 10px;color:#fff;font-size:10px;font-weight:700;white-space:nowrap;flex-shrink:0;}',
-'.f4sn{font-size:12px;font-weight:800;}',
+if(!document.getElementById('fwpv5css')){
+  var _cs=document.createElement('style');
+  _cs.id='fwpv5css';
+  _cs.textContent=
+/* =====================================================
+   CRITICAL: .fwpw is the inner wrapper.
+   max-width + margin:auto centres it and caps width.
+   The host page's #fwp-daily-widget can be any width —
+   the widget always stays at most 560px wide.
+   overflow:hidden on .fwpc clips the blue header
+   inside the rounded corners cleanly.
+   ===================================================== */
+'.fwpw{display:block !important;width:100%;max-width:560px;margin:0 auto;font-family:Roboto,Arial,sans-serif;font-size:13px;color:#111;line-height:1.4;}'
++'.fwpw *{box-sizing:border-box;}'
++'.fwpc{background:#fff;border-radius:14px;overflow:hidden;border:2.5px solid #0A0AFF;box-shadow:0 3px 16px rgba(10,10,255,.13);}'
+/* HEAD — never wraps, logo never shrinks, text clips with ellipsis */
++'.fwph{background:#0A0AFF;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;}'
++'.fwphl{display:flex;align-items:center;gap:9px;flex:1 1 0;min-width:0;overflow:hidden;}'
++'.fwplogo{width:34px;height:34px;min-width:34px;max-width:34px;border-radius:7px;object-fit:cover;border:2px solid rgba(255,255,255,.35);flex-shrink:0;display:block;}'
++'.fwptxt{min-width:0;flex:1;overflow:hidden;}'
++'.fwpbrand{font-size:9px;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:2px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
++'.fwptitle{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
++'.fwpsk{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.32);border-radius:30px;padding:4px 10px;color:#fff;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}'
++'.fwpskn{font-size:13px;font-weight:800;}'
 /* date bar */
-'.f4bar{background:#13253a;padding:5px 14px;display:flex;align-items:center;justify-content:space-between;gap:6px;}',
-'.f4bd{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;}',
-'.f4bt{font-size:9px;color:rgba(255,255,255,.55);}',
++'.fwpbar{background:#13253a;padding:5px 14px;display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}'
++'.fwpbd{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}'
++'.fwpbt{font-size:9px;color:rgba(255,255,255,.55);white-space:nowrap;flex-shrink:0;}'
 /* progress */
-'.f4prog{height:3px;background:#e5e7eb;}',
-'.f4pfill{height:3px;background:#0A0AFF;width:0%;transition:width .4s ease;}',
++'.fwppr{height:3px;background:#e5e7eb;}'
++'.fwppf{height:3px;background:#0A0AFF;width:0%;transition:width .4s ease;}'
 /* tabs */
-'.f4tabs{display:flex;padding:9px 10px 0;background:#f4f5ff;border-bottom:2px solid #0A0AFF;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}',
-'.f4tabs::-webkit-scrollbar{display:none;}',
-'.f4tab{flex:0 0 auto;padding:6px 11px;font-size:10.5px;font-weight:700;color:#6b7280;background:#fff;border:1.5px solid #d1d5db;border-bottom:2px solid #d1d5db;border-radius:7px 7px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s;margin-bottom:-2px;position:relative;}',
-'.f4tab.on{color:#0A0AFF;border-color:#0A0AFF;border-bottom-color:#f4f5ff;background:#f4f5ff;z-index:1;}',
-'.f4tab:hover:not(.on){color:#374151;border-color:#a5b4fc;background:#eef1ff;}',
++'.fwptabs{display:flex;padding:9px 10px 0;background:#f4f5ff;border-bottom:2px solid #0A0AFF;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}'
++'.fwptabs::-webkit-scrollbar{display:none;}'
++'.fwptab{flex:0 0 auto;padding:6px 11px;font-size:10.5px;font-weight:700;color:#6b7280;background:#fff;border:1.5px solid #d1d5db;border-bottom:2px solid #d1d5db;border-radius:7px 7px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s;margin-bottom:-2px;position:relative;}'
++'.fwptab.on{color:#0A0AFF;border-color:#0A0AFF;border-bottom-color:#f4f5ff;background:#f4f5ff;z-index:1;}'
++'.fwptab:hover:not(.on){color:#374151;border-color:#a5b4fc;background:#eef1ff;}'
 /* body */
-'.f4body{padding:13px 14px;}',
-'.f4top{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}',
-'.f4ctr{font-size:10px;color:#9ca3af;font-weight:500;}',
-'.f4navs{display:flex;gap:5px;}',
-'.f4nav{width:26px;height:26px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;color:#9ca3af;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;}',
-'.f4nav:hover{background:#eef1ff;color:#0A0AFF;border-color:#0A0AFF;}',
++'.fwpbody{padding:13px 14px;}'
++'.fwptop{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}'
++'.fwpctr{font-size:10px;color:#9ca3af;font-weight:500;}'
++'.fwpnavs{display:flex;gap:5px;}'
++'.fwpnav{width:26px;height:26px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;color:#9ca3af;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;}'
++'.fwpnav:hover{background:#eef1ff;color:#0A0AFF;border-color:#0A0AFF;}'
 /* badge */
-'.f4bdg{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:30px;margin-bottom:9px;}',
-'.f4bdg.easy{background:#EAF3DE;color:#27500A;}',
-'.f4bdg.medium{background:#FAEEDA;color:#633806;}',
-'.f4bdg.hard{background:#FCEBEB;color:#791F1F;}',
++'.fwpbdg{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:30px;margin-bottom:9px;}'
++'.fwpbdg.easy{background:#EAF3DE;color:#27500A;}'
++'.fwpbdg.medium{background:#FAEEDA;color:#633806;}'
++'.fwpbdg.hard{background:#FCEBEB;color:#791F1F;}'
 /* question */
-'.f4q{font-size:13px;line-height:1.75;color:#111827;white-space:pre-line;min-height:44px;margin-bottom:10px;}',
++'.fwpq{font-size:13px;line-height:1.75;color:#111827;white-space:pre-line;min-height:44px;margin-bottom:10px;word-break:break-word;}'
 /* hint */
-'.f4hbtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;display:inline-flex;align-items:center;gap:4px;padding:0;font-family:inherit;font-weight:600;}',
-'.f4hbtn:hover{text-decoration:underline;}',
-'.f4hbox{background:#eef2ff;border-left:3px solid #0A0AFF;border-radius:0 7px 7px 0;padding:8px 11px;font-size:12px;color:#1e1b4b;line-height:1.6;margin-top:7px;margin-bottom:9px;display:none;}',
-/* answer */
-'.f4irow{display:flex;gap:6px;margin-top:11px;}',
-'.f4inp{flex:1;min-width:0;height:40px;border:1.5px solid #e5e7eb;border-radius:8px;padding:0 11px;font-size:13px;color:#111827;background:#fff;outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s;}',
-'.f4inp:focus{border-color:#0A0AFF;box-shadow:0 0 0 3px rgba(10,10,255,.1);}',
-'.f4inp:disabled{background:#f9fafb;color:#6b7280;}',
-'.f4chk{height:40px;padding:0 14px;background:#0A0AFF;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}',
-'.f4chk:hover{background:#2222ff;}',
-'.f4res{font-size:12px;padding:8px 11px;border-radius:8px;line-height:1.5;margin-top:7px;display:none;}',
-'.f4res.ok{background:#EAF3DE;color:#166534;display:block;}',
-'.f4res.no{background:#FCEBEB;color:#991b1b;display:block;}',
-'.f4rev{margin-top:6px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:7px 11px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;display:none;width:100%;text-align:left;transition:background .15s;}',
-'.f4rev:hover{background:#f9fafb;}',
++'.fwphbtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;display:inline-flex;align-items:center;gap:4px;padding:0;font-family:inherit;font-weight:600;}'
++'.fwphbtn:hover{text-decoration:underline;}'
++'.fwphbox{background:#eef2ff;border-left:3px solid #0A0AFF;border-radius:0 7px 7px 0;padding:8px 11px;font-size:12px;color:#1e1b4b;line-height:1.6;margin-top:7px;margin-bottom:9px;display:none;word-break:break-word;}'
+/* input */
++'.fwpirow{display:flex;gap:6px;margin-top:11px;}'
++'.fwpinp{flex:1;min-width:0;height:40px;border:1.5px solid #e5e7eb;border-radius:8px;padding:0 11px;font-size:13px;color:#111827;background:#fff;outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s;}'
++'.fwpinp:focus{border-color:#0A0AFF;box-shadow:0 0 0 3px rgba(10,10,255,.1);}'
++'.fwpinp:disabled{background:#f9fafb;color:#6b7280;}'
++'.fwpchk{height:40px;padding:0 14px;background:#0A0AFF;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}'
++'.fwpchk:hover{background:#2222ff;}'
+/* result */
++'.fwpres{font-size:12px;padding:8px 11px;border-radius:8px;line-height:1.5;margin-top:7px;display:none;word-break:break-word;}'
++'.fwpres.ok{background:#EAF3DE;color:#166534;display:block;}'
++'.fwpres.no{background:#FCEBEB;color:#991b1b;display:block;}'
++'.fwprev{margin-top:6px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:7px 11px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;display:none;width:100%;text-align:left;transition:background .15s;}'
++'.fwprev:hover{background:#f9fafb;}'
 /* dots */
-'.f4dots{display:flex;gap:7px;justify-content:center;margin-top:13px;}',
-'.f4dot{width:9px;height:9px;border-radius:50%;background:#e5e7eb;cursor:pointer;border:none;transition:all .2s;flex-shrink:0;padding:0;}',
-'.f4dot:hover{transform:scale(1.3);}',
-'.f4dot.on{background:#0A0AFF;transform:scale(1.2);}',
-'.f4dot.done{background:#16a34a;}',
-'.f4dot.wrong{background:#dc2626;}',
-/* streak banner shown after completing all puzzles */
-'.f4banner{display:none;background:linear-gradient(135deg,#0A0AFF 0%,#13253a 100%);border-radius:10px;padding:12px 14px;margin-top:11px;text-align:center;color:#fff;}',
-'.f4banner p{font-size:13px;font-weight:700;margin-bottom:4px;}',
-'.f4banner small{font-size:11px;color:rgba(255,255,255,.7);}',
++'.fwpdots{display:flex;gap:7px;justify-content:center;margin-top:13px;}'
++'.fwpdot{width:9px;height:9px;border-radius:50%;background:#e5e7eb;cursor:pointer;border:none;transition:all .2s;flex-shrink:0;padding:0;}'
++'.fwpdot:hover{transform:scale(1.3);}'
++'.fwpdot.on{background:#0A0AFF;transform:scale(1.2);}'
++'.fwpdot.done{background:#16a34a;}'
++'.fwpdot.wrong{background:#dc2626;}'
+/* completion banner */
++'.fwpban{display:none;background:linear-gradient(135deg,#0A0AFF,#13253a);border-radius:10px;padding:12px 14px;margin-top:11px;text-align:center;color:#fff;}'
++'.fwpban p{font-size:13px;font-weight:700;margin-bottom:4px;color:#fff;}'
++'.fwpban small{font-size:11px;color:rgba(255,255,255,.75);}'
 /* footer */
-'.f4foot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:8px;flex-wrap:wrap;}',
-'.f4fl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}',
-'.f4more{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;}',
-'.f4more:hover{text-decoration:underline;}',
-'.f4ac{font-size:10px;color:#9ca3af;text-decoration:none;white-space:nowrap;}',
-'.f4ac:hover{color:#374151;}',
-'.f4sh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;}',
-'.f4sh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}',
++'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:8px;flex-wrap:wrap;}'
++'.fwpfl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}'
++'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;}'
++'.fwpmore:hover{text-decoration:underline;}'
++'.fwpac{font-size:10px;color:#9ca3af;text-decoration:none;white-space:nowrap;}'
++'.fwpac:hover{color:#374151;}'
++'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;}'
++'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
 /* add to site */
-'.f4add{border-top:2px dashed #c7d2fe;padding:9px 14px;background:#f0f2ff;}',
-'.f4abtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;font-family:inherit;font-weight:700;display:flex;align-items:center;gap:5px;padding:0;width:100%;text-align:left;}',
-'.f4abtn:hover{text-decoration:underline;}',
-'.f4ebox{margin-top:10px;display:none;}',
-'.f4ebox p{font-size:11px;color:#374151;margin-bottom:8px;line-height:1.55;}',
-'.f4ec{display:block;background:#1e293b;color:#7dd3fc;font-family:monospace;font-size:10.5px;padding:10px 12px;border-radius:8px;white-space:pre;overflow-x:auto;line-height:1.7;border:1px solid #334155;}',
-'.f4cb{margin-top:7px;background:#0A0AFF;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}',
-'.f4cb:hover{background:#2222ff;}',
-'.f4cb.copied{background:#16a34a;}',
++'.fwpadd{border-top:2px dashed #c7d2fe;padding:9px 14px;background:#f0f2ff;}'
++'.fwpabtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;font-family:inherit;font-weight:700;display:flex;align-items:center;gap:5px;padding:0;width:100%;text-align:left;}'
++'.fwpabtn:hover{text-decoration:underline;}'
++'.fwpebox{margin-top:10px;display:none;}'
++'.fwpebox p{font-size:11px;color:#374151;margin-bottom:8px;line-height:1.55;}'
++'.fwpec{display:block;background:#1e293b;color:#7dd3fc;font-family:monospace;font-size:10.5px;padding:10px 12px;border-radius:8px;white-space:pre;overflow-x:auto;line-height:1.7;border:1px solid #334155;}'
++'.fwpcb{margin-top:7px;background:#0A0AFF;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}'
++'.fwpcb:hover{background:#2222ff;}'
++'.fwpcb.copied{background:#16a34a;}'
 /* attribution */
-'.f4attr{font-size:10px;color:#9ca3af;text-align:center;padding:5px 0 8px;}',
-'.f4attr a{color:#0A0AFF;text-decoration:none;}',
-'.f4attr a:hover{text-decoration:underline;}'
-].join('');document.head.appendChild(_s);}
++'.fwpattr{font-size:10px;color:#9ca3af;text-align:center;padding:5px 0 8px;}'
++'.fwpattr a{color:#0A0AFF;text-decoration:none;}'
++'.fwpattr a:hover{text-decoration:underline;}';
+  document.head.appendChild(_cs);
+}
 
-/* ── Puzzle bank: 26 categories × 16 puzzles ── */
 var C=[
 {t:"Riddles",s:"riddles",p:[
 {d:"easy",q:"I speak without a mouth and hear without ears. I have no body but come alive with wind. What am I?",h:"Think of sounds bouncing back in a valley.",a:"echo"},
@@ -113,13 +121,13 @@ var C=[
 {d:"easy",q:"What is full of holes but still holds water?",h:"You use it in the shower.",a:"sponge"},
 {d:"easy",q:"What has a head and a tail but no body?",h:"Think about a coin.",a:"coin"},
 {d:"easy",q:"I have no wings but I fly, no eyes but I cry. What am I?",h:"Think about weather.",a:"cloud"},
-{d:"easy",q:"What has legs but cannot walk?",h:"You sit at it.",a:"table"},
 {d:"medium",q:"I have cities but no houses, mountains but no trees, water but no fish. What am I?",h:"You can fold me and put me in your pocket.",a:"map"},
 {d:"medium",q:"I am always in front of you but can never be seen. What am I?",h:"Think about what lies ahead in time.",a:"future"},
 {d:"medium",q:"The more you remove from me, the bigger I get. What am I?",h:"Think about digging in the ground.",a:"hole"},
 {d:"medium",q:"I can travel around the world without moving. What am I?",h:"Think about sending letters.",a:"stamp"},
 {d:"hard",q:"I can be cracked, made, told and played. What am I?",h:"Comedians do this every night.",a:"joke"},
 {d:"hard",q:"What has a bottom at the top?",h:"Think about clothing worn on your legs.",a:"legs"},
+{d:"hard",q:"What can travel around the world while staying in a corner?",h:"Think about postage.",a:"stamp"},
 {d:"hard",q:"I bind it and it walks. I loose it and it stops. What am I?",h:"Think about a sandal.",a:"sandal"}
 ]},
 {t:"Tricky",s:"tricky-riddles",p:[
@@ -174,7 +182,7 @@ var C=[
 {d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human"},
 {d:"hard",q:"What word becomes shorter when you add two letters to it?",h:"Think of the word meaning not long.",a:"short"},
 {d:"hard",q:"What runs but never walks, has a mouth but never talks, has a head but never weeps?",h:"Think about flowing water.",a:"river"},
-{d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"The Sphinx riddle.",a:"human"}
+{d:"hard",q:"What comes once in a year, twice in a week, never in a day?",h:"Look at the letters of each word.",a:"letter e"}
 ]},
 {t:"Mystery",s:"mystery-riddles",p:[
 {d:"easy",q:"How far can a dog run into the woods?",h:"Think about the halfway point.",a:"halfway"},
@@ -192,7 +200,7 @@ var C=[
 {d:"hard",q:"A man found dead in a field next to an unopened package. No marks, no one around. How did he die?",h:"Think about what the package was supposed to do.",a:"parachute failed to open"},
 {d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 paise per digit. She pays Rs 1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits"},
 {d:"hard",q:"3 doors: freedom behind one, lions behind others. Which do you pick?",h:"Think about lions unfed for 3 years.",a:"any they would be dead"},
-{d:"hard",q:"A man walks into a bar and asks the bartender for a glass of water. The bartender pulls out a gun. The man says thank you and leaves. Why?",h:"Think about what cures hiccups.",a:"hiccups"}
+{d:"hard",q:"A man walks into a bar and asks the bartender for water. The bartender pulls out a gun. The man says thank you and leaves. Why?",h:"Think about what cures hiccups.",a:"hiccups"}
 ]},
 {t:"Maths",s:"maths-puzzles",p:[
 {d:"easy",q:"A farmer has 17 sheep. All but 9 run away. How many are left?",h:"Read all but 9 very carefully.",a:"9"},
@@ -333,46 +341,10 @@ var C=[
 {d:"medium",q:"A man dead in a field, unopened package beside him, no marks, no one around. How?",h:"What was the package supposed to do?",a:"parachute failed"},
 {d:"medium",q:"You are in a boat on a lake. You drop an anchor overboard. Does the lake level rise or fall?",h:"Think about weight displacement.",a:"falls"},
 {d:"medium",q:"A man is pushing his car. He stops at a hotel and says he is broke. What is he doing?",h:"Think about a board game.",a:"playing monopoly"},
-{d:"hard",q:"3 switches outside control 3 bulbs in a windowless room. Enter only once. How do you identify each?",h:"Switches do more than light bulbs. Think heat.",a:"turn one on wait turn off turn another on then enter"},
+{d:"hard",q:"3 switches outside control 3 bulbs in a windowless room. Enter only once. How do you identify each?",h:"Think heat.",a:"turn one on wait turn off turn another on then enter"},
 {d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
 {d:"hard",q:"A house has 4 sides all facing south. A bear walks by. What colour is the bear?",h:"Think about where all 4 sides can face south.",a:"white"},
 {d:"hard",q:"How can you throw a ball so it stops and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up"}
-]},
-{t:"Matchstick",s:"matchstick-maths-puzzles",p:[
-{d:"easy",q:"How many matchsticks does it take to build a single square?",h:"Count the sides.",a:"4"},
-{d:"easy",q:"5 + 5 + 5 = 550 is wrong. Add ONE straight line to make it correct.",h:"You can draw on any digit or symbol.",a:"545+5=550"},
-{d:"easy",q:"How many matchsticks does it take to write number 8 on a digital display?",h:"Count all the segments.",a:"7"},
-{d:"easy",q:"Move 1 matchstick in 5+5=6 to make it correct.",h:"You can change any digit or the operator.",a:"5+1=6"},
-{d:"easy",q:"Using exactly 4 matchsticks, what is the maximum number of squares you can make?",h:"Think about sharing sides between shapes.",a:"2"},
-{d:"easy",q:"How many matchsticks make the number 1 on a digital display?",h:"Count the segments in a digital 1.",a:"2"},
-{d:"easy",q:"How many triangles can you make with 3 matchsticks?",h:"Each matchstick is one side.",a:"1"},
-{d:"easy",q:"How many matchsticks does it take to make 0 on a digital display?",h:"Count all segments of a digital zero.",a:"6"},
-{d:"medium",q:"How many triangles can you make with 6 equal matchsticks without breaking any?",h:"Think in three dimensions.",a:"4"},
-{d:"medium",q:"Move ONE matchstick in VI - IV = IX to make it correct.",h:"Roman numerals. One stick changes a numeral.",a:"VI + IV = X"},
-{d:"medium",q:"How many squares of ANY size are in a 3x3 matchstick grid?",h:"Count 1x1, 2x2, and 3x3 squares separately.",a:"14"},
-{d:"medium",q:"Remove 2 matchsticks from a 2x2 grid of squares to leave exactly 2 squares.",h:"Think about shared sides.",a:"remove two adjacent sides"},
-{d:"hard",q:"Remove 2 matchsticks from a 3x3 grid of squares to leave exactly 3 squares.",h:"Removing a shared side destroys two squares at once.",a:"remove two shared sides"},
-{d:"hard",q:"How many squares of all sizes are in a 4x4 matchstick grid?",h:"Count 1x1=16, 2x2=9, 3x3=4, 4x4=1.",a:"30"},
-{d:"hard",q:"Move 2 matchsticks in 8-4=11 to make it correct.",h:"You can change any part of the equation.",a:"8-4=4"},
-{d:"hard",q:"How many matchsticks are needed to spell CAT in capital block letters?",h:"Count each letter carefully using straight lines.",a:"9"}
-]},
-{t:"Rebus",s:"rebus-riddles",p:[
-{d:"easy",q:"What phrase does HE + ART represent?",h:"Read the letters and their position.",a:"heart"},
-{d:"easy",q:"HIJKLMNO — What one word does this represent?",h:"These letters span H to O.",a:"water"},
-{d:"easy",q:"What does BAN + ANA represent?",h:"Put the sounds together.",a:"banana"},
-{d:"easy",q:"What does EZ represent?",h:"Say the letters aloud.",a:"easy"},
-{d:"easy",q:"What phrase does HEAD over HEELS represent?",h:"One word is above another.",a:"head over heels"},
-{d:"easy",q:"What word is hidden inside: PRAISECTION?",h:"Look for a smaller word inside.",a:"raise"},
-{d:"easy",q:"What does GR + 8 represent?",h:"Say each part aloud.",a:"great"},
-{d:"easy",q:"What does B4 represent?",h:"Say it aloud as a number and letter.",a:"before"},
-{d:"medium",q:"What does this represent?\nSTAND\nI I I I",h:"What are the I's doing relative to STAND?",a:"i understand"},
-{d:"medium",q:"ONCE\n----\nTIME\nWhat does this represent?",h:"Think about position.",a:"once upon a time"},
-{d:"medium",q:"What phrase is shown by TIMING TIM ING?",h:"One word is inside another.",a:"perfect timing"},
-{d:"medium",q:"What does this mean: DEATH LIFE?",h:"Think about what comes between the two words.",a:"life after death"},
-{d:"hard",q:"What does MAN / BOARD represent?",h:"Think about position.",a:"man overboard"},
-{d:"hard",q:"What does NE14 10S mean?",h:"Say each part aloud.",a:"anyone for tennis"},
-{d:"hard",q:"TIMING TIM ING — what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing"},
-{d:"hard",q:"What does ROADS represent?",h:"Think about crossroads.",a:"crossroads"}
 ]},
 {t:"GK",s:"general-knowledge-quizzes-and-riddles",p:[
 {d:"easy",q:"Which planet has the most moons?",h:"The largest planet in our solar system.",a:"jupiter"},
@@ -455,7 +427,7 @@ var C=[
 {d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin"},
 {d:"easy",q:"How many seconds are in a year?",h:"Think literally about the word second.",a:"12 the 2nd of each month"},
 {d:"easy",q:"A rooster lays an egg at the top of a slanted roof. Which side does it roll off?",h:"Can a rooster lay eggs?",a:"roosters dont lay eggs"},
-{d:"medium",q:"A man drives from A to B at 60 km/h and returns at 40 km/h. What is his average speed?",h:"Do not just average the speeds. Use total distance over total time.",a:"48 km/h"},
+{d:"medium",q:"A man drives from A to B at 60 km/h and returns at 40 km/h. What is his average speed?",h:"Use total distance over total time.",a:"48 km/h"},
 {d:"medium",q:"A snail is at the bottom of a 10m well. Each day it climbs 3m but slides back 2m at night. How many days to escape?",h:"On the last day it reaches the top before sliding.",a:"8 days"},
 {d:"medium",q:"100 people in a room. 99 percent have blue eyes. How many must leave so 98 percent have blue eyes?",h:"This is a tricky percentage puzzle.",a:"50"},
 {d:"medium",q:"If a doctor gives you 3 pills and tells you to take one every 30 minutes, how long until they are all gone?",h:"Count carefully from when you take the first.",a:"1 hour"},
@@ -505,18 +477,18 @@ var C=[
 {d:"easy",q:"Fill the pyramid:\n?\n5  6",h:"Add the two bottom blocks.",a:"11"},
 {d:"easy",q:"In a pyramid:\n10\n?  3\nWhat is the missing number?",h:"Top = sum of two below.",a:"7"},
 {d:"easy",q:"Pyramid: top is 15, one base is 7. What is the other base?",h:"Top = sum of two below.",a:"8"},
-{d:"easy",q:"Bottom row of pyramid: 2, 3. What is the top?",h:"Add the two bottom numbers.",a:"5"},
+{d:"easy",q:"Bottom row: 2, 3. What is the top?",h:"Add the two bottom numbers.",a:"5"},
 {d:"easy",q:"Bottom row: 1, 4. Top = ?",h:"Add the two bottom numbers.",a:"5"},
 {d:"easy",q:"Top = 20. Bottom left = 8. Bottom right = ?",h:"Top = sum of two below.",a:"12"},
 {d:"easy",q:"Bottom row: 6, 7. What is the top?",h:"Add the two bottom numbers.",a:"13"},
 {d:"medium",q:"Complete the pyramid:\n?\n?  ?\n1  2  3",h:"Build layer by layer from the bottom.",a:"9"},
 {d:"medium",q:"Bottom row: 5, 3, 8. Each block = difference of two below. What is the top?",h:"Middle row first, then top.",a:"3"},
-{d:"medium",q:"A 4-row pyramid bottom row: 1, 2, 3, 4. Each block = sum of two below. What is the top?",h:"Build row by row: 3,5,7 then 8,12 then 20.",a:"20"},
+{d:"medium",q:"4-row pyramid. Bottom row: 1, 2, 3, 4. Each block = sum of two below. Top = ?",h:"Build row by row.",a:"20"},
 {d:"medium",q:"Pyramid top=18. Middle row: 7, ?. Bottom row: 3, 4, ?",h:"Work downwards and upwards.",a:"11 and 7"},
-{d:"hard",q:"Pyramid top=50. Second row: 20 and ?. Third row: 8, 12, ?. Find missing values.",h:"Work both up and down.",a:"30 and 18"},
+{d:"hard",q:"Pyramid top=50. Second row: 20 and ?. Third row: 8, 12, ?",h:"Work both up and down.",a:"30 and 18"},
 {d:"hard",q:"5-row pyramid, bottom row all 1s. What is the top?",h:"Use Pascal triangle pattern.",a:"16"},
 {d:"hard",q:"Bottom row: a, b, c. Top = a+2b+c. If top=20, a=3, c=5, find b.",h:"Top = a + 2b + c.",a:"6"},
-{d:"hard",q:"In a multiplication pyramid each block = product of two below. Bottom: 2, 3, 4. Top = ?",h:"Middle row: 6, 12. Then top = 72.",a:"72"}
+{d:"hard",q:"Multiplication pyramid. Bottom: 2, 3, 4. Each block = product of two below. Top = ?",h:"Middle row: 6, 12. Then top.",a:"72"}
 ]},
 {t:"Shapes",s:"count-shapes-puzzles",p:[
 {d:"easy",q:"How many triangles are in a large triangle divided into 4 smaller equal triangles?",h:"Count the small ones and the large one.",a:"5"},
@@ -529,7 +501,7 @@ var C=[
 {d:"easy",q:"How many diagonals does a square have?",h:"Draw it and count.",a:"2"},
 {d:"medium",q:"How many squares of ALL sizes are in a 3x3 grid?",h:"Count 1x1, 2x2, and 3x3 separately.",a:"14"},
 {d:"medium",q:"How many rectangles are in a 3x2 grid?",h:"Use: (r+1)r/2 x (c+1)c/2.",a:"18"},
-{d:"medium",q:"How many triangles in a hexagon divided into 6 triangles from centre?",h:"Count all sizes: 1, 2, 3, 4, 5, 6 unit triangles.",a:"18"},
+{d:"medium",q:"How many triangles in a hexagon divided into 6 triangles from centre?",h:"Count all sizes.",a:"18"},
 {d:"medium",q:"How many triangles are in a regular pentagram (5-pointed star)?",h:"Count all sizes carefully.",a:"10"},
 {d:"hard",q:"How many squares of ALL sizes are in a 4x4 grid?",h:"1x1=16, 2x2=9, 3x3=4, 4x4=1.",a:"30"},
 {d:"hard",q:"How many rectangles are in a 4x4 grid?",h:"Use formula: C(5,2) x C(5,2).",a:"100"},
@@ -544,7 +516,7 @@ var C=[
 {d:"easy",q:"You have 3L and 5L jugs. How do you measure exactly 4L?",h:"Fill 5, pour into 3, dump, repeat.",a:"fill 5 pour into 3 leaving 2 fill 3 from 5 gives 4"},
 {d:"easy",q:"How many times do the hands of a clock overlap in 12 hours?",h:"They overlap approximately every 65.45 minutes.",a:"11"},
 {d:"easy",q:"How many windows are in your city?",h:"Estimate population then multiply by windows per person.",a:"estimate based on population"},
-{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively. This is a judgement test.",a:"move the reference point or tunnel through it"},
+{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively. This is a judgement test.",a:"move the reference point"},
 {d:"medium",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings"},
 {d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200"},
 {d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Think about heat from a bulb.",a:"leave one on wait turn off turn another on then enter check heat"},
@@ -556,7 +528,6 @@ var C=[
 ]}
 ];
 
-/* ── Helpers ── */
 function _td(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 function _sh(a,s){var r=a.slice(),x=(s||1)&0x7fffffff,i,j,t;for(i=r.length-1;i>0;i--){x=(x*1664525+1013904223)&0x7fffffff;j=x%(i+1);t=r[i];r[i]=r[j];r[j]=t;}return r;}
 function _ds(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
@@ -564,99 +535,114 @@ function _pk(c,s){var e=_sh(c.p.filter(function(x){return x.d==='easy';}),s),m=_
 function _nr(s){return s.trim().toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ');}
 function _fz(r,a){var x=_nr(r),c=_nr(a);if(x===c)return true;var cw=c.split(' '),rw=x.split(' '),h=cw.filter(function(w){return w.length>3&&rw.indexOf(w)!==-1;});return h.length>=Math.max(1,Math.floor(cw.length*0.6));}
 
-/* ── Init one widget instance ── */
-function _init(tid){
-var target=document.getElementById(tid);
-if(!target)return;
-var _SK=SK+(tid===WIDGET_ID?'':'2'),_TK=TK+(tid===WIDGET_ID?'':'2');
-var ds=_ds(),td=_td();
-var ac=_sh(C,ds).slice(0,4);
-var st;try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
-if(!st)st={date:td,tab:0,puzz:0,ans:{},rev:{}};
-var sk=1;
-try{var _s=JSON.parse(localStorage.getItem(_TK)||'null');var _yd=new Date();_yd.setDate(_yd.getDate()-1);var _ys=_yd.getFullYear()+'-'+(_yd.getMonth()+1)+'-'+_yd.getDate();if(_s){if(_s.last===td)sk=_s.count;else if(_s.last===_ys){sk=_s.count+1;localStorage.setItem(_TK,JSON.stringify({last:td,count:sk}));}else{sk=1;localStorage.setItem(_TK,JSON.stringify({last:td,count:1}));}}else{localStorage.setItem(_TK,JSON.stringify({last:td,count:1}));}}catch(e){}
-function _sv(){try{localStorage.setItem(_SK,JSON.stringify(st));}catch(e){}}
-function _k(t,p){return t+'_'+p;}
-var cp=[],ho=false;
-var pid=tid.replace(/[^a-z0-9]/gi,'_');
-function g(id){return document.getElementById(pid+id);}
+function _boot(tid,_SK,_TK){
+  var el=document.getElementById(tid);if(!el)return;
+  var ds=_ds(),td=_td();
+  var ac=_sh(C,ds).slice(0,4);
+  var st;try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
+  if(!st)st={date:td,tab:0,puzz:0,ans:{},rev:{}};
+  var sk=1;
+  try{var _s=JSON.parse(localStorage.getItem(_TK)||'null');var _yd=new Date();_yd.setDate(_yd.getDate()-1);var _ys=_yd.getFullYear()+'-'+(_yd.getMonth()+1)+'-'+_yd.getDate();if(_s){if(_s.last===td)sk=_s.count;else if(_s.last===_ys){sk=_s.count+1;localStorage.setItem(_TK,JSON.stringify({last:td,count:sk}));}else{sk=1;localStorage.setItem(_TK,JSON.stringify({last:td,count:1}));}}else{localStorage.setItem(_TK,JSON.stringify({last:td,count:1}));}}catch(e){}
+  function sv(){try{localStorage.setItem(_SK,JSON.stringify(st));}catch(e){}}
+  function k(t,p){return t+'_'+p;}
+  var cp=[],ho=false;
+  var px='fwpv5_'+tid.replace(/[^a-z0-9]/gi,'_');
+  function g(id){return document.getElementById(px+'_'+id);}
 
-/* Build HTML */
-target.innerHTML=['<div class="f4w"><div class="f4wrap"><div class="f4card">',
-'<div class="f4head"><div class="f4hl"><img class="f4logo" src="'+LG+'" alt="FWP" onerror="this.style.display=\'none\'"/><div><div class="f4brand">Fun With Puzzles</div><div class="f4title">Today\'s Challenges</div></div></div><div class="f4streak">\uD83D\uDD25 <span class="f4sn" id="'+pid+'sk">1</span> day</div></div>',
-'<div class="f4bar"><span class="f4bd" id="'+pid+'date"></span><span class="f4bt">\u2728 New every day</span></div>',
-'<div class="f4prog"><div class="f4pfill" id="'+pid+'prog"></div></div>',
-'<div class="f4tabs" id="'+pid+'tabs" role="tablist"></div>',
-'<div class="f4body">',
-'<div class="f4top"><span class="f4ctr" id="'+pid+'ctr"></span><div class="f4navs"><button class="f4nav" id="'+pid+'prev">\u2039</button><button class="f4nav" id="'+pid+'next">\u203a</button></div></div>',
-'<div class="f4bdg easy" id="'+pid+'diff"></div>',
-'<p class="f4q" id="'+pid+'q"></p>',
-'<button class="f4hbtn" id="'+pid+'hbtn">\uD83D\uDCA1 Show hint</button>',
-'<div class="f4hbox" id="'+pid+'hbox"></div>',
-'<div class="f4irow"><input class="f4inp" id="'+pid+'inp" type="text" placeholder="Your answer..."/><button class="f4chk" id="'+pid+'chk">Check</button></div>',
-'<div class="f4res" id="'+pid+'res"></div>',
-'<button class="f4rev" id="'+pid+'rev">\uD83D\uDC41 Show answer</button>',
-'<div class="f4dots" id="'+pid+'dots"></div>',
-'<div class="f4banner" id="'+pid+'ban"><p>\uD83C\uDF89 All puzzles complete!</p><small>Come back tomorrow for fresh challenges \u2014 your streak continues!</small></div>',
-'</div>',
-'<div class="f4foot"><div class="f4fl"><a class="f4more" id="'+pid+'more" href="'+B+'/p/index.html" target="_blank" rel="noopener">More puzzles</a><a class="f4ac" href="'+B+'/p/index.html" target="_blank" rel="noopener">All categories</a></div><button class="f4sh" id="'+pid+'sh">\u2191 Share</button></div>',
-'<div class="f4add"><button class="f4abtn" id="'+pid+'abtn">\u2795 Add this widget to your website \u2014 free!</button><div class="f4ebox" id="'+pid+'ebox"><p>Copy these 2 lines and paste into any webpage. The widget loads automatically, all links point to funwithpuzzles.com, and future updates apply everywhere instantly.</p><code class="f4ec" id="'+pid+'ec"></code><button class="f4cb" id="'+pid+'cb">Copy code</button></div></div>',
-'<div class="f4attr">Powered by <a href="'+B+'" target="_blank" rel="noopener">funwithpuzzles.com</a></div>',
-'</div></div></div>'].join('');
+  el.innerHTML=
+    '<div class="fwpw"><div class="fwpc">'
+    +'<div class="fwph">'
+      +'<div class="fwphl">'
+        +'<img class="fwplogo" src="'+LG+'" alt="FWP" onerror="this.style.display=\'none\'"/>'
+        +'<div class="fwptxt">'
+          +'<div class="fwpbrand">Fun With Puzzles</div>'
+          +'<div class="fwptitle">Today\'s Challenges</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="fwpsk">\uD83D\uDD25 <span class="fwpskn" id="'+px+'_sk">1</span>\u00a0day</div>'
+    +'</div>'
+    +'<div class="fwpbar"><span class="fwpbd" id="'+px+'_date"></span><span class="fwpbt">\u2728 New every day</span></div>'
+    +'<div class="fwppr"><div class="fwppf" id="'+px+'_prog"></div></div>'
+    +'<div class="fwptabs" id="'+px+'_tabs" role="tablist"></div>'
+    +'<div class="fwpbody">'
+      +'<div class="fwptop"><span class="fwpctr" id="'+px+'_ctr"></span>'
+        +'<div class="fwpnavs"><button class="fwpnav" id="'+px+'_prev">\u2039</button><button class="fwpnav" id="'+px+'_next">\u203a</button></div>'
+      +'</div>'
+      +'<div class="fwpbdg easy" id="'+px+'_diff"></div>'
+      +'<p class="fwpq" id="'+px+'_q"></p>'
+      +'<button class="fwphbtn" id="'+px+'_hbtn">\uD83D\uDCA1 Show hint</button>'
+      +'<div class="fwphbox" id="'+px+'_hbox"></div>'
+      +'<div class="fwpirow">'
+        +'<input class="fwpinp" id="'+px+'_inp" type="text" placeholder="Your answer..."/>'
+        +'<button class="fwpchk" id="'+px+'_chk">Check</button>'
+      +'</div>'
+      +'<div class="fwpres" id="'+px+'_res"></div>'
+      +'<button class="fwprev" id="'+px+'_rev">\uD83D\uDC41 Show answer</button>'
+      +'<div class="fwpdots" id="'+px+'_dots"></div>'
+      +'<div class="fwpban" id="'+px+'_ban"><p>\uD83C\uDF89 All puzzles complete!</p><small>Come back tomorrow for fresh challenges!</small></div>'
+    +'</div>'
+    +'<div class="fwpfoot"><div class="fwpfl">'
+      +'<a class="fwpmore" id="'+px+'_more" href="'+B+'/p/index.html" target="_blank" rel="noopener">More puzzles</a>'
+      +'<a class="fwpac" href="'+B+'/p/index.html" target="_blank" rel="noopener">All categories</a>'
+    +'</div><button class="fwpsh" id="'+px+'_sh">\u2191 Share</button></div>'
+    +'<div class="fwpadd">'
+      +'<button class="fwpabtn" id="'+px+'_abtn">\u2795 Add this widget to your website \u2014 free!</button>'
+      +'<div class="fwpebox" id="'+px+'_ebox">'
+        +'<p>Copy these 2 lines and paste into any webpage. Widget loads automatically, all links point to funwithpuzzles.com, and future updates apply everywhere instantly.</p>'
+        +'<code class="fwpec" id="'+px+'_ec"></code>'
+        +'<button class="fwpcb" id="'+px+'_cb">Copy code</button>'
+      +'</div>'
+    +'</div>'
+    +'<div class="fwpattr">Powered by <a href="'+B+'" target="_blank" rel="noopener">funwithpuzzles.com</a></div>'
+    +'</div></div>';
 
-g('ec').textContent=EC;
-g('date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
-g('sk').textContent=sk;
+  g('ec').textContent=EC;
+  g('date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  g('sk').textContent=sk;
 
-function render(){
-  var p=cp[st.puzz],k=_k(st.tab,st.puzz);var ans=st.ans[k],rev=st.rev[k];
-  g('q').textContent=p.q;g('hbox').textContent=p.h;g('hbox').style.display='none';g('hbtn').textContent='\uD83D\uDCA1 Show hint';ho=false;
-  var diff=g('diff');diff.className='f4bdg '+p.d;diff.textContent=p.d==='easy'?'\uD83D\uDFE2 Easy':p.d==='medium'?'\uD83D\uDFE1 Medium':'\uD83D\uDD34 Hard';
-  g('ctr').textContent='Puzzle '+(st.puzz+1)+' of '+cp.length;
-  var m=g('more');m.href=B+'/p/'+ac[st.tab].s+'.html';m.textContent='More '+ac[st.tab].t+' puzzles';
-  var inp=g('inp'),res=g('res'),rv=g('rev');
-  if(ans!==undefined){inp.value=ans;inp.disabled=true;var ok=_fz(ans,p.a);if(ok){res.className='f4res ok';res.textContent='\u2713 Correct! Well done.';rv.style.display='none';}else{res.className='f4res no';res.textContent='\u2717 Not quite. Try again or reveal the answer.';rv.style.display='block';rv.textContent=rev?'Answer: '+p.a:'\uD83D\uDC41 Show answer';}}
-  else if(rev){inp.value='';inp.disabled=false;res.className='f4res no';res.textContent='Answer: '+p.a;rv.style.display='none';}
-  else{inp.value='';inp.disabled=false;res.className='f4res';res.textContent='';rv.style.display='none';}
-  dots();prog();
+  function rend(){
+    var p=cp[st.puzz],kk=k(st.tab,st.puzz),ans=st.ans[kk],rev=st.rev[kk];
+    g('q').textContent=p.q;g('hbox').textContent=p.h;g('hbox').style.display='none';g('hbtn').textContent='\uD83D\uDCA1 Show hint';ho=false;
+    var di=g('diff');di.className='fwpbdg '+p.d;di.textContent=p.d==='easy'?'\uD83D\uDFE2 Easy':p.d==='medium'?'\uD83D\uDFE1 Medium':'\uD83D\uDD34 Hard';
+    g('ctr').textContent='Puzzle '+(st.puzz+1)+' of '+cp.length;
+    var mo=g('more');mo.href=B+'/p/'+ac[st.tab].s+'.html';mo.textContent='More '+ac[st.tab].t+' puzzles';
+    var inp=g('inp'),res=g('res'),rv=g('rev');
+    if(ans!==undefined){inp.value=ans;inp.disabled=true;var ok=_fz(ans,p.a);
+      if(ok){res.className='fwpres ok';res.textContent='\u2713 Correct! Well done.';rv.style.display='none';}
+      else{res.className='fwpres no';res.textContent='\u2717 Not quite. Try again or reveal the answer.';rv.style.display='block';rv.textContent=rev?'Answer: '+p.a:'\uD83D\uDC41 Show answer';}}
+    else if(rev){inp.value='';inp.disabled=false;res.className='fwpres no';res.textContent='Answer: '+p.a;rv.style.display='none';}
+    else{inp.value='';inp.disabled=false;res.className='fwpres';res.textContent='';rv.style.display='none';}
+    _dots();_prog();
+  }
+  function _dots(){
+    var de=g('dots');de.innerHTML='';
+    cp.forEach(function(_,i){var d=document.createElement('button');d.className='fwpdot';var kk=k(st.tab,i),a=st.ans[kk];if(i===st.puzz)d.className+=' on';else if(a!==undefined)d.className+=_fz(a,cp[i].a)?' done':' wrong';else if(st.rev[kk])d.className+=' wrong';d.setAttribute('aria-label','Puzzle '+(i+1));(function(n){d.onclick=function(){st.puzz=n;sv();rend();};}(i));de.appendChild(d);});
+    var tot=cp.length*4,dn=0;for(var t=0;t<4;t++){var ps=_pk(ac[t],ds*31+t);for(var pi=0;pi<ps.length;pi++){var kk=k(t,pi);if(st.ans[kk]!==undefined||st.rev[kk])dn++;}}
+    g('ban').style.display=(dn>=tot)?'block':'none';
+  }
+  function _prog(){var tot=cp.length*4,dn=0;for(var t=0;t<4;t++){var ps=_pk(ac[t],ds*31+t);for(var pi=0;pi<ps.length;pi++){var kk=k(t,pi);if(st.ans[kk]!==undefined||st.rev[kk])dn++;}}g('prog').style.width=Math.round((dn/tot)*100)+'%';}
+  function _sw(n){st.tab=n;st.puzz=0;sv();cp=_pk(ac[n],ds*31+n);document.querySelectorAll('#'+px+'_tabs .fwptab').forEach(function(b,i){b.className='fwptab'+(i===n?' on':'');});rend();}
+  function _dc(){var raw=g('inp').value;if(!raw.trim())return;var kk=k(st.tab,st.puzz);if(st.ans[kk]!==undefined)return;st.ans[kk]=raw;sv();rend();}
+
+  var te=g('tabs');
+  ac.forEach(function(cat,i){var btn=document.createElement('button');btn.className='fwptab'+(i===0?' on':'');btn.textContent=cat.t;btn.setAttribute('role','tab');(function(n){btn.onclick=function(){_sw(n);};}(i));te.appendChild(btn);});
+
+  g('prev').onclick=function(){st.puzz=(st.puzz-1+cp.length)%cp.length;sv();rend();};
+  g('next').onclick=function(){st.puzz=(st.puzz+1)%cp.length;sv();rend();};
+  g('hbtn').onclick=function(){ho=!ho;g('hbox').style.display=ho?'block':'none';this.textContent=ho?'\uD83D\uDE48 Hide hint':'\uD83D\uDCA1 Show hint';};
+  g('chk').onclick=_dc;
+  g('inp').onkeydown=function(e){if(e.key==='Enter')_dc();};
+  g('rev').onclick=function(){var kk=k(st.tab,st.puzz),p=cp[st.puzz];if(st.rev[kk]){delete st.ans[kk];delete st.rev[kk];sv();g('inp').disabled=false;g('inp').value='';g('res').className='fwpres';g('res').textContent='';this.style.display='none';}else{st.rev[kk]=true;sv();g('res').className='fwpres no';g('res').textContent='Answer: '+p.a;this.style.display='none';_dots();_prog();}};
+  g('sh').onclick=function(){var p=cp[st.puzz];var txt='Can you solve this?\n\n'+p.q+'\n\nMore at '+B,url=B+'/p/daily-challenge.html';if(navigator.share){navigator.share({title:"Fun With Puzzles \u2014 Today's Challenges",text:txt,url:url}).catch(function(){});}else{window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt+'\n'+url),'_blank');}};
+  var eo=false;
+  g('abtn').onclick=function(){eo=!eo;g('ebox').style.display=eo?'block':'none';this.textContent=eo?'\u2212 Close':'\u2795 Add this widget to your website \u2014 free!';};
+  g('cb').onclick=function(){var btn=this;function done(){btn.textContent='Copied!';btn.className='fwpcb copied';setTimeout(function(){btn.textContent='Copy code';btn.className='fwpcb';},2500);}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(EC).then(done).catch(function(){});}else{var ta=document.createElement('textarea');ta.value=EC;ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}};
+  cp=_pk(ac[0],ds*31);rend();
 }
 
-function dots(){
-  var de=g('dots');de.innerHTML='';
-  cp.forEach(function(_,i){var d=document.createElement('button');d.className='f4dot';var k=_k(st.tab,i),a=st.ans[k];if(i===st.puzz)d.className+=' on';else if(a!==undefined)d.className+=_fz(a,cp[i].a)?' done':' wrong';else if(st.rev[k])d.className+=' wrong';d.setAttribute('aria-label','Puzzle '+(i+1));(function(n){d.onclick=function(){st.puzz=n;_sv();render();};}(i));de.appendChild(d);});
-  /* show banner if all puzzles in all tabs done */
-  var tot=cp.length*4,dn=0;for(var t=0;t<4;t++){var ps=_pk(ac[t],ds*31+t);for(var pi=0;pi<ps.length;pi++){var k=_k(t,pi);if(st.ans[k]!==undefined||st.rev[k])dn++;}}
-  g('ban').style.display=(dn>=tot)?'block':'none';
-}
-
-function prog(){var tot=cp.length*4,dn=0;for(var t=0;t<4;t++){var ps=_pk(ac[t],ds*31+t);for(var pi=0;pi<ps.length;pi++){var k=_k(t,pi);if(st.ans[k]!==undefined||st.rev[k])dn++;}}g('prog').style.width=Math.round((dn/tot)*100)+'%';}
-
-function switchTab(n){st.tab=n;st.puzz=0;_sv();cp=_pk(ac[n],ds*31+n);document.querySelectorAll('#'+pid+'tabs .f4tab').forEach(function(b,i){b.className='f4tab'+(i===n?' on':'');});render();}
-
-function doCheck(){var raw=g('inp').value;if(!raw.trim())return;var k=_k(st.tab,st.puzz);if(st.ans[k]!==undefined)return;st.ans[k]=raw;_sv();render();}
-
-/* Tabs */
-var te=g('tabs');ac.forEach(function(cat,i){var btn=document.createElement('button');btn.className='f4tab'+(i===0?' on':'');btn.textContent=cat.t;btn.setAttribute('role','tab');(function(n){btn.onclick=function(){switchTab(n);};}(i));te.appendChild(btn);});
-
-g('prev').onclick=function(){st.puzz=(st.puzz-1+cp.length)%cp.length;_sv();render();};
-g('next').onclick=function(){st.puzz=(st.puzz+1)%cp.length;_sv();render();};
-g('hbtn').onclick=function(){ho=!ho;g('hbox').style.display=ho?'block':'none';this.textContent=ho?'\uD83D\uDE48 Hide hint':'\uD83D\uDCA1 Show hint';};
-g('chk').onclick=doCheck;
-g('inp').onkeydown=function(e){if(e.key==='Enter')doCheck();};
-g('rev').onclick=function(){var k=_k(st.tab,st.puzz),p=cp[st.puzz];if(st.rev[k]){delete st.ans[k];delete st.rev[k];_sv();g('inp').disabled=false;g('inp').value='';g('res').className='f4res';g('res').textContent='';this.style.display='none';}else{st.rev[k]=true;_sv();g('res').className='f4res no';g('res').textContent='Answer: '+p.a;this.style.display='none';dots();prog();}};
-g('sh').onclick=function(){var p=cp[st.puzz];var txt='Can you solve this puzzle?\n\n'+p.q+'\n\nMore at '+B,url=B+'/p/daily-challenge.html';if(navigator.share){navigator.share({title:'Fun With Puzzles \u2014 Daily Challenges',text:txt,url:url}).catch(function(){});}else{window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt+'\n'+url),'_blank');}};
-var eo=false;
-g('abtn').onclick=function(){eo=!eo;g('ebox').style.display=eo?'block':'none';this.textContent=eo?'\u2212 Close':'\u2795 Add this widget to your website \u2014 free!';};
-g('cb').onclick=function(){var btn=this;function done(){btn.textContent='Copied!';btn.className='f4cb copied';setTimeout(function(){btn.textContent='Copy code';btn.className='f4cb';},2500);}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(EC).then(done).catch(function(){});}else{var ta=document.createElement('textarea');ta.value=EC;ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}};
-
-cp=_pk(ac[0],ds*31);render();
-} /* end _init */
-
-/* ── Auto-init all target divs ── */
-var WIDGET_ID='fwp-daily-widget';
-var _ids=['fwp-daily-widget','fwp-daily-widget-2'];
-_ids.forEach(function(id){if(document.getElementById(id))_init(id);});
-/* Fallback: also init just the primary if only one exists */
-if(!document.getElementById('fwp-daily-widget-2')&&document.getElementById(WIDGET_ID)){/* already done */}
+/* Boot — finds fwp-daily-widget on the page */
+var _ids=['fwp-daily-widget'];
+document.querySelectorAll('[id^="fwp-daily-widget"]').forEach(function(el){if(_ids.indexOf(el.id)===-1)_ids.push(el.id);});
+_ids.forEach(function(id,i){if(document.getElementById(id))_boot(id,SK+(i>0?i:''),TK+(i>0?i:''));});
 
 })();
