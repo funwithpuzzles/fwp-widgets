@@ -10,53 +10,58 @@ var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.ne
    Derived from actual site URLs and navigation structure.
    Difficulty labels are separate entries so user can filter by level. */
 var LABELS=[
-  /* By difficulty */
-  {d:'🟢 Easy Puzzles',       l:'Brain Teasers for Kids'},
-  {d:'🟡 Medium Puzzles',     l:'Brain Teasers for Teens'},
-  {d:'🔴 Hard Puzzles',       l:'Brain Teasers for Adults'},
-  /* Riddles */
-  {d:'💡 Riddles',            l:'Riddles'},
-  {d:'❓ Tricky Riddles',     l:'Tricky Questions'},
-  {d:'🤔 What Am I',          l:'What am I'},
-  {d:'😄 Funny Riddles',      l:'Funny Riddles'},
-  {d:'🕵️ Mystery Riddles',   l:'Mystery Riddles'},
-  {d:'📝 English Riddles',    l:'English Riddles'},
+  /* Difficulty — exact Blogger labels */
+  {d:'🟢 Easy Puzzles',        l:'Brain Teasers for Kids'},
+  {d:'🟡 Medium Puzzles',      l:'Brain Teasers for Teens'},
+  {d:'🔴 Hard Puzzles',        l:'Brain Teasers for Adults'},
+  /* Riddles — exact labels from site */
+  {d:'💡 Riddles',             l:'Riddles'},
+  {d:'❓ Tricky Riddles',      l:'Tricky Questions'},
+  {d:'🤔 What Am I',           l:'What am I'},
+  {d:'😄 Funny Riddles',       l:'Funny Riddles'},
+  {d:'🕵️ Mystery Riddles',    l:'Mystery Riddles'},
+  {d:'📝 English Riddles',     l:'English Riddles'},
   /* Logic */
-  {d:'🔐 Crack the Code',     l:'Crack the Code Puzzles'},
-  {d:'🧠 Lateral Thinking',   l:'Lateral Thinking'},
-  {d:'⚖️ Logical Equations',  l:'Logical Equations'},
-  {d:'🔍 Logical Reasoning',  l:'Logical Reasoning'},
-  {d:'💼 Interview Questions', l:'Interview Puzzles'},
+  {d:'🔐 Crack the Code',      l:'Crack the Code'},
+  {d:'🧠 Lateral Thinking',    l:'Lateral Thinking'},
+  {d:'⚖️ Logical Equations',   l:'Logical Equations'},
+  {d:'🔍 Logical Reasoning',   l:'Logical Reasoning'},
+  {d:'💼 Interview Questions',  l:'Interview Questions'},
   /* Maths */
-  {d:'➕ Maths Puzzles',      l:'Maths Puzzles'},
-  {d:'🔢 Missing Numbers',    l:'Missing Number Puzzles'},
-  {d:'📈 Number Series',      l:'Number Series'},
-  {d:'🔥 Matchstick Puzzles', l:'Matchstick Puzzles'},
-  {d:'🔺 Triangle Puzzles',   l:'Triangle Puzzles'},
-  {d:'🔼 Pyramid Puzzles',    l:'Pyramid Puzzles'},
-  {d:'⭕ Circle Reasoning',   l:'Circle Puzzles'},
-  {d:'🔷 Square Reasoning',   l:'Square Puzzles'},
+  {d:'➕ Maths Puzzles',       l:'Maths Puzzles'},
+  {d:'🔢 Missing Numbers',     l:'Missing Number Puzzles'},
+  {d:'📈 Number Series',       l:'Number Series'},
+  {d:'🔥 Matchstick Puzzles',  l:'Matchstick Puzzles'},
+  {d:'🔺 Triangle Puzzles',    l:'Triangle Puzzles'},
+  {d:'🔼 Pyramid Puzzles',     l:'Pyramid Puzzles'},
+  {d:'⭕ Circle Reasoning',    l:'Circle Puzzles'},
+  {d:'🔷 Square Puzzles',      l:'Square Puzzles'},
   /* Picture puzzles */
-  {d:'🖼️ Picture Puzzles',    l:'Picture Puzzles'},
-  {d:'👁️ Find the Mistake',   l:'Find the Mistake'},
-  {d:'🧩 Odd One Out',        l:'Odd One Out Puzzles'},
-  {d:'🔍 Spot the Difference', l:'Spot the Difference'},
-  {d:'🌀 Optical Illusions',  l:'Optical Illusions'},
-  {d:'🔷 Count Shapes',       l:'Count the Shapes'},
-  {d:'🔤 Hidden Letters',     l:'Hidden Letters'},
-  {d:'🐾 Hidden Animals',     l:'Hidden Animals'},
+  {d:'🖼️ Picture Puzzles',     l:'Picture Puzzles'},
+  {d:'👁️ Find the Mistake',    l:'Find the Mistake'},
+  {d:'🧩 Odd One Out',         l:'Odd One Out'},
+  {d:'🔎 Spot Difference',     l:'Spot the Difference'},
+  {d:'🌀 Optical Illusions',   l:'Optical Illusions'},
+  {d:'🔷 Count Shapes',        l:'Count the Shapes'},
+  {d:'🔤 Hidden Letters',      l:'Hidden Letters'},
+  {d:'🐾 Hidden Animals',      l:'Hidden Animals'},
+  {d:'🔢 Hidden Numbers',      l:'Hidden Numbers'},
   /* Other */
-  {d:'♟️ Chess Puzzles',      l:'Chess Puzzles'},
-  {d:'🔢 Sudoku',             l:'Sudoku'},
-  {d:'🖼️ Rebus Puzzles',      l:'Rebus Puzzles'},
-  {d:'😎 Emoji Puzzles',      l:'Emoji Puzzles'},
-  {d:'🌍 GK Puzzles',         l:'General Knowledge'},
-  {d:'📐 Spatial Reasoning',  l:'Spatial Reasoning'},
-  {d:'👁️ Can You Read This',  l:'Can You Read This'},
-  {d:'🌑 Shadow Riddles',     l:'Shadow Puzzles'},
-  {d:'💧 Water Tank',         l:'Water Tank Puzzles'},
-  {d:'⚙️ Gear Puzzles',       l:'Gear Puzzles'},
-  {d:'⚡ Quick Puzzles',      l:'Quick Puzzles'}
+  {d:'♟️ Chess Puzzles',       l:'Chess Puzzles'},
+  {d:'🔢 Sudoku',              l:'Sudoku'},
+  {d:'🖼️ Rebus Puzzles',       l:'Rebus Puzzles'},
+  {d:'😎 Emoji Puzzles',       l:'Emoji Puzzles'},
+  {d:'🌍 GK Puzzles',          l:'General Knowledge'},
+  {d:'📐 Spatial Reasoning',   l:'Spatial Reasoning'},
+  {d:'👁️ Can You Read This',   l:'Can You Read This'},
+  {d:'🌑 Shadow Riddles',      l:'Shadow Puzzles'},
+  {d:'💧 Water Tank',          l:'Water Tank Puzzles'},
+  {d:'⚙️ Gear Puzzles',        l:'Gear Puzzles'},
+  {d:'⚡ Quick Puzzles',       l:'Quick Puzzles'},
+  {d:'🧩 Jigsaw Puzzles',      l:'Jigsaw Puzzles'},
+  {d:'🔡 Missing Vowels',      l:'Missing Vowels'},
+  {d:'👀 Stereograms',         l:'Stereograms'},
+  {d:'📊 Non-Verbal',          l:'Non Verbal Reasoning'}
 ];
 
 /* ── CSS ── */
@@ -146,11 +151,14 @@ if(!document.getElementById('fwpv6css')){
 /* card */
 +'.fwpexp-card{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;cursor:pointer;transition:box-shadow .2s,transform .2s;text-decoration:none;display:block;background:#fff;}'
 +'.fwpexp-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px);}'
-/* IMAGE: object-fit:contain — shows FULL image, no cropping, works on sidebar and desktop */
-+'.fwpexp-imgwrap{width:100%;background:#f8f9ff;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:160px;}'
-+'.fwpexp-img{width:100%;height:auto;max-height:320px;object-fit:contain;display:block;transition:transform .3s;}'
+/* IMAGE FIX:
+   - padding-top:56.25% reserves exact 16:9 space BEFORE image loads = zero layout shift
+   - object-fit:contain = full image visible, no cropping on sidebar OR desktop
+   - background:#f8f9ff fills any letterbox gaps cleanly */
++'.fwpexp-imgwrap{width:100%;padding-top:56.25%;position:relative;background:#f8f9ff;overflow:hidden;}'
++'.fwpexp-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;display:block;transition:transform .3s;}'
 +'.fwpexp-card:hover .fwpexp-img{transform:scale(1.02);}'
-+'.fwpexp-imgph{width:100%;min-height:160px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
++'.fwpexp-imgph{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
 +'.fwpexp-imgph img{width:52px;height:52px;opacity:.35;object-fit:contain;}'
 /* card body */
 +'.fwpexp-cbody{padding:11px 13px 13px;}'
@@ -160,7 +168,7 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpexp-solve span{font-size:15px;}'
 /* skeleton — same structure as card so no layout shift */
 +'.fwpexp-skel{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;background:#fff;}'
-+'.fwpexp-skel-img{width:100%;min-height:200px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
++'.fwpexp-skel-img{width:100%;padding-top:56.25%;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
 +'.fwpexp-skel-body{padding:11px 13px 13px;}'
 +'.fwpexp-skel-tag{height:16px;width:90px;border-radius:8px;margin-bottom:10px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
 +'.fwpexp-skel-l{height:13px;border-radius:6px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;margin-bottom:7px;}'
