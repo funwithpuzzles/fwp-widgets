@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget v6.1 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget v6.6 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -6,62 +6,78 @@ var LG='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDi4jf-HGfN5
 var SK='fwpv6s',TK='fwpv6t';
 var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.net/gh/funwithpuzzles/fwp-widgets@latest/fwp-daily.js"><\/scr'+'ipt>';
 
-/* ── Explore labels: display name → exact Blogger label ──
-   Derived from actual site URLs and navigation structure.
-   Difficulty labels are separate entries so user can filter by level. */
+/* ── Explore labels: display name, exact Blogger label, hub page URL ──
+   All label names verified from lebel-hubpage-mapping.txt
+   Hub pages used for Browse More link and error fallback. */
 var LABELS=[
-  /* Difficulty — exact Blogger labels */
-  {d:'🟢 Easy Puzzles',        l:'Brain Teasers for Kids'},
-  {d:'🟡 Medium Puzzles',      l:'Brain Teasers for Teens'},
-  {d:'🔴 Hard Puzzles',        l:'Brain Teasers for Adults'},
-  /* Riddles — exact labels from site */
-  {d:'💡 Riddles',             l:'Riddles'},
-  {d:'❓ Tricky Riddles',      l:'Tricky Questions'},
-  {d:'🤔 What Am I',           l:'What am I'},
-  {d:'😄 Funny Riddles',       l:'Funny Riddles'},
-  {d:'🕵️ Mystery Riddles',    l:'Mystery Riddles'},
-  {d:'📝 English Riddles',     l:'English Riddles'},
+  /* Difficulty */
+  {d:'🟢 Easy Puzzles',              l:'Brain Teasers for Kids',                     h:'p/easy-puzzles.html'},
+  {d:'🟡 Medium Puzzles',            l:'Brain Teasers for Teens',                    h:'p/intermediate-level-puzzles.html'},
+  {d:'🔴 Hard Puzzles',              l:'Brain Teasers for Adults',                   h:'p/hard-puzzles.html'},
+  /* Riddles */
+  {d:'💡 Riddles',                   l:'Brain Teasers and Riddles',                  h:'p/riddles.html'},
+  {d:'❓ Tricky Riddles',            l:'Tricky Questions',                           h:'p/tricky-riddles.html'},
+  {d:'🤔 What Am I',                 l:'What am I Riddles',                          h:'p/what-am-i-riddles.html'},
+  {d:'😄 Funny Riddles',             l:'Funny Riddles',                              h:'p/funny-riddles.html'},
+  {d:'🕵️ Mystery Riddles',          l:'Mystery Riddles',                            h:'p/mystery-riddles.html'},
+  {d:'📝 English Riddles',           l:'English Puzzles and Riddles',                h:'p/english-word-riddles.html'},
   /* Logic */
-  {d:'🔐 Crack the Code',      l:'Crack the Code'},
-  {d:'🧠 Lateral Thinking',    l:'Lateral Thinking'},
-  {d:'⚖️ Logical Equations',   l:'Logical Equations'},
-  {d:'🔍 Logical Reasoning',   l:'Logical Reasoning'},
-  {d:'💼 Interview Questions',  l:'Interview Questions'},
+  {d:'🔐 Crack the Code',            l:'Crack the Code Puzzles',                     h:'p/crack-code-puzzles.html'},
+  {d:'🧠 Lateral Thinking',          l:'Lateral Thinking Puzzles',                   h:'p/lateral-thinking-puzzles.html'},
+  {d:'⚖️ Logical Equations',         l:'Logical Equations Puzzles',                  h:'p/logical-equations-puzzles.html'},
+  {d:'🔍 Logical Reasoning',         l:'Logical Reasoning Questions and Puzzles',    h:'p/logical-reasoning-puzzles.html'},
+  {d:'💼 Interview Questions',        l:'Interview Questions',                        h:'p/interview-questions.html'},
   /* Maths */
-  {d:'➕ Maths Puzzles',       l:'Maths Puzzles'},
-  {d:'🔢 Missing Numbers',     l:'Missing Number Puzzles'},
-  {d:'📈 Number Series',       l:'Number Series'},
-  {d:'🔥 Matchstick Puzzles',  l:'Matchstick Puzzles'},
-  {d:'🔺 Triangle Puzzles',    l:'Triangle Puzzles'},
-  {d:'🔼 Pyramid Puzzles',     l:'Pyramid Puzzles'},
-  {d:'⭕ Circle Reasoning',    l:'Circle Puzzles'},
-  {d:'🔷 Square Puzzles',      l:'Square Puzzles'},
-  /* Picture puzzles */
-  {d:'🖼️ Picture Puzzles',     l:'Picture Puzzles'},
-  {d:'👁️ Find the Mistake',    l:'Find the Mistake'},
-  {d:'🧩 Odd One Out',         l:'Odd One Out'},
-  {d:'🔎 Spot Difference',     l:'Spot the Difference'},
-  {d:'🌀 Optical Illusions',   l:'Optical Illusions'},
-  {d:'🔷 Count Shapes',        l:'Count the Shapes'},
-  {d:'🔤 Hidden Letters',      l:'Hidden Letters'},
-  {d:'🐾 Hidden Animals',      l:'Hidden Animals'},
-  {d:'🔢 Hidden Numbers',      l:'Hidden Numbers'},
+  {d:'➕ Maths Puzzles',             l:'Maths Puzzles',                              h:'p/maths-puzzles.html'},
+  {d:'🔢 Missing Numbers',           l:'Missing Number Puzzles',                     h:'p/missing-number-puzzles.html'},
+  {d:'📈 Number Series',             l:'Number Series Puzzles',                      h:'p/maths-reasoning-number-series-puzzles.html'},
+  {d:'🔥 Matchstick Puzzles',        l:'Matchstick Puzzles',                         h:'p/matchstick-maths-puzzles.html'},
+  {d:'🔺 Triangle Puzzles',          l:'Triangle Puzzles',                           h:'p/triangle-maths-logic-puzzles.html'},
+  {d:'🔼 Pyramid Puzzles',           l:'Pyramid Puzzles',                            h:'p/pyramid-maths-puzzles.html'},
+  {d:'⭕ Circle Reasoning',          l:'Circle Reasoning Puzzles',                   h:'p/circle-reasoning-puzzles.html'},
+  {d:'🔷 Square Puzzles',            l:'Square Reasoning Puzzles',                   h:'p/square-reasoning-puzzles.html'},
+  {d:'🧮 Maths Riddles',             l:'Maths Riddles',                              h:'p/maths-riddles.html'},
+  /* Picture Puzzles */
+  {d:'🖼️ Picture Puzzles',           l:'Brain Teasers: Picture Puzzles',             h:'p/picture-puzzles.html'},
+  {d:'👁️ Find the Mistake',          l:'Find the Mistake Puzzles',                   h:'p/find-mistake-puzzles.html'},
+  {d:'🧩 Odd One Out',               l:'Odd One Out Puzzles',                        h:'p/odd-one-out-picture-puzzles.html'},
+  {d:'🔎 Spot the Difference',       l:'Spot the Difference Puzzles',                h:'p/spot-differences-picture-puzzles.html'},
+  {d:'🌀 Optical Illusions',         l:'Optical Illusions',                          h:'p/optical-illusions.html'},
+  {d:'🔷 Count Shapes',              l:'Count the Shapes Puzzles',                   h:'p/count-shapes-puzzles.html'},
+  {d:'🔤 Hidden Letters',            l:'Hidden Letter Puzzles',                      h:'p/hidden-letter-puzzles.html'},
+  {d:'🐾 Hidden Animals',            l:'Hidden Animal Puzzles',                      h:'p/hidden-animal-puzzles.html'},
+  {d:'🔢 Eye Test / Numbers',        l:'Eye Test Puzzles',                           h:'p/hidden-number-picture-puzzles.html'},
+  {d:'🔍 Find the Pair',             l:'Find the Pair Puzzles',                      h:'p/find-pair-picture-puzzles.html'},
+  {d:'🅰️ Can You Read This',         l:'Can you Read this',                          h:'p/can-you-read-this.html'},
+  {d:'🌑 Shadow Riddles',            l:'Shadow Riddles',                             h:'p/shadow-picture-riddles.html'},
+  {d:'🧠 Visual Puzzles',            l:'Brain Teasers: Visual Puzzles',              h:'p/visual-puzzles-test-your-observation.html'},
+  /* Chess */
+  {d:'♟️ Chess Puzzles',             l:'Chess Puzzles',                              h:'p/fun-chess-puzzles.html'},
+  {d:'♟️ Easy Chess',                l:'Easy Chess Puzzles',                         h:'p/easy-chess-puzzles.html'},
+  {d:'♟️ Medium Chess',              l:'Medium Level Chess Puzzles',                 h:'p/medium-level-chess-puzzles.html'},
+  {d:'♟️ Hard Chess',                l:'Hard Chess Puzzles',                         h:'p/hard-chess-puzzles.html'},
+  /* Sudoku */
+  {d:'🔢 Sudoku',                    l:'Sudoku',                                     h:'p/sudoku.html'},
+  {d:'🔢 Sudoku Variants',           l:'Sudoku Variants',                            h:'p/sudoku-puzzles.html'},
+  {d:'🔢 Killer Sudoku',             l:'Killer Sudoku',                              h:'2017/01/killer-sudoku-puzzles-index.html'},
+  {d:'🔢 Diagonal Sudoku',           l:'Diagonal Sudoku',                            h:'2015/10/diagonal-sudoku-puzzles.html'},
+  {d:'🔢 Thermo Sudoku',             l:'Thermo Sudoku',                              h:'2017/01/thermometer-sudoku-puzzles-index.html'},
   /* Other */
-  {d:'♟️ Chess Puzzles',       l:'Chess Puzzles'},
-  {d:'🔢 Sudoku',              l:'Sudoku'},
-  {d:'🖼️ Rebus Puzzles',       l:'Rebus Puzzles'},
-  {d:'😎 Emoji Puzzles',       l:'Emoji Puzzles'},
-  {d:'🌍 GK Puzzles',          l:'General Knowledge'},
-  {d:'📐 Spatial Reasoning',   l:'Spatial Reasoning'},
-  {d:'👁️ Can You Read This',   l:'Can You Read This'},
-  {d:'🌑 Shadow Riddles',      l:'Shadow Puzzles'},
-  {d:'💧 Water Tank',          l:'Water Tank Puzzles'},
-  {d:'⚙️ Gear Puzzles',        l:'Gear Puzzles'},
-  {d:'⚡ Quick Puzzles',       l:'Quick Puzzles'},
-  {d:'🧩 Jigsaw Puzzles',      l:'Jigsaw Puzzles'},
-  {d:'🔡 Missing Vowels',      l:'Missing Vowels'},
-  {d:'👀 Stereograms',         l:'Stereograms'},
-  {d:'📊 Non-Verbal',          l:'Non Verbal Reasoning'}
+  {d:'🖼️ Rebus Puzzles',             l:'Rebus Puzzles',                              h:'p/rebus-riddles.html'},
+  {d:'😎 Emoji Puzzles',             l:'Emoji Puzzles',                              h:'p/emoji-puzzles.html'},
+  {d:'🌍 GK Puzzles',               l:'GK Puzzles',                                 h:'p/general-knowledge-quizzes-and-riddles.html'},
+  {d:'📐 Spatial Reasoning',         l:'Spatial Reasoning Puzzles',                  h:'p/spatial-reasoning-puzzles.html'},
+  {d:'💧 Water Tank',                l:'Water Tank Puzzles',                         h:'p/water-tank-puzzles.html'},
+  {d:'⚙️ Gear Puzzles',              l:'Gear Puzzles',                               h:'p/gear-puzzles.html'},
+  {d:'⚡ Quick Puzzles',             l:'Quick Puzzles',                              h:'p/quick-puzzles-brain-teasers-and-riddles.html'},
+  {d:'🧩 Jigsaw Puzzles',            l:'Jigsaw Puzzles',                             h:'p/jigsaw-puzzles.html'},
+  {d:'👀 Stereograms',               l:'Stereograms',                                h:'p/stereogram-puzzles.html'},
+  {d:'🅰️ Missing Vowels',            l:'Missing Vowels Quiz',                        h:'p/missing-vowels-quiz-puzzles.html'},
+  {d:'📊 Non-Verbal Reasoning',      l:'Non Verbal Reasoning',                       h:'p/non-verbal-reasoning-puzzles.html'},
+  {d:'🧠 Mental Ability',            l:'Mental Ability Questions',                   h:'p/mental-ability-questions-brain-test.html'},
+  {d:'🅿️ Parking Puzzles',           l:'Parking Puzzles',                            h:'p/parking-pattern-puzzles.html'},
+  {d:'🔢 Number Logic',              l:'Number Logic Puzzles',                       h:'p/number-logic-puzzles.html'},
+  {d:'🏆 Best Puzzles',              l:'Best Brain Teasers',                         h:'p/popular-puzzles.html'}
 ];
 
 /* ── CSS ── */
@@ -147,7 +163,7 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpexp-nb{width:26px;height:26px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;color:#9ca3af;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;}'
 +'.fwpexp-nb:hover{background:#f5f3ff;color:#7c3aed;border-color:#7c3aed;}'
 /* card container — FIXED HEIGHT prevents layout shift */
-+'.fwpexp-wrap{min-height:300px;position:relative;}'
++'.fwpexp-wrap{position:relative;}'
 /* card */
 +'.fwpexp-card{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;cursor:pointer;transition:box-shadow .2s,transform .2s;text-decoration:none;display:block;background:#fff;}'
 +'.fwpexp-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px);}'
@@ -286,12 +302,25 @@ function _fz(r,a){
   var h=cw.filter(function(w){return w.length>3&&rw.indexOf(w)!==-1;});
   return h.length>=Math.max(1,Math.floor(cw.length*0.6));
 }
-/* extract first usable image from blogger post html */
+/* extract image from blogger post html
+   Handles ALL blogger CDN URL formats:
+   - /s640-rw/image.PNG  (old)
+   - /w400-h266-p-k-no-nu/image.png  (new)
+   - /s72-c/image.png  (thumbnail old)
+   - /w72-h72-p-k-no-nu/image.png  (thumbnail new)
+   Strategy: grab full blogger CDN URL then normalise size to s600 */
 function _img(html){
   if(!html)return null;
-  var m=html.match(/src=["']([^"']+blogger[^"']*\/s\d+\/[^"']+)/i);
-  if(m)return m[1].replace(/\/s\d+\//,'/s600/');
-  var m2=html.match(/src=["']([^"']+\.(jpg|jpeg|png|gif|webp)[^"']*)/i);
+  /* match ANY blogger googleusercontent URL */
+  var m=html.match(/src=["'](https?:\/\/[^"']*blogger[^"']*googleusercontent[^"']*\/[^"'\/]+\/[^"']+)/i);
+  if(m){
+    var u=m[1];
+    /* normalise size portion — replace whatever comes before the filename */
+    u=u.replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/');
+    return u;
+  }
+  /* fallback: any image src */
+  var m2=html.match(/src=["']([^"']+\.(?:jpg|jpeg|png|gif|webp|PNG|JPG)[^"']*)/i);
   return m2?m2[1]:null;
 }
 
@@ -466,8 +495,8 @@ function _boot(tid,_SK,_TK){
     if(n===3){
       g('offline').style.display='none';
       g('exp').style.display='block';
-      g('more').textContent='More puzzles';
-      g('more').href=B+'/p/index.html';
+      g('more').textContent='More '+expLabelObj.d+' puzzles';
+      g('more').href=B+'/'+expLabelObj.h;
       /* lazy — only fetch on first Explore click */
       if(expPosts.length===0&&!expLoading)_expFetch(expLabelObj,false);
     }else{
@@ -500,7 +529,7 @@ function _boot(tid,_SK,_TK){
     g('expctr').textContent='Puzzle '+(expIdx+1)+' of '+expPosts.length;
     /* build card */
     var imgHtml=p.img
-      ?'<div class="fwpexp-imgwrap"><img class="fwpexp-img" src="'+p.img+'" alt="'+p.title.replace(/[<>"]/g,'')+'" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=fwpexp-imgph><img src='+LG+' /></div>\'"/></div>'
+      ?'<div class="fwpexp-imgwrap"><img class="fwpexp-img" src="'+p.img+'" alt="'+p.title.replace(/[<>"]/g,'')+'" onerror="this.parentNode.innerHTML=\'<div class=fwpexp-imgph><img src='+LG+' /></div>\'"/></div>'
       :'<div class="fwpexp-imgph"><img src="'+LG+'"/></div>';
     g('expcard').innerHTML=
       '<a class="fwpexp-card" href="'+p.url+'" target="_blank" rel="noopener">'
@@ -554,7 +583,10 @@ function _boot(tid,_SK,_TK){
         /* try media thumbnail first — most reliable */
         var img=null;
         if(e.media$thumbnail&&e.media$thumbnail.url){
-          img=e.media$thumbnail.url.replace(/\/s\d+\//,'/s600/').replace(/=s\d+/,'=s600');
+          /* handle all blogger thumbnail URL formats */
+          img=e.media$thumbnail.url
+            .replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/')
+            .replace(/=s\d+(-c)?/,'=s600');
         }
         if(!img)img=_img(content);
         return{title:title,url:pUrl,img:img};
@@ -566,7 +598,23 @@ function _boot(tid,_SK,_TK){
       expIdx=0;_expRender();
     };
 
+    /* graceful timeout — if JSONP never calls back, stop after 8 seconds */
+    var _timer=setTimeout(function(){
+      if(!window[cbName])return;/* already resolved */
+      expLoading=false;
+      ref.disabled=false;ref.textContent='\u21BB Refresh';
+      try{document.head.removeChild(script);}catch(e){}
+      delete window[cbName];
+      g('expcard').innerHTML=
+        '<div class="fwpexp-err">'
+          +'<p>\uD83D\uDE15 Timed out. The feed took too long to respond.</p>'
+          +'<a href="'+B+'/'+labelObj.h+'" target="_blank" rel="noopener">Browse '+labelObj.d+' on the website \u2192</a>'
+        +'</div>';
+      g('expctr').textContent='';g('expdots').innerHTML='';
+    },8000);
+
     script.onerror=function(){
+      clearTimeout(_timer);
       expLoading=false;
       ref.disabled=false;ref.textContent='\u21BB Refresh';
       try{document.head.removeChild(script);}catch(e){}
@@ -574,10 +622,15 @@ function _boot(tid,_SK,_TK){
       g('expcard').innerHTML=
         '<div class="fwpexp-err">'
           +'<p>\uD83D\uDE15 Could not load puzzles. Please check your connection.</p>'
-          +'<a href="'+B+'/search/label/'+encodeURIComponent(labelObj.l)+'" target="_blank" rel="noopener">Browse '+labelObj.d+' on the website \u2192</a>'
+          +'<a href="'+B+'/'+labelObj.h+'" target="_blank" rel="noopener">Browse '+labelObj.d+' on the website \u2192</a>'
         +'</div>';
       g('expctr').textContent='';g('expdots').innerHTML='';
     };
+
+    /* also clear timer on success — patch the callback */
+    var _origCb=window[cbName];
+    window[cbName]=function(data){clearTimeout(_timer);_origCb(data);};
+
     document.head.appendChild(script);
   }
 
@@ -642,6 +695,8 @@ function _boot(tid,_SK,_TK){
   g('expsel').onchange=function(){
     expLabelObj=shuffledLabels[parseInt(this.value,10)];
     expPosts=[];expIdx=0;
+    g('more').textContent='More '+expLabelObj.d+' puzzles';
+    g('more').href=B+'/'+expLabelObj.h;
     _expFetch(expLabelObj,false);
   };
   g('expref').onclick=function(){_expFetch(expLabelObj,true);};
