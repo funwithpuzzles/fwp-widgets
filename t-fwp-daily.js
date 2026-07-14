@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget v6.6 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget v6.7.1 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -201,13 +201,13 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpexp-dot.on{background:#7c3aed;transform:scale(1.2);}'
 +'.fwpexp-dot:hover{transform:scale(1.3);}'
 /* footer */
-+'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:8px;flex-wrap:wrap;}'
-+'.fwpfl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}'
-+'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;}'
++'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:8px;flex-wrap:nowrap;}'
++'.fwpfl{display:flex;gap:10px;align-items:center;flex:1 1 auto;min-width:0;overflow:hidden;}'
++'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto;}'
 +'.fwpmore:hover{text-decoration:underline;}'
-+'.fwpac{font-size:10px;color:#9ca3af;text-decoration:none;white-space:nowrap;}'
++'.fwpac{font-size:10px;color:#9ca3af;text-decoration:none;white-space:nowrap;flex:0 0 auto;}'
 +'.fwpac:hover{color:#374151;}'
-+'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;}'
++'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;flex:0 0 auto;}'
 +'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
 /* add to site */
 +'.fwpadd{border-top:2px dashed #c7d2fe;padding:9px 14px;background:#f0f2ff;}'
@@ -225,7 +225,16 @@ if(!document.getElementById('fwpv6css')){
   document.head.appendChild(_cs);
 }
 
-/* ── Offline puzzle data (3 tabs) ── */
+/* ── One-time network warm-up: open the connections early so the first
+   Explore fetch and its images don't pay full DNS+TLS setup cost ── */
+if(!document.getElementById('fwpv6preconnect')){
+  var _pc1=document.createElement('link');_pc1.id='fwpv6preconnect';_pc1.rel='preconnect';_pc1.href=B;
+  document.head.appendChild(_pc1);
+  var _pc2=document.createElement('link');_pc2.rel='preconnect';_pc2.href='https://blogger.googleusercontent.com';_pc2.crossOrigin='anonymous';
+  document.head.appendChild(_pc2);
+}
+
+/* ── Offline puzzle data (6 tabs) ── */
 var C=[
 {t:'Riddles',s:'riddles',p:[
 {d:'easy',q:'I speak without a mouth and hear without ears. I have no body but come alive with wind. What am I?',h:'Think of sounds bouncing back in a valley.',a:'echo'},
@@ -243,7 +252,15 @@ var C=[
 {d:'hard',q:'I can be cracked, made, told and played. What am I?',h:'Comedians do this every night.',a:'joke'},
 {d:'hard',q:'What has a bottom at the top?',h:'Think about clothing worn on your legs.',a:'legs'},
 {d:'hard',q:'What can travel around the world while staying in a corner?',h:'Think about postage.',a:'stamp'},
-{d:'hard',q:'I bind it and it walks. I loose it and it stops. What am I?',h:'Think about a sandal.',a:'sandal'}
+{d:'hard',q:'I bind it and it walks. I loose it and it stops. What am I?',h:'Think about a sandal.',a:'sandal'},
+{d:'easy',q:'What has to be broken before you can use it?',h:'You eat what is inside it for breakfast.',a:'egg'},
+{d:'easy',q:'What kind of room has no doors or windows?',h:'Think about shapes, not buildings.',a:'mushroom'},
+{d:'easy',q:'What can you keep after giving it to someone?',h:'Think about spoken words.',a:'your word'},
+{d:'easy',q:'What runs but never walks, has a mouth but never talks?',h:'You find this in the mountains.',a:'river'},
+{d:'medium',q:'What belongs to you but other people use it more than you?',h:'People say it when talking to you.',a:'your name'},
+{d:'medium',q:'What has many teeth but cannot bite?',h:'You run it through your hair.',a:'comb'},
+{d:'hard',q:'What building has the most stories?',h:'Think about a place full of books, not floors.',a:'library'},
+{d:'hard',q:'What five-letter word becomes shorter when you add two letters to it?',h:'Add letters that spell out a small amount.',a:'short'}
 ]},
 {t:'Maths',s:'maths-puzzles',p:[
 {d:'easy',q:'A farmer has 17 sheep. All but 9 run away. How many are left?',h:'Read all but 9 very carefully.',a:'9'},
@@ -261,7 +278,15 @@ var C=[
 {d:'hard',q:'A clock loses 3 minutes every hour. Set at noon, when will it next show the correct time?',h:'It must lose exactly 12 hours.',a:'240 days'},
 {d:'hard',q:'8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.',h:'Divide into groups of 3, 3, and 2.',a:'two weighings'},
 {d:'hard',q:'What 3 positive numbers give the same result when multiplied and when added?',h:'Try simple numbers like 1, 2, 3.',a:'1 2 3'},
-{d:'hard',q:'You have two hourglasses: 4-min and 7-min. How do you measure exactly 9 minutes?',h:'Start both, flip strategically.',a:'flip strategically'}
+{d:'hard',q:'You have two hourglasses: 4-min and 7-min. How do you measure exactly 9 minutes?',h:'Start both, flip strategically.',a:'flip strategically'},
+{d:'easy',q:'What comes next in this pattern: 2, 4, 6, 8, __?',h:'Add 2 each time.',a:'10'},
+{d:'easy',q:'How many minutes are there in half an hour?',h:'Divide 60 by 2.',a:'30'},
+{d:'easy',q:'If today is Monday, what day will it be after 3 days?',h:'Count forward: Tue, Wed, Thu.',a:'thursday'},
+{d:'easy',q:'What comes next: 5, 10, 15, 20, __?',h:'Add 5 each time.',a:'25'},
+{d:'medium',q:'A number plus itself equals 18. What is the number?',h:'Divide 18 by 2.',a:'9'},
+{d:'medium',q:'If 3 cats catch 3 mice in 3 minutes, how long for 100 cats to catch 100 mice?',h:'Rate stays the same regardless of how many.',a:'3 minutes'},
+{d:'hard',q:'A snail climbs 3m up a wall each day and slips 2m back each night. The wall is 10m. How many days to reach the top?',h:'Net progress is 1m per full day, but the last day it does not slip back.',a:'8 days'},
+{d:'hard',q:'You have 5 pirates dividing 100 gold coins by vote, oldest proposes first. What is the least coins the proposer can offer and still survive?',h:'Think about the minimum votes needed to pass.',a:'majority vote strategy'}
 ]},
 {t:'Tricky',s:'tricky-riddles',p:[
 {d:'easy',q:'What goes up but never comes down?',h:'Think about getting older.',a:'age'},
@@ -279,7 +304,48 @@ var C=[
 {d:'hard',q:'What word in English is always spelled incorrectly?',h:'Read the question very literally.',a:'incorrectly'},
 {d:'hard',q:'A woman shoots her husband then holds him underwater. They go to dinner later. How?',h:'What profession shoots people harmlessly?',a:'photographer'},
 {d:'hard',q:'A man outside in the rain without an umbrella did not get wet. How?',h:'Think about hair.',a:'he was bald'},
-{d:'hard',q:'What has a head and a tail but no body? It is not alive but you find it in your pocket.',h:'You flip it to make a decision.',a:'coin'}
+{d:'hard',q:'What has a head and a tail but no body? It is not alive but you find it in your pocket.',h:'You flip it to make a decision.',a:'coin'},
+{d:'easy',q:'What can you break without touching it?',h:'You make one to a friend but sometimes fail to keep it.',a:'a promise'},
+{d:'easy',q:'What has a neck but no head?',h:'You might drink from it.',a:'bottle'},
+{d:'easy',q:'What kind of coat can only be put on wet?',h:'You do this to a wall or fence, not a body.',a:'coat of paint'},
+{d:'easy',q:'What has a face and two hands but no arms or legs?',h:'It hangs on a wall and ticks.',a:'clock'},
+{d:'medium',q:'Two fathers and two sons go fishing. Each catches one fish, yet only 3 fish are caught total. How?',h:'Think about three generations of the same family.',a:'grandfather father son'},
+{d:'medium',q:'What can fill a room but takes up no physical space?',h:'You turn a switch on and it spreads instantly.',a:'light'},
+{d:'hard',q:'A man is found dead in a field with an unopened package. There are no other clues. What happened?',h:'Think about a failed parachute jump.',a:'his parachute did not open'},
+{d:'hard',q:'I am taken from a mine and shut in a wooden case, from which I am never released, yet almost everyone uses me. What am I?',h:'Found in a pencil.',a:'pencil lead graphite'}
+]},
+{t:'Logic',s:'logical-reasoning-puzzles',p:[
+{d:'easy',q:'All roses are flowers. Some flowers fade quickly. Can we conclude all roses fade quickly?',h:'Think about whether the statements actually connect that way.',a:'no'},
+{d:'easy',q:'If A is taller than B, and B is taller than C, who is the shortest?',h:'Follow the chain from tallest to shortest.',a:'c'},
+{d:'easy',q:'Sam is older than Priya. Priya is older than Raj. Who is the oldest?',h:'Sam is at the top of the chain.',a:'sam'},
+{d:'easy',q:'Complete the sequence: circle, square, circle, square, __?',h:'The pattern simply alternates.',a:'circle'},
+{d:'medium',q:'Three boxes are labelled Apples, Oranges, and Mixed, but all labels are wrong. You pick one fruit from the Mixed box and it is an Apple. What is really in the Mixed box?',h:'Since every label is wrong, the Mixed box cannot actually be mixed.',a:'apples'},
+{d:'medium',q:'Five houses in a row, each a different colour. The red house is immediately left of the blue house. The blue house is not at either end. If blue is in position 3, where is red?',h:'Immediately left means one position before.',a:'position 2'},
+{d:'medium',q:'If some cats are dogs (in a made-up logic world) and all dogs bark, do all cats bark?',h:'Only the cats that are also dogs would bark.',a:'no only some do'},
+{d:'hard',q:'Three friends always lie on Mondays and tell the truth on other days. On what day would all three say "I lied yesterday"?',h:'Think about the transition day between lying and truth-telling.',a:'tuesday'},
+{d:'hard',q:'You have 12 identical-looking coins, one is fake and weighs differently (heavier or lighter, unknown). Using a balance scale only 3 times, how do you find the fake one?',h:'Split into groups of 4, compare in stages.',a:'three weighings'}
+]},
+{t:'Word Play',s:'english-word-riddles',p:[
+{d:'easy',q:'What word becomes shorter when you add two letters to it?',h:'Add letters that spell out a small amount.',a:'short'},
+{d:'easy',q:'What 8-letter word has only one letter in it?',h:'Read it literally, not as a category.',a:'envelope'},
+{d:'easy',q:'What word looks the same upside down and backwards?',h:'Think of a word made only of certain symmetric letters.',a:'swims'},
+{d:'easy',q:'What word starts and ends with the letter E but only has one letter in it?',h:'Count the letters carefully.',a:'eye'},
+{d:'medium',q:'I am a word of letters three. Add two and fewer there will be. What word am I?',h:'The word itself means "not many".',a:'few'},
+{d:'medium',q:'What common English word contains all five vowels in order, exactly once each?',h:'Think of a word about speaking without preparation.',a:'facetiously'},
+{d:'medium',q:'What word begins and ends with "he" and has "he" in the middle too?',h:'Think about a place full of chickens.',a:'henhouse'},
+{d:'hard',q:'What 7-letter word has hundreds of letters in it?',h:'Think about a place where mail arrives.',a:'mailbox'},
+{d:'hard',q:'Rearrange the letters of "LISTEN" to make another common word.',h:'It relates to being quiet or peaceful.',a:'silent'}
+]},
+{t:'GK',s:'general-knowledge-quizzes-and-riddles',p:[
+{d:'easy',q:'What is the largest planet in our solar system?',h:'It is a gas giant, the fifth planet from the sun.',a:'jupiter'},
+{d:'easy',q:'How many continents are there on Earth?',h:'The commonly taught number.',a:'7'},
+{d:'easy',q:'What is the capital city of France?',h:'Home to the Eiffel Tower.',a:'paris'},
+{d:'easy',q:'How many legs does a spider have?',h:'It is not 6 like an insect.',a:'8'},
+{d:'medium',q:'What is the longest river in the world, by most measurements?',h:'It flows through northeastern Africa.',a:'nile'},
+{d:'medium',q:'Which gas do plants absorb from the air for photosynthesis?',h:'Humans and animals breathe this gas out.',a:'carbon dioxide'},
+{d:'medium',q:'What is the smallest prime number?',h:'It is also the only even prime number.',a:'2'},
+{d:'hard',q:'Which ancient wonder of the world was located in Alexandria, Egypt?',h:'It guided ships at night using fire.',a:'lighthouse of alexandria'},
+{d:'hard',q:'What is the chemical symbol for gold?',h:'It comes from the Latin word "aurum".',a:'au'}
 ]}
 ];
 
@@ -330,9 +396,15 @@ function _boot(tid,_SK,_TK){
   var ds=_ds(),td=_td();
   /* shuffle offline cats daily so the order rotates */
   var ac=_sh(C,ds);
+  var EXPLORE_IDX=ac.length; /* Explore tab always sits right after the offline category tabs */
   var st;
   try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
   if(!st)st={date:td,tab:0,puzz:0,ans:{},rev:{}};
+  /* Guard against a saved tab index that no longer maps to an offline category
+     (e.g. the visitor left the widget on the Explore tab, or a previous
+     version had a different number of offline tabs). Without this clamp,
+     ac[st.tab] is undefined and rend() throws when reading its properties. */
+  if(typeof st.tab!=='number'||st.tab<0||st.tab>=ac.length){st.tab=0;st.puzz=0;}
   var sk=1;
   try{
     var _s=JSON.parse(localStorage.getItem(_TK)||'null');
@@ -357,6 +429,7 @@ function _boot(tid,_SK,_TK){
   var expLabelObj=shuffledLabels[0];
   var expPosts=[],expIdx=0,expLoading=false;
   var expCache={};
+  var expTotals={}; /* label -> total post count in that category, so a repeat visit/refresh skips the count lookup */
 
   /* ── Build HTML ── */
   el.innerHTML=
@@ -470,8 +543,8 @@ function _boot(tid,_SK,_TK){
       (function(n){d.onclick=function(){st.puzz=n;sv();rend();};}(i));
       de.appendChild(d);
     });
-    var tot=cp.length*3,dn=0;
-    for(var t=0;t<3;t++){
+    var tot=cp.length*ac.length,dn=0;
+    for(var t=0;t<ac.length;t++){
       var ps=_pk(ac[t],ds*31+t);
       for(var pi=0;pi<ps.length;pi++){var kk=k(t,pi);if(st.ans[kk]!==undefined||st.rev[kk])dn++;}
     }
@@ -479,8 +552,8 @@ function _boot(tid,_SK,_TK){
   }
 
   function _prog(){
-    var tot=cp.length*3,dn=0;
-    for(var t=0;t<3;t++){
+    var tot=cp.length*ac.length,dn=0;
+    for(var t=0;t<ac.length;t++){
       var ps=_pk(ac[t],ds*31+t);
       for(var pi=0;pi<ps.length;pi++){var kk=k(t,pi);if(st.ans[kk]!==undefined||st.rev[kk])dn++;}
     }
@@ -490,15 +563,18 @@ function _boot(tid,_SK,_TK){
   function _sw(n){
     st.tab=n;st.puzz=0;sv();
     document.querySelectorAll('#'+px+'_tabs .fwptab').forEach(function(b,i){
-      b.className='fwptab'+(i===3?' exptab':'')+(i===n?' on':'');
+      b.className='fwptab'+(i===EXPLORE_IDX?' exptab':'')+(i===n?' on':'');
     });
-    if(n===3){
+    if(n===EXPLORE_IDX){
       g('offline').style.display='none';
       g('exp').style.display='block';
       g('more').textContent='More '+expLabelObj.d+' puzzles';
       g('more').href=B+'/'+expLabelObj.h;
-      /* lazy — only fetch on first Explore click */
-      if(expPosts.length===0&&!expLoading)_expFetch(expLabelObj,false);
+      /* posts may already be sitting in memory from the idle-time
+         background prefetch done right after boot — render immediately
+         instead of re-fetching, so the tab feels instant */
+      if(expPosts.length>0)_expRender();
+      else if(!expLoading)_expFetch(expLabelObj,false);
     }else{
       g('offline').style.display='block';
       g('exp').style.display='none';
@@ -551,88 +627,113 @@ function _boot(tid,_SK,_TK){
     });
   }
 
-  /* ── Explore fetch via JSONP ── */
+  /* ── Explore fetch via JSONP ──
+     Two-step strategy instead of pulling the 150 newest posts every time:
+       1) ask Blogger for just the total post count in the category (tiny reply)
+       2) fetch a small window (up to 20 posts) starting at a UNIFORMLY RANDOM
+          offset across the category's whole history, then sample 5 from it
+     This makes every post — including the very oldest — equally likely to be
+     picked, and downloads far less JSON than before, so it loads faster. */
+  function _jsonp(url,onData,onFail){
+    var cbName='fwpjp_'+px+'_'+Date.now()+'_'+Math.floor(Math.random()*1e6);
+    var script=document.createElement('script');
+    var done=false;
+    function cleanup(){
+      if(done)return;done=true;
+      clearTimeout(_timer);
+      try{document.head.removeChild(script);}catch(e){}
+      delete window[cbName];
+    }
+    var _timer=setTimeout(function(){cleanup();onFail();},8000);
+    window[cbName]=function(data){cleanup();onData(data);};
+    script.onerror=function(){cleanup();onFail();};
+    script.src=url+'&callback='+cbName;
+    document.head.appendChild(script);
+  }
+
+  function _expParseEntry(e){
+    var title=(e.title&&e.title.$t)||'Untitled';
+    var pUrl='';
+    if(e.link){for(var i=0;i<e.link.length;i++){if(e.link[i].rel==='alternate'){pUrl=e.link[i].href;break;}}}
+    var content=(e.content&&e.content.$t)||(e.summary&&e.summary.$t)||'';
+    /* try media thumbnail first — most reliable */
+    var img=null;
+    if(e.media$thumbnail&&e.media$thumbnail.url){
+      img=e.media$thumbnail.url
+        .replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/')
+        .replace(/=s\d+(-c)?/,'=s600');
+    }
+    if(!img)img=_img(content);
+    return{title:title,url:pUrl,img:img};
+  }
+
+  /* preload the images for the current post set in the background so that
+     paging with the next/prev arrows shows an already-cached image instead
+     of waiting on a fresh download each click */
+  function _expPreload(){
+    expPosts.forEach(function(p){
+      if(p.img){var im=new Image();im.src=p.img;}
+    });
+  }
+
+  function _expFail(labelObj,msg){
+    expLoading=false;
+    var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
+    g('expcard').innerHTML=
+      '<div class="fwpexp-err">'
+        +'<p>\uD83D\uDE15 '+msg+'</p>'
+        +'<a href="'+B+'/'+labelObj.h+'" target="_blank" rel="noopener">Browse '+labelObj.d+' on the website \u2192</a>'
+      +'</div>';
+    g('expctr').textContent='';g('expdots').innerHTML='';
+  }
+
+  function _expFetchWindow(labelObj,total,cacheKey){
+    var batch=Math.min(20,total);
+    var maxStart=Math.max(1,total-batch+1);
+    var start=1+Math.floor(Math.random()*maxStart); /* Blogger start-index is 1-based */
+    var url=B+'/feeds/posts/default/-/'+encodeURIComponent(labelObj.l)
+      +'?alt=json&max-results='+batch+'&start-index='+start;
+    _jsonp(url,function(data){
+      expLoading=false;
+      var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
+      var entries=(data&&data.feed&&data.feed.entry)||[];
+      var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
+      if(posts.length===0){expPosts=[];_expRender();return;}
+      expCache[cacheKey]=posts;
+      expPosts=_rnd(posts).slice(0,5);
+      expIdx=0;_expRender();_expPreload();
+    },function(){
+      _expFail(labelObj,'Timed out. The feed took too long to respond.');
+    });
+  }
+
+  function _expFetchCount(labelObj,cacheKey){
+    var url=B+'/feeds/posts/default/-/'+encodeURIComponent(labelObj.l)+'?alt=json&max-results=1';
+    _jsonp(url,function(data){
+      var total=(data&&data.feed&&data.feed.openSearch$totalResults&&parseInt(data.feed.openSearch$totalResults.$t,10))||0;
+      if(!total){expLoading=false;expPosts=[];_expRender();return;}
+      expTotals[cacheKey]=total;
+      _expFetchWindow(labelObj,total,cacheKey);
+    },function(){
+      _expFail(labelObj,'Could not load puzzles. Please check your connection.');
+    });
+  }
+
   function _expFetch(labelObj,forceRefresh){
     if(expLoading)return;
     var cacheKey=labelObj.l;
     if(!forceRefresh&&expCache[cacheKey]){
       expPosts=_rnd(expCache[cacheKey]).slice(0,5);
-      expIdx=0;_expRender();return;
+      expIdx=0;_expRender();_expPreload();return;
     }
     expLoading=true;
-    var ref=g('expref');ref.disabled=true;ref.textContent='\u23F3 Loading...';
+    var ref=g('expref');if(ref){ref.disabled=true;ref.textContent='\u23F3 Loading...';}
     g('expcard').innerHTML=_expSkel();
     g('expctr').textContent='Fetching puzzles...';
     g('expdots').innerHTML='';
 
-    var cbName='fwpjp_'+px+'_'+Date.now();
-    var script=document.createElement('script');
-    var url=B+'/feeds/posts/default/-/'+encodeURIComponent(labelObj.l)+'?alt=json&max-results=150&orderby=published&callback='+cbName;
-
-    window[cbName]=function(data){
-      expLoading=false;
-      ref.disabled=false;ref.textContent='\u21BB Refresh';
-      try{document.head.removeChild(script);}catch(e){}
-      delete window[cbName];
-      var entries=(data&&data.feed&&data.feed.entry)||[];
-      var posts=entries.map(function(e){
-        var title=(e.title&&e.title.$t)||'Untitled';
-        var pUrl='';
-        if(e.link){for(var i=0;i<e.link.length;i++){if(e.link[i].rel==='alternate'){pUrl=e.link[i].href;break;}}}
-        var content=(e.content&&e.content.$t)||(e.summary&&e.summary.$t)||'';
-        /* try media thumbnail first — most reliable */
-        var img=null;
-        if(e.media$thumbnail&&e.media$thumbnail.url){
-          /* handle all blogger thumbnail URL formats */
-          img=e.media$thumbnail.url
-            .replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/')
-            .replace(/=s\d+(-c)?/,'=s600');
-        }
-        if(!img)img=_img(content);
-        return{title:title,url:pUrl,img:img};
-      }).filter(function(p){return p.url;});
-
-      if(posts.length===0){expPosts=[];_expRender();return;}
-      expCache[cacheKey]=posts;
-      expPosts=_rnd(posts).slice(0,5);
-      expIdx=0;_expRender();
-    };
-
-    /* graceful timeout — if JSONP never calls back, stop after 8 seconds */
-    var _timer=setTimeout(function(){
-      if(!window[cbName])return;/* already resolved */
-      expLoading=false;
-      ref.disabled=false;ref.textContent='\u21BB Refresh';
-      try{document.head.removeChild(script);}catch(e){}
-      delete window[cbName];
-      g('expcard').innerHTML=
-        '<div class="fwpexp-err">'
-          +'<p>\uD83D\uDE15 Timed out. The feed took too long to respond.</p>'
-          +'<a href="'+B+'/'+labelObj.h+'" target="_blank" rel="noopener">Browse '+labelObj.d+' on the website \u2192</a>'
-        +'</div>';
-      g('expctr').textContent='';g('expdots').innerHTML='';
-    },8000);
-
-    script.onerror=function(){
-      clearTimeout(_timer);
-      expLoading=false;
-      ref.disabled=false;ref.textContent='\u21BB Refresh';
-      try{document.head.removeChild(script);}catch(e){}
-      delete window[cbName];
-      g('expcard').innerHTML=
-        '<div class="fwpexp-err">'
-          +'<p>\uD83D\uDE15 Could not load puzzles. Please check your connection.</p>'
-          +'<a href="'+B+'/'+labelObj.h+'" target="_blank" rel="noopener">Browse '+labelObj.d+' on the website \u2192</a>'
-        +'</div>';
-      g('expctr').textContent='';g('expdots').innerHTML='';
-    };
-
-    /* also clear timer on success — patch the callback */
-    var _origCb=window[cbName];
-    window[cbName]=function(data){clearTimeout(_timer);_origCb(data);};
-
-	script.src = url;
-    document.head.appendChild(script);
+    if(expTotals[cacheKey]){_expFetchWindow(labelObj,expTotals[cacheKey],cacheKey);}
+    else{_expFetchCount(labelObj,cacheKey);}
   }
 
   function _expSkel(){
@@ -652,7 +753,7 @@ function _boot(tid,_SK,_TK){
   var te=g('tabs');
   ac.forEach(function(cat,i){
     var btn=document.createElement('button');
-    btn.className='fwptab'+(i===0?' on':'');
+    btn.className='fwptab'+(i===st.tab?' on':'');
     btn.textContent=cat.t;
     btn.setAttribute('role','tab');
     (function(n){btn.onclick=function(){_sw(n);};}(i));
@@ -662,7 +763,7 @@ function _boot(tid,_SK,_TK){
   expBtn.className='fwptab exptab';
   expBtn.textContent='\uD83D\uDD0D Explore';
   expBtn.setAttribute('role','tab');
-  expBtn.onclick=function(){_sw(3);};
+  expBtn.onclick=function(){_sw(EXPLORE_IDX);};
   te.appendChild(expBtn);
 
   /* ── Wire offline events ── */
@@ -719,8 +820,17 @@ function _boot(tid,_SK,_TK){
   };
 
   /* ── Boot ── */
-  cp=_pk(ac[0],ds*31);
+  cp=_pk(ac[st.tab],ds*31+st.tab);
   rend();
+
+  /* Warm the Explore tab in the background during idle time so that if the
+     visitor clicks Explore, the first post is already in memory instead of
+     waiting on a network round trip. Only runs if nothing is loaded yet. */
+  function _idlePrefetch(){
+    if(expPosts.length===0&&!expLoading)_expFetch(expLabelObj,false);
+  }
+  if('requestIdleCallback' in window){requestIdleCallback(_idlePrefetch,{timeout:4000});}
+  else{setTimeout(_idlePrefetch,1500);}
 }
 
 /* Auto-discover all widget divs */
