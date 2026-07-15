@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget v6.7.3 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.0 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -234,7 +234,7 @@ if(!document.getElementById('fwpv6preconnect')){
   document.head.appendChild(_pc2);
 }
 
-/* ── Offline puzzle data (6 tabs) ── */
+/* ── Offline puzzle data pool: 28 categories, 3 shown at random each day ── */
 var C=[
 {t:"Riddles",s:"riddles",p:[
 {d:"easy",q:"I speak without a mouth and hear without ears. I have no body but come alive with wind. What am I?",h:"Think of sounds bouncing back in a valley.",a:"echo"},
@@ -624,7 +624,7 @@ var C=[
 {d:"easy",q:"Bottom row of pyramid: 2, 3. What is the top?",h:"Add the two bottom numbers.",a:"5"},
 {d:"easy",q:"Bottom row: 1, 4. Top = ?",h:"Add the two bottom numbers.",a:"5"},
 {d:"easy",q:"Top = 20. Bottom left = 8. Bottom right = ?",h:"Top = sum of two below.",a:"12"},
-{d:"easy",q:"3-row pyramid. Bottom row: 4, 5, 6. Each block above = sum of the two blocks below it. What is the top value?",h:"First find the middle row (4+5 and 5+6), then add those two.",a:"20"},
+{d:"easy",q:"3-row pyramid. Bottom row: 4, 5, 6. Middle row: 9, ?. Top: ?",h:"Each block is the sum of the two blocks below it.",a:"11 and 20"},
 {d:"medium",q:"Complete the pyramid:\n?\n?  ?\n1  2  3",h:"Build layer by layer from the bottom.",a:"9"},
 {d:"medium",q:"Bottom row: 5, 3, 8. Each block = difference of two below. What is the top?",h:"Middle row first, then top.",a:"3"},
 {d:"medium",q:"A 4-row pyramid bottom row: 1, 2, 3, 4. Each block = sum of two below. What is the top?",h:"Build row by row: 3,5,7 then 8,12 then 20.",a:"20"},
@@ -688,59 +688,59 @@ var C=[
 {d:"hard",q:"If 5 cats catch 5 mice in 5 minutes, how many cats catch 100 mice in 100 minutes?",h:"Work out the rate per cat.",a:"5"},
 {d:"hard",q:"You are shrunk to penny-height and put in a blender. What do you do?",h:"Think about the physics and your tiny weight.",a:"jump out as blades spin slowly at first"}
 ]},
-{t:'Word Play',s:'english-word-riddles',p:[
-{d:'easy',q:'What word becomes shorter when you add two letters to it?',h:'Add letters that spell out a small amount.',a:'short'},
-{d:'easy',q:'What 8-letter word has only one letter in it?',h:'Read it literally, not as a category.',a:'envelope'},
-{d:'easy',q:'What word looks the same upside down and backwards?',h:'Think of a simple 5-letter word about swimming.',a:'swims'},
-{d:'easy',q:'Rearrange the letters of "LISTEN" to make another common word.',h:'It relates to being quiet or peaceful.',a:'silent'},
-{d:'easy',q:'What do you call a word that reads the same forwards and backwards?',h:'Think of the word "level" as an example.',a:'palindrome'},
-{d:'easy',q:'What is the only English number word whose letters are in alphabetical order?',h:'It has 4 letters.',a:'forty'},
-{d:'easy',q:'What word begins and ends with "he" and has "he" in the middle too?',h:'Think about a place full of chickens.',a:'henhouse'},
-{d:'easy',q:'What single letter, when added to "OWE", makes a word meaning a farming tool?',h:'Farmers use this tool to break up soil.',a:'hoe'},
-{d:'medium',q:'I am a word of letters three. Add two and fewer there will be. What word am I?',h:'The word itself means "not many".',a:'few'},
-{d:'medium',q:'What common English word contains all five vowels in order, exactly once each?',h:'Think of a word about speaking without preparation.',a:'facetiously'},
-{d:'medium',q:'What 7-letter word has hundreds of letters in it?',h:'Think about a place where mail arrives.',a:'mailbox'},
-{d:'medium',q:'What word can precede both "BOX" and "STORM" to make two new words?',h:'Think about strong wind and cardboard containers.',a:'wind'},
-{d:'hard',q:'What is the longest English word that can be typed using only the left hand on a QWERTY keyboard?',h:'Think of a word describing something exaggerated or overstated.',a:'stewardesses'},
-{d:'hard',q:'What word starts with an E, ends with an E, but is spelled with just one letter?',h:'It carries a written message.',a:'envelope'},
-{d:'hard',q:'What 9-letter word remains a word each time you remove the last letter, down to a single letter?',h:'It starts with a word about a place to stay.',a:'startling'},
-{d:'hard',q:'Which English word is the odd one out — DESSERTS, STRESSED, or DRAWER — when spelled backwards?',h:'Two of them turn into real words when reversed.',a:'drawer'}
+{t:"Water Tank",s:"water-tank-puzzles",p:[
+{d:"easy",q:"A tap fills a tank in 6 hours. How long will it take to fill half the tank?",h:"Half the tank takes half the time.",a:"3 hours"},
+{d:"easy",q:"A tank holds 100 litres. If 20 litres are removed, how many litres remain?",h:"Subtract 20 from 100.",a:"80 litres"},
+{d:"easy",q:"A tap fills water at 10 litres per minute. How long will it take to fill 50 litres?",h:"Divide the total by the rate.",a:"5 minutes"},
+{d:"easy",q:"One tap fills a tank in 4 hours. If 2 identical taps are opened together, how long will they take?",h:"Two taps work twice as fast.",a:"2 hours"},
+{d:"easy",q:"A tank is already half full. Filling the other half takes 3 hours. How long would it take to fill the tank from empty at the same rate?",h:"Double the time for the other half.",a:"6 hours"},
+{d:"easy",q:"A bucket holds 5 litres. How many buckets are needed to fill a 40-litre tank?",h:"Divide 40 by 5.",a:"8"},
+{d:"easy",q:"A full tank drains completely through an outlet in 5 hours. How long will it take to drain just half the tank?",h:"Half the tank takes half the time.",a:"2.5 hours"},
+{d:"easy",q:"A tap fills a tank in 12 hours. What fraction of the tank does it fill in 1 hour?",h:"One hour out of the total time needed.",a:"1/12"},
+{d:"medium",q:"Pipe A fills a tank in 6 hours, Pipe B fills it in 3 hours. If both are opened together, how long will it take to fill the tank?",h:"Add their hourly rates: 1/6 + 1/3.",a:"2 hours"},
+{d:"medium",q:"A tank is filled by pipe A in 4 hours and emptied by pipe B in 6 hours. If both pipes are open together, how long will it take to fill the tank?",h:"Net rate = 1/4 minus 1/6.",a:"12 hours"},
+{d:"medium",q:"Three taps fill a tank in 4, 6, and 12 hours respectively. Working together, how long will they take?",h:"Add all three hourly rates.",a:"2 hours"},
+{d:"medium",q:"Tap A alone fills a tank in 10 hours, tap B alone in 15 hours. Working together, how long will they take?",h:"Add their hourly rates: 1/10 + 1/15.",a:"6 hours"},
+{d:"hard",q:"Pipe A fills a tank in 6 hours. Pipe B can empty a full tank in 9 hours. If both are opened together on an empty tank, how long until it is full?",h:"Net rate = 1/6 minus 1/9.",a:"18 hours"},
+{d:"hard",q:"Pipes A and B fill a tank in 12 and 15 hours. Pipe C empties it in 20 hours. If all three are opened together, how long will it take to fill the tank?",h:"Add the fill rates and subtract the drain rate.",a:"10 hours"},
+{d:"hard",q:"A tank can be filled by pipe A in 10 hours and drained by pipe B in 15 hours. If both are opened together on an empty tank, how long until it is full?",h:"Net rate = 1/10 minus 1/15.",a:"30 hours"},
+{d:"hard",q:"Pipe A alone fills a tank in 8 hours. Because of a leak at the bottom, it actually takes 2 hours longer. How long would the leak alone take to empty a full tank?",h:"Find the combined rate with the leak, then subtract from pipe A's rate.",a:"40 hours"}
 ]},
-{t:'Number Logic',s:'number-logic-puzzles',p:[
-{d:'easy',q:'What is the smallest positive whole number that is not a prime and not 1?',h:'It is even.',a:'4'},
-{d:'easy',q:'What do you call a number that can only be divided evenly by 1 and itself?',h:'2, 3, 5, 7, 11 are examples.',a:'prime number'},
-{d:'easy',q:'What is the next number in this simple pattern: 1, 3, 5, 7, __?',h:'These are odd numbers in order.',a:'9'},
-{d:'easy',q:'If you add all the numbers from 1 to 5, what do you get?',h:'1+2+3+4+5.',a:'15'},
-{d:'easy',q:'What is the smallest 3-digit number?',h:'Think of the smallest possible hundreds digit.',a:'100'},
-{d:'easy',q:'How many even numbers are there between 1 and 10 (inclusive)?',h:'Count 2, 4, 6, 8, 10.',a:'5'},
-{d:'easy',q:'What number, when doubled, equals 18?',h:'Divide 18 by 2.',a:'9'},
-{d:'easy',q:'What is 7 squared?',h:'7 multiplied by itself.',a:'49'},
-{d:'medium',q:'In a 3x3 magic square using 1-9, every row, column and diagonal sums to the same number. What is that number?',h:'The total of 1 through 9 is 45. Divide by 3 rows.',a:'15'},
-{d:'medium',q:'What is the smallest number divisible by both 4 and 6?',h:'Find the least common multiple.',a:'12'},
-{d:'medium',q:'A number is divisible by 9 if what is true about its digits?',h:'Add up the digits and check that sum.',a:'the digit sum is divisible by 9'},
-{d:'medium',q:'What is the sum of the digits of 999?',h:'9+9+9.',a:'27'},
-{d:'hard',q:'What is the only even prime number?',h:'Every other even number can be divided by 2 evenly, which disqualifies it from being prime — except this one.',a:'2'},
-{d:'hard',q:'A 4-digit number reads the same forwards and backwards. What is this type of number called?',h:'Think about the word for something symmetric, like "level" or "1221".',a:'palindrome'},
-{d:'hard',q:'What is the smallest number that is both a perfect square and a perfect cube (excluding 0 and 1)?',h:'Try 2 to the power of 6.',a:'64'},
-{d:'hard',q:'What do you call a number equal to the sum of its own proper divisors, like 6 = 1+2+3?',h:'The next such number after 6 is 28.',a:'perfect number'}
+{t:"Number Logic",s:"number-logic-puzzles",p:[
+{d:"easy",q:"The sum of two numbers is 15 and their difference is 5. What are the two numbers?",h:"Add the sum and difference, then halve for the larger number.",a:"10 and 5"},
+{d:"easy",q:"A number decreased by 5 equals 20. What is the number?",h:"Add 5 to 20.",a:"25"},
+{d:"easy",q:"Twice a number is 18. What is the number?",h:"Divide 18 by 2.",a:"9"},
+{d:"easy",q:"The sum of a number and 7 is 20. What is the number?",h:"Subtract 7 from 20.",a:"13"},
+{d:"easy",q:"A number is 3 more than double 6. What is the number?",h:"Double 6 first, then add 3.",a:"15"},
+{d:"easy",q:"If you add 10 to a number and get 30, what was the number?",h:"Subtract 10 from 30.",a:"20"},
+{d:"easy",q:"A number multiplied by itself gives 49. What is the number?",h:"Think about square roots.",a:"7"},
+{d:"easy",q:"Half of a number is 12. What is the number?",h:"Multiply 12 by 2.",a:"24"},
+{d:"medium",q:"Sam is twice as old as his son. In 20 years, Sam will be 1.5 times as old as his son. How old is Sam now?",h:"Let the son's age be x, Sam's age be 2x, then set up the equation for 20 years later.",a:"40"},
+{d:"medium",q:"The sum of three consecutive numbers is 72. What are the numbers?",h:"Divide 72 by 3 to find the middle number.",a:"23 24 25"},
+{d:"medium",q:"A number is such that adding 9 to it gives the same result as doubling it. What is the number?",h:"Set up: x + 9 = 2x.",a:"9"},
+{d:"medium",q:"The digits of a two-digit number add up to 9. The number itself is 9 times its units digit. What is the number?",h:"Try two-digit numbers whose digits sum to 9 and check the condition.",a:"45"},
+{d:"hard",q:"The sum of the ages of a father and son is 60. Six years ago, the father was 5 times as old as the son. Find their current ages.",h:"Set up two equations using their current ages and their ages 6 years ago.",a:"father 46 son 14"},
+{d:"hard",q:"A two-digit number is 4 times the sum of its digits. If 27 is added to the number, its digits reverse. Find the number.",h:"Let the number be 10t+u, then use both conditions to solve for t and u.",a:"36"},
+{d:"hard",q:"Two numbers are in the ratio 3:5. If 10 is subtracted from each, the new ratio becomes 1:3. Find the numbers.",h:"Let the numbers be 3x and 5x, then solve using the new ratio.",a:"15 and 25"},
+{d:"hard",q:"A clock shows 4:20. What is the angle between the hour and minute hands?",h:"The hour hand moves too — it is not exactly on the 4.",a:"10 degrees"}
 ]},
-{t:'Emoji',s:'emoji-puzzles',p:[
-{d:'easy',q:'🍎 + 🥧 = ? (guess the food)',h:'A classic American dessert.',a:'apple pie'},
-{d:'easy',q:'🐝 + 🍯 — which insect makes this sweet food?',h:'Think about a buzzing insect.',a:'bee honey'},
-{d:'easy',q:'🌞 + 🌻 — what flower always turns to face this?',h:'Its name literally describes the behaviour.',a:'sunflower'},
-{d:'easy',q:'❄️ + ☃️ — what season features both?',h:'The cold season.',a:'winter'},
-{d:'easy',q:'🌧️ + 🐱 + 🐶 — what English idiom describes very heavy rain?',h:"It's raining ___ and ___.",a:'raining cats and dogs'},
-{d:'easy',q:'🍞 + 🧈 — what do you spread on the bread?',h:'A dairy product.',a:'butter'},
-{d:'easy',q:'🌧️ + 🌈 — what appears in the sky after rain and sun combine?',h:'A colourful arc.',a:'rainbow'},
-{d:'easy',q:'🥚 + 🐔 — which classic philosophical question involves both?',h:'Which came first?',a:'the chicken or the egg'},
-{d:'medium',q:'⏰ + ✈️ — what common phrase means time passes quickly?',h:'Think about a flying insect too, if that helps.',a:'time flies'},
-{d:'medium',q:'🌙 + 🚶 = ? (a phrase about staying up late walking)',h:'Not literally walking on the moon.',a:'moonwalk'},
-{d:'medium',q:'🐛 + 🦋 — what natural process does this represent?',h:'A caterpillar becomes something else.',a:'metamorphosis'},
-{d:'medium',q:'🔥 + 👨‍🚒 — what job puts out fires?',h:'Wears a helmet, drives a red truck.',a:'firefighter'},
-{d:'hard',q:'🦁 + 👑 — what is this animal often called because of its emoji pairing?',h:"Think about a famous animated movie title.",a:'the lion king'},
-{d:'hard',q:'🌍 + 🔥 + 🌡️ — what environmental issue do these three represent together?',h:'Rising planetary temperatures.',a:'global warming'},
-{d:'hard',q:'🧠 + 💡 — what phrase describes a sudden clever idea?',h:'A lightbulb moment.',a:'brainwave or bright idea'},
-{d:'hard',q:'⏰ + 🐦 — what English idiom about being early does this represent?',h:'A proverb about worms.',a:'the early bird catches the worm'}
+{t:"Missing Vowels",s:"missing-vowels-quiz-puzzles",p:[
+{d:"easy",q:"Fill in the vowels to find the word: PPL (a common fruit)",h:"Think of a fruit that's often red or green.",a:"apple"},
+{d:"easy",q:"Fill in the vowels: BLL (a round toy used in many sports)",h:"You throw, kick or bounce this.",a:"ball"},
+{d:"easy",q:"Fill in the vowels: HRT (it beats in your chest)",h:"Keeps you alive, pumps blood.",a:"heart"},
+{d:"easy",q:"Fill in the vowels: DG (man's best friend)",h:"A common pet that barks.",a:"dog"},
+{d:"easy",q:"Fill in the vowels: CT (says meow)",h:"A common household pet.",a:"cat"},
+{d:"easy",q:"Fill in the vowels: HS (where you live)",h:"A building with rooms.",a:"house"},
+{d:"easy",q:"Fill in the vowels: SN (shines in the sky during the day)",h:"You need sunglasses to look at it.",a:"sun"},
+{d:"easy",q:"Fill in the vowels: MN (visible at night in the sky)",h:"It has phases like full and crescent.",a:"moon"},
+{d:"medium",q:"Fill in the vowels: CMPTR (you're likely using one to read this)",h:"An electronic device for processing data.",a:"computer"},
+{d:"medium",q:"Fill in the vowels: LPHNT (has a long trunk)",h:"The largest land animal.",a:"elephant"},
+{d:"medium",q:"Fill in the vowels: BRTHDY (you celebrate it every year)",h:"The anniversary of the day you were born.",a:"birthday"},
+{d:"medium",q:"Fill in the vowels: MNTN (a tall natural landform)",h:"Higher than a hill.",a:"mountain"},
+{d:"hard",q:"Fill in the vowels: PZZL (you are solving one right now)",h:"A game or problem designed to test knowledge.",a:"puzzle"},
+{d:"hard",q:"Fill in the vowels: DCTNRY (contains definitions of words)",h:"You look up word meanings here.",a:"dictionary"},
+{d:"hard",q:"Fill in the vowels: NVRSTY (a place of higher education)",h:"Students earn degrees here.",a:"university"},
+{d:"hard",q:"Fill in the vowels: RFRGRTR (keeps your food cold)",h:"A large kitchen appliance.",a:"refrigerator"}
 ]}
 ];
 
