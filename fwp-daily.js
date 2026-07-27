@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.0 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.0.4 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -6,81 +6,81 @@ var LG='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDi4jf-HGfN5
 var SK='fwpv6s',TK='fwpv6t';
 var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.net/gh/funwithpuzzles/fwp-widgets@latest/fwp-daily.js"><\/scr'+'ipt>';
 
-/* ── Explore labels: display name, exact Blogger label, hub page URL ──
+/* \u2500\u2500 Explore labels: display name, exact Blogger label, hub page URL \u2500\u2500
    All label names verified from lebel-hubpage-mapping.txt
    Hub pages used for Browse More link and error fallback. */
 var LABELS=[
   /* Difficulty */
-  {d:'🟢 Easy Puzzles',              l:'Brain Teasers for Kids',                     h:'p/easy-puzzles.html'},
-  {d:'🟡 Medium Puzzles',            l:'Brain Teasers for Teens',                    h:'p/intermediate-level-puzzles.html'},
-  {d:'🔴 Hard Puzzles',              l:'Brain Teasers for Adults',                   h:'p/hard-puzzles.html'},
+  {d:'\ud83d\udfe2 Easy Puzzles',              l:'Brain Teasers for Kids',                     h:'p/easy-puzzles.html'},
+  {d:'\ud83d\udfe1 Medium Puzzles',            l:'Brain Teasers for Teens',                    h:'p/intermediate-level-puzzles.html'},
+  {d:'\ud83d\udd34 Hard Puzzles',              l:'Brain Teasers for Adults',                   h:'p/hard-puzzles.html'},
   /* Riddles */
-  {d:'💡 Riddles',                   l:'Brain Teasers and Riddles',                  h:'p/riddles.html'},
-  {d:'❓ Tricky Riddles',            l:'Tricky Questions',                           h:'p/tricky-riddles.html'},
-  {d:'🤔 What Am I',                 l:'What am I Riddles',                          h:'p/what-am-i-riddles.html'},
-  {d:'😄 Funny Riddles',             l:'Funny Riddles',                              h:'p/funny-riddles.html'},
-  {d:'🕵️ Mystery Riddles',          l:'Mystery Riddles',                            h:'p/mystery-riddles.html'},
-  {d:'📝 English Riddles',           l:'English Puzzles and Riddles',                h:'p/english-word-riddles.html'},
+  {d:'\ud83d\udca1 Riddles',                   l:'Brain Teasers and Riddles',                  h:'p/riddles.html'},
+  {d:'\u2753 Tricky Riddles',            l:'Tricky Questions',                           h:'p/tricky-riddles.html'},
+  {d:'\ud83e\udd14 What Am I',                 l:'What am I Riddles',                          h:'p/what-am-i-riddles.html'},
+  {d:'\ud83d\ude04 Funny Riddles',             l:'Funny Riddles',                              h:'p/funny-riddles.html'},
+  {d:'\ud83d\udd75\ufe0f Mystery Riddles',          l:'Mystery Riddles',                            h:'p/mystery-riddles.html'},
+  {d:'\ud83d\udcdd English Riddles',           l:'English Puzzles and Riddles',                h:'p/english-word-riddles.html'},
   /* Logic */
-  {d:'🔐 Crack the Code',            l:'Crack the Code Puzzles',                     h:'p/crack-code-puzzles.html'},
-  {d:'🧠 Lateral Thinking',          l:'Lateral Thinking Puzzles',                   h:'p/lateral-thinking-puzzles.html'},
-  {d:'⚖️ Logical Equations',         l:'Logical Equations Puzzles',                  h:'p/logical-equations-puzzles.html'},
-  {d:'🔍 Logical Reasoning',         l:'Logical Reasoning Questions and Puzzles',    h:'p/logical-reasoning-puzzles.html'},
-  {d:'💼 Interview Questions',        l:'Interview Questions',                        h:'p/interview-questions.html'},
+  {d:'\ud83d\udd10 Crack the Code',            l:'Crack the Code Puzzles',                     h:'p/crack-code-puzzles.html'},
+  {d:'\ud83e\udde0 Lateral Thinking',          l:'Lateral Thinking Puzzles',                   h:'p/lateral-thinking-puzzles.html'},
+  {d:'\u2696\ufe0f Logical Equations',         l:'Logical Equations Puzzles',                  h:'p/logical-equations-puzzles.html'},
+  {d:'\ud83d\udd0d Logical Reasoning',         l:'Logical Reasoning Questions and Puzzles',    h:'p/logical-reasoning-puzzles.html'},
+  {d:'\ud83d\udcbc Interview Questions',        l:'Interview Questions',                        h:'p/interview-questions.html'},
   /* Maths */
-  {d:'➕ Maths Puzzles',             l:'Maths Puzzles',                              h:'p/maths-puzzles.html'},
-  {d:'🔢 Missing Numbers',           l:'Missing Number Puzzles',                     h:'p/missing-number-puzzles.html'},
-  {d:'📈 Number Series',             l:'Number Series Puzzles',                      h:'p/maths-reasoning-number-series-puzzles.html'},
-  {d:'🔥 Matchstick Puzzles',        l:'Matchstick Puzzles',                         h:'p/matchstick-maths-puzzles.html'},
-  {d:'🔺 Triangle Puzzles',          l:'Triangle Puzzles',                           h:'p/triangle-maths-logic-puzzles.html'},
-  {d:'🔼 Pyramid Puzzles',           l:'Pyramid Puzzles',                            h:'p/pyramid-maths-puzzles.html'},
-  {d:'⭕ Circle Reasoning',          l:'Circle Reasoning Puzzles',                   h:'p/circle-reasoning-puzzles.html'},
-  {d:'🔷 Square Puzzles',            l:'Square Reasoning Puzzles',                   h:'p/square-reasoning-puzzles.html'},
-  {d:'🧮 Maths Riddles',             l:'Maths Riddles',                              h:'p/maths-riddles.html'},
+  {d:'\u2795 Maths Puzzles',             l:'Maths Puzzles',                              h:'p/maths-puzzles.html'},
+  {d:'\ud83d\udd22 Missing Numbers',           l:'Missing Number Puzzles',                     h:'p/missing-number-puzzles.html'},
+  {d:'\ud83d\udcc8 Number Series',             l:'Number Series Puzzles',                      h:'p/maths-reasoning-number-series-puzzles.html'},
+  {d:'\ud83d\udd25 Matchstick Puzzles',        l:'Matchstick Puzzles',                         h:'p/matchstick-maths-puzzles.html'},
+  {d:'\ud83d\udd3a Triangle Puzzles',          l:'Triangle Puzzles',                           h:'p/triangle-maths-logic-puzzles.html'},
+  {d:'\ud83d\udd3c Pyramid Puzzles',           l:'Pyramid Puzzles',                            h:'p/pyramid-maths-puzzles.html'},
+  {d:'\u2b55 Circle Reasoning',          l:'Circle Reasoning Puzzles',                   h:'p/circle-reasoning-puzzles.html'},
+  {d:'\ud83d\udd37 Square Puzzles',            l:'Square Reasoning Puzzles',                   h:'p/square-reasoning-puzzles.html'},
+  {d:'\ud83e\uddee Maths Riddles',             l:'Maths Riddles',                              h:'p/maths-riddles.html'},
   /* Picture Puzzles */
-  {d:'🖼️ Picture Puzzles',           l:'Brain Teasers: Picture Puzzles',             h:'p/picture-puzzles.html'},
-  {d:'👁️ Find the Mistake',          l:'Find the Mistake Puzzles',                   h:'p/find-mistake-puzzles.html'},
-  {d:'🧩 Odd One Out',               l:'Odd One Out Puzzles',                        h:'p/odd-one-out-picture-puzzles.html'},
-  {d:'🔎 Spot the Difference',       l:'Spot the Difference Puzzles',                h:'p/spot-differences-picture-puzzles.html'},
-  {d:'🌀 Optical Illusions',         l:'Optical Illusions',                          h:'p/optical-illusions.html'},
-  {d:'🔷 Count Shapes',              l:'Count the Shapes Puzzles',                   h:'p/count-shapes-puzzles.html'},
-  {d:'🔤 Hidden Letters',            l:'Hidden Letter Puzzles',                      h:'p/hidden-letter-puzzles.html'},
-  {d:'🐾 Hidden Animals',            l:'Hidden Animal Puzzles',                      h:'p/hidden-animal-puzzles.html'},
-  {d:'🔢 Eye Test / Numbers',        l:'Eye Test Puzzles',                           h:'p/hidden-number-picture-puzzles.html'},
-  {d:'🔍 Find the Pair',             l:'Find the Pair Puzzles',                      h:'p/find-pair-picture-puzzles.html'},
-  {d:'🅰️ Can You Read This',         l:'Can you Read this',                          h:'p/can-you-read-this.html'},
-  {d:'🌑 Shadow Riddles',            l:'Shadow Riddles',                             h:'p/shadow-picture-riddles.html'},
-  {d:'🧠 Visual Puzzles',            l:'Brain Teasers: Visual Puzzles',              h:'p/visual-puzzles-test-your-observation.html'},
+  {d:'\ud83d\uddbc\ufe0f Picture Puzzles',           l:'Brain Teasers: Picture Puzzles',             h:'p/picture-puzzles.html'},
+  {d:'\ud83d\udc41\ufe0f Find the Mistake',          l:'Find the Mistake Puzzles',                   h:'p/find-mistake-puzzles.html'},
+  {d:'\ud83e\udde9 Odd One Out',               l:'Odd One Out Puzzles',                        h:'p/odd-one-out-picture-puzzles.html'},
+  {d:'\ud83d\udd0e Spot the Difference',       l:'Spot the Difference Puzzles',                h:'p/spot-differences-picture-puzzles.html'},
+  {d:'\ud83c\udf00 Optical Illusions',         l:'Optical Illusions',                          h:'p/optical-illusions.html'},
+  {d:'\ud83d\udd37 Count Shapes',              l:'Count the Shapes Puzzles',                   h:'p/count-shapes-puzzles.html'},
+  {d:'\ud83d\udd24 Hidden Letters',            l:'Hidden Letter Puzzles',                      h:'p/hidden-letter-puzzles.html'},
+  {d:'\ud83d\udc3e Hidden Animals',            l:'Hidden Animal Puzzles',                      h:'p/hidden-animal-puzzles.html'},
+  {d:'\ud83d\udd22 Eye Test / Numbers',        l:'Eye Test Puzzles',                           h:'p/hidden-number-picture-puzzles.html'},
+  {d:'\ud83d\udd0d Find the Pair',             l:'Find the Pair Puzzles',                      h:'p/find-pair-picture-puzzles.html'},
+  {d:'\ud83c\udd70\ufe0f Can You Read This',         l:'Can you Read this',                          h:'p/can-you-read-this.html'},
+  {d:'\ud83c\udf11 Shadow Riddles',            l:'Shadow Riddles',                             h:'p/shadow-picture-riddles.html'},
+  {d:'\ud83e\udde0 Visual Puzzles',            l:'Brain Teasers: Visual Puzzles',              h:'p/visual-puzzles-test-your-observation.html'},
   /* Chess */
-  {d:'♟️ Chess Puzzles',             l:'Chess Puzzles',                              h:'p/fun-chess-puzzles.html'},
-  {d:'♟️ Easy Chess',                l:'Easy Chess Puzzles',                         h:'p/easy-chess-puzzles.html'},
-  {d:'♟️ Medium Chess',              l:'Medium Level Chess Puzzles',                 h:'p/medium-level-chess-puzzles.html'},
-  {d:'♟️ Hard Chess',                l:'Hard Chess Puzzles',                         h:'p/hard-chess-puzzles.html'},
+  {d:'\u265f\ufe0f Chess Puzzles',             l:'Chess Puzzles',                              h:'p/fun-chess-puzzles.html'},
+  {d:'\u265f\ufe0f Easy Chess',                l:'Easy Chess Puzzles',                         h:'p/easy-chess-puzzles.html'},
+  {d:'\u265f\ufe0f Medium Chess',              l:'Medium Level Chess Puzzles',                 h:'p/medium-level-chess-puzzles.html'},
+  {d:'\u265f\ufe0f Hard Chess',                l:'Hard Chess Puzzles',                         h:'p/hard-chess-puzzles.html'},
   /* Sudoku */
-  {d:'🔢 Sudoku',                    l:'Sudoku',                                     h:'p/sudoku.html'},
-  {d:'🔢 Sudoku Variants',           l:'Sudoku Variants',                            h:'p/sudoku-puzzles.html'},
-  {d:'🔢 Killer Sudoku',             l:'Killer Sudoku',                              h:'2017/01/killer-sudoku-puzzles-index.html'},
-  {d:'🔢 Diagonal Sudoku',           l:'Diagonal Sudoku',                            h:'2015/10/diagonal-sudoku-puzzles.html'},
-  {d:'🔢 Thermo Sudoku',             l:'Thermo Sudoku',                              h:'2017/01/thermometer-sudoku-puzzles-index.html'},
+  {d:'\ud83d\udd22 Sudoku',                    l:'Sudoku',                                     h:'p/sudoku.html'},
+  {d:'\ud83d\udd22 Sudoku Variants',           l:'Sudoku Variants',                            h:'p/sudoku-puzzles.html'},
+  {d:'\ud83d\udd22 Killer Sudoku',             l:'Killer Sudoku',                              h:'2017/01/killer-sudoku-puzzles-index.html'},
+  {d:'\ud83d\udd22 Diagonal Sudoku',           l:'Diagonal Sudoku',                            h:'2015/10/diagonal-sudoku-puzzles.html'},
+  {d:'\ud83d\udd22 Thermo Sudoku',             l:'Thermo Sudoku',                              h:'2017/01/thermometer-sudoku-puzzles-index.html'},
   /* Other */
-  {d:'🖼️ Rebus Puzzles',             l:'Rebus Puzzles',                              h:'p/rebus-riddles.html'},
-  {d:'😎 Emoji Puzzles',             l:'Emoji Puzzles',                              h:'p/emoji-puzzles.html'},
-  {d:'🌍 GK Puzzles',               l:'GK Puzzles',                                 h:'p/general-knowledge-quizzes-and-riddles.html'},
-  {d:'📐 Spatial Reasoning',         l:'Spatial Reasoning Puzzles',                  h:'p/spatial-reasoning-puzzles.html'},
-  {d:'💧 Water Tank',                l:'Water Tank Puzzles',                         h:'p/water-tank-puzzles.html'},
-  {d:'⚙️ Gear Puzzles',              l:'Gear Puzzles',                               h:'p/gear-puzzles.html'},
-  {d:'⚡ Quick Puzzles',             l:'Quick Puzzles',                              h:'p/quick-puzzles-brain-teasers-and-riddles.html'},
-  {d:'🧩 Jigsaw Puzzles',            l:'Jigsaw Puzzles',                             h:'p/jigsaw-puzzles.html'},
-  {d:'👀 Stereograms',               l:'Stereograms',                                h:'p/stereogram-puzzles.html'},
-  {d:'🅰️ Missing Vowels',            l:'Missing Vowels Quiz',                        h:'p/missing-vowels-quiz-puzzles.html'},
-  {d:'📊 Non-Verbal Reasoning',      l:'Non Verbal Reasoning',                       h:'p/non-verbal-reasoning-puzzles.html'},
-  {d:'🧠 Mental Ability',            l:'Mental Ability Questions',                   h:'p/mental-ability-questions-brain-test.html'},
-  {d:'🅿️ Parking Puzzles',           l:'Parking Puzzles',                            h:'p/parking-pattern-puzzles.html'},
-  {d:'🔢 Number Logic',              l:'Number Logic Puzzles',                       h:'p/number-logic-puzzles.html'},
-  {d:'🏆 Best Puzzles',              l:'Best Brain Teasers',                         h:'p/popular-puzzles.html'}
+  {d:'\ud83d\uddbc\ufe0f Rebus Puzzles',             l:'Rebus Puzzles',                              h:'p/rebus-riddles.html'},
+  {d:'\ud83d\ude0e Emoji Puzzles',             l:'Emoji Puzzles',                              h:'p/emoji-puzzles.html'},
+  {d:'\ud83c\udf0d GK Puzzles',               l:'GK Puzzles',                                 h:'p/general-knowledge-quizzes-and-riddles.html'},
+  {d:'\ud83d\udcd0 Spatial Reasoning',         l:'Spatial Reasoning Puzzles',                  h:'p/spatial-reasoning-puzzles.html'},
+  {d:'\ud83d\udca7 Water Tank',                l:'Water Tank Puzzles',                         h:'p/water-tank-puzzles.html'},
+  {d:'\u2699\ufe0f Gear Puzzles',              l:'Gear Puzzles',                               h:'p/gear-puzzles.html'},
+  {d:'\u26a1 Quick Puzzles',             l:'Quick Puzzles',                              h:'p/quick-puzzles-brain-teasers-and-riddles.html'},
+  {d:'\ud83e\udde9 Jigsaw Puzzles',            l:'Jigsaw Puzzles',                             h:'p/jigsaw-puzzles.html'},
+  {d:'\ud83d\udc40 Stereograms',               l:'Stereograms',                                h:'p/stereogram-puzzles.html'},
+  {d:'\ud83c\udd70\ufe0f Missing Vowels',            l:'Missing Vowels Quiz',                        h:'p/missing-vowels-quiz-puzzles.html'},
+  {d:'\ud83d\udcca Non-Verbal Reasoning',      l:'Non Verbal Reasoning',                       h:'p/non-verbal-reasoning-puzzles.html'},
+  {d:'\ud83e\udde0 Mental Ability',            l:'Mental Ability Questions',                   h:'p/mental-ability-questions-brain-test.html'},
+  {d:'\ud83c\udd7f\ufe0f Parking Puzzles',           l:'Parking Puzzles',                            h:'p/parking-pattern-puzzles.html'},
+  {d:'\ud83d\udd22 Number Logic',              l:'Number Logic Puzzles',                       h:'p/number-logic-puzzles.html'},
+  {d:'\ud83c\udfc6 Best Puzzles',              l:'Best Brain Teasers',                         h:'p/popular-puzzles.html'}
 ];
 
-/* ── CSS ── */
+/* \u2500\u2500 CSS \u2500\u2500 */
 if(!document.getElementById('fwpv6css')){
   var _cs=document.createElement('style');
   _cs.id='fwpv6css';
@@ -148,7 +148,7 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpban{display:none;background:linear-gradient(135deg,#0A0AFF,#13253a);border-radius:10px;padding:12px 14px;margin-top:11px;text-align:center;color:#fff;}'
 +'.fwpban p{font-size:13px;font-weight:700;margin-bottom:4px;color:#fff;}'
 +'.fwpban small{font-size:11px;color:rgba(255,255,255,.75);}'
-/* ── EXPLORE TAB ── */
+/* \u2500\u2500 EXPLORE TAB \u2500\u2500 */
 +'.fwpexp{display:none;padding:13px 14px;}'
 +'.fwpexp-toprow{display:flex;align-items:center;gap:7px;margin-bottom:11px;}'
 +'.fwpexp-sel{flex:1;min-width:0;height:36px;border:1.5px solid #d1d5db;border-radius:8px;padding:0 10px;font-size:11.5px;color:#374151;background:#fff;outline:none;font-family:inherit;cursor:pointer;transition:border-color .15s;}'
@@ -156,25 +156,36 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpexp-ref{height:36px;padding:0 11px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}'
 +'.fwpexp-ref:hover{background:#6d28d9;}'
 +'.fwpexp-ref:disabled{background:#a78bfa;cursor:not-allowed;}'
-/* nav row — fixed height prevents layout shift */
+/* nav row \u2014 fixed height prevents layout shift */
 +'.fwpexp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;min-height:26px;}'
 +'.fwpexp-ctr{font-size:10px;color:#9ca3af;font-weight:500;}'
 +'.fwpexp-navs{display:flex;gap:5px;}'
 +'.fwpexp-nb{width:26px;height:26px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;color:#9ca3af;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;}'
 +'.fwpexp-nb:hover{background:#f5f3ff;color:#7c3aed;border-color:#7c3aed;}'
-/* card container — FIXED HEIGHT prevents layout shift */
+/* card container \u2014 FIXED HEIGHT prevents layout shift */
 +'.fwpw .fwpexp-wrap{position:relative;}'
 /* card */
 +'.fwpw .fwpexp-card{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;cursor:pointer;transition:box-shadow .2s,transform .2s;text-decoration:none;display:block;background:#fff;}'
 +'.fwpw .fwpexp-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px);}'
-/* IMAGE FIX:
-   - padding-top:56.25% reserves exact 16:9 space BEFORE image loads = zero layout shift
-   - object-fit:contain = full image visible, no cropping on sidebar OR desktop
-   - background:#f8f9ff fills any letterbox gaps cleanly */
-+'.fwpw .fwpexp-imgwrap{width:100%;padding-top:56.25%;position:relative;background:#f8f9ff;overflow:hidden;}'
-+'.fwpw .fwpexp-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;display:block;transition:transform .3s;}'
+/* IMAGE FIX (v3 \u2014 no cropping, minimal layout shift):
+   - width:100%, height:auto lets each image render at its own natural aspect
+     ratio, so the whole picture is always visible (nothing gets cropped).
+   - When the source <img> tag includes width/height attributes (Blogger's
+     native uploader usually adds these), _imgWithDims() reads them and the
+     card sets an inline CSS aspect-ratio on the wrapper BEFORE the image
+     starts downloading \u2014 so the box is already the correct height up front
+     instead of jumping once the image loads. Falls back to min-height:220px
+     when dimensions aren't available (some shift in that case only).
+   - max-height:420px caps how tall the card can grow for unusually tall/
+     portrait images \u2014 in that rare case the image renders slightly narrower
+     than full width (via object-fit:contain, centred) rather than forcing the
+     card to a huge height. Typical wide/landscape puzzle images render at
+     full width with no cap kicking in at all.
+   - background:#f8f9ff shows briefly behind the image while it loads */
++'.fwpw .fwpexp-imgwrap{width:100% !important;max-width:none !important;min-height:220px;max-height:420px;position:relative;background:#f8f9ff;overflow:hidden;text-align:center;line-height:0;}'
++'.fwpw .fwpexp-img{display:block !important;position:static !important;width:100% !important;height:auto !important;max-width:100% !important;max-height:420px !important;object-fit:contain !important;object-position:center;margin:0 auto !important;transition:transform .3s;}'
 +'.fwpw .fwpexp-card:hover .fwpexp-img{transform:scale(1.02);}'
-+'.fwpw .fwpexp-imgph{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
++'.fwpw .fwpexp-imgph{position:static !important;width:100% !important;height:220px !important;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
 +'.fwpw .fwpexp-imgph img{width:52px;height:52px;opacity:.35;object-fit:contain;}'
 /* card body */
 +'.fwpexp-cbody{padding:11px 13px 13px;}'
@@ -182,7 +193,7 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpexp-title{font-size:13px;font-weight:700;color:#111827;line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}'
 +'.fwpexp-solve{display:flex;align-items:center;justify-content:space-between;background:#7c3aed;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;font-weight:700;}'
 +'.fwpexp-solve span{font-size:15px;}'
-/* skeleton — same structure as card so no layout shift */
+/* skeleton \u2014 same structure as card so no layout shift */
 +'.fwpexp-skel{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;background:#fff;}'
 +'.fwpexp-skel-img{width:100%;padding-top:56.25%;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
 +'.fwpexp-skel-body{padding:11px 13px 13px;}'
@@ -225,8 +236,8 @@ if(!document.getElementById('fwpv6css')){
   document.head.appendChild(_cs);
 }
 
-/* ── One-time network warm-up: open the connections early so the first
-   Explore fetch and its images don't pay full DNS+TLS setup cost ── */
+/* \u2500\u2500 One-time network warm-up: open the connections early so the first
+   Explore fetch and its images don't pay full DNS+TLS setup cost \u2500\u2500 */
 if(!document.getElementById('fwpv6preconnect')){
   var _pc1=document.createElement('link');_pc1.id='fwpv6preconnect';_pc1.rel='preconnect';_pc1.href=B;
   document.head.appendChild(_pc1);
@@ -234,7 +245,7 @@ if(!document.getElementById('fwpv6preconnect')){
   document.head.appendChild(_pc2);
 }
 
-/* ── Offline puzzle data pool: 28 categories, 3 shown at random each day ── */
+/* \u2500\u2500 Offline puzzle data pool: 28 categories, 3 shown at random each day \u2500\u2500 */
 var C=[
 {t:"Riddles",s:"riddles",p:[
 {d:"easy",q:"I speak without a mouth and hear without ears. I have no body but come alive with wind. What am I?",h:"Think of sounds bouncing back in a valley.",a:"echo"},
@@ -335,7 +346,7 @@ var C=[
 {d:"easy",q:"How many times can you subtract 10 from 100?",h:"After the first time the number is no longer 100.",a:"once"},
 {d:"easy",q:"What comes next: 1, 2, 4, 8, 16, __?",h:"Each number is doubled.",a:"32"},
 {d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet"},
-{d:"easy",q:"How many sides does a circle have?",h:"Think carefully — it is not zero.",a:"one curved side"},
+{d:"easy",q:"How many sides does a circle have?",h:"Think carefully \u2014 it is not zero.",a:"one curved side"},
 {d:"easy",q:"What is 1000 plus 20 plus 1000 plus 30 plus 1000 plus 1040?",h:"Add carefully step by step.",a:"4090"},
 {d:"medium",q:"I am an odd number. Take away one letter and I become even. What number am I?",h:"Think about the word not the digit.",a:"seven"},
 {d:"medium",q:"A bat and ball cost Rs 110 together. The bat costs Rs 100 more than the ball. What is the cost of the ball?",h:"Do not say Rs 10. Set up a proper equation.",a:"5"},
@@ -344,40 +355,40 @@ var C=[
 {d:"hard",q:"A clock loses 3 minutes every hour. Set at noon, when will it next show the correct time?",h:"It must lose exactly 12 hours.",a:"240 days"},
 {d:"hard",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings"},
 {d:"hard",q:"What 3 positive numbers give the same result when multiplied and when added?",h:"Try simple numbers like 1, 2, 3.",a:"1 2 3"},
-{d:"hard",q:"You have two hourglasses — a 4-minute and a 7-minute. How do you measure exactly 9 minutes?",h:"Start both, flip the 4 when done, then flip again.",a:"flip strategically"}
+{d:"hard",q:"You have two hourglasses \u2014 a 4-minute and a 7-minute. How do you measure exactly 9 minutes?",h:"Start both, flip the 4 when done, then flip again.",a:"flip strategically"}
 ]},
 {t:"Missing #",s:"missing-number-puzzles",p:[
-{d:"easy",q:"2, 4, 6, 8, __ — What comes next?",h:"Each number increases by the same amount.",a:"10"},
-{d:"easy",q:"1, 1, 2, 3, 5, 8, __ — What comes next?",h:"Each number is the sum of the two before it.",a:"13"},
-{d:"easy",q:"10, 20, 30, 40, __ — What comes next?",h:"Count in tens.",a:"50"},
-{d:"easy",q:"5, 10, 20, 40, __ — What comes next?",h:"Each number is doubled.",a:"80"},
-{d:"easy",q:"100, 90, 80, 70, __ — What comes next?",h:"Counting backwards by tens.",a:"60"},
-{d:"easy",q:"1, 4, 9, 16, 25, __ — What comes next?",h:"Think about perfect squares.",a:"36"},
-{d:"easy",q:"3, 9, 27, 81, __ — What comes next?",h:"Each number is multiplied by 3.",a:"243"},
-{d:"easy",q:"2, 4, 8, 16, __ — What comes next?",h:"Each number doubles.",a:"32"},
-{d:"medium",q:"3, 6, 12, 24, __ — What comes next?",h:"Each number is multiplied by the same value.",a:"48"},
+{d:"easy",q:"2, 4, 6, 8, __ \u2014 What comes next?",h:"Each number increases by the same amount.",a:"10"},
+{d:"easy",q:"1, 1, 2, 3, 5, 8, __ \u2014 What comes next?",h:"Each number is the sum of the two before it.",a:"13"},
+{d:"easy",q:"10, 20, 30, 40, __ \u2014 What comes next?",h:"Count in tens.",a:"50"},
+{d:"easy",q:"5, 10, 20, 40, __ \u2014 What comes next?",h:"Each number is doubled.",a:"80"},
+{d:"easy",q:"100, 90, 80, 70, __ \u2014 What comes next?",h:"Counting backwards by tens.",a:"60"},
+{d:"easy",q:"1, 4, 9, 16, 25, __ \u2014 What comes next?",h:"Think about perfect squares.",a:"36"},
+{d:"easy",q:"3, 9, 27, 81, __ \u2014 What comes next?",h:"Each number is multiplied by 3.",a:"243"},
+{d:"easy",q:"2, 4, 8, 16, __ \u2014 What comes next?",h:"Each number doubles.",a:"32"},
+{d:"medium",q:"3, 6, 12, 24, __ \u2014 What comes next?",h:"Each number is multiplied by the same value.",a:"48"},
 {d:"medium",q:"Grid:\n2  4  8\n3  9  27\n4  16  ?\nWhat replaces the ?",h:"Look at the pattern across each row.",a:"64"},
-{d:"medium",q:"7, 14, 21, 28, __ — What comes next?",h:"Multiples of 7.",a:"35"},
-{d:"medium",q:"1, 3, 6, 10, 15, __ — What comes next?",h:"These are triangle numbers.",a:"21"},
-{d:"hard",q:"1, 2, 6, 24, 120, __ — What comes next?",h:"Each term equals previous term multiplied by its position.",a:"720"},
+{d:"medium",q:"7, 14, 21, 28, __ \u2014 What comes next?",h:"Multiples of 7.",a:"35"},
+{d:"medium",q:"1, 3, 6, 10, 15, __ \u2014 What comes next?",h:"These are triangle numbers.",a:"21"},
+{d:"hard",q:"1, 2, 6, 24, 120, __ \u2014 What comes next?",h:"Each term equals previous term multiplied by its position.",a:"720"},
 {d:"hard",q:"Find the missing number:\n6  13  25\n11 23  45\n16 33  __",h:"Look at the relationship across each row.",a:"65"},
 {d:"hard",q:"What is the sum of the first 100 natural numbers?",h:"Use the formula n x (n+1) divided by 2.",a:"5050"},
 {d:"hard",q:"What comes next: 0, 1, 1, 2, 3, 5, 8, 13, 21, __?",h:"Each number is the sum of the two before it.",a:"34"}
 ]},
 {t:"Series",s:"maths-reasoning-number-series-puzzles",p:[
-{d:"easy",q:"2, 6, 18, 54, __ — What comes next?",h:"Each number is multiplied by 3.",a:"162"},
-{d:"easy",q:"3, 6, 9, 12, 15, __ — What comes next?",h:"Multiples of 3.",a:"18"},
-{d:"easy",q:"1, 3, 5, 7, 9, __ — What comes next?",h:"These are odd numbers in order.",a:"11"},
-{d:"easy",q:"2, 3, 5, 7, 11, 13, __ — What comes next?",h:"These are all prime numbers.",a:"17"},
-{d:"easy",q:"4, 8, 12, 16, __ — What comes next?",h:"Multiples of 4.",a:"20"},
-{d:"easy",q:"100, 95, 85, 70, 50, __ — What comes next?",h:"Look at how much is subtracted each time.",a:"25"},
-{d:"easy",q:"1, 2, 4, 8, 16, __ — What comes next?",h:"Powers of 2.",a:"32"},
-{d:"easy",q:"5, 10, 15, 20, 25, __ — What comes next?",h:"Multiples of 5.",a:"30"},
-{d:"medium",q:"1, 2, 4, 7, 11, 16, __ — What comes next?",h:"The difference between terms increases by 1 each time.",a:"22"},
-{d:"medium",q:"1, 8, 27, 64, 125, __ — What comes next?",h:"Think about perfect cubes.",a:"216"},
-{d:"medium",q:"2, 5, 10, 17, 26, __ — What comes next?",h:"Look at the differences: 3, 5, 7, 9 ...",a:"37"},
-{d:"medium",q:"0, 1, 4, 9, 16, __ — What comes next?",h:"These are perfect squares starting from 0.",a:"25"},
-{d:"hard",q:"3, 5, 11, 29, 83, __ — What comes next?",h:"Each term equals previous term x 3 minus 4.",a:"245"},
+{d:"easy",q:"2, 6, 18, 54, __ \u2014 What comes next?",h:"Each number is multiplied by 3.",a:"162"},
+{d:"easy",q:"3, 6, 9, 12, 15, __ \u2014 What comes next?",h:"Multiples of 3.",a:"18"},
+{d:"easy",q:"1, 3, 5, 7, 9, __ \u2014 What comes next?",h:"These are odd numbers in order.",a:"11"},
+{d:"easy",q:"2, 3, 5, 7, 11, 13, __ \u2014 What comes next?",h:"These are all prime numbers.",a:"17"},
+{d:"easy",q:"4, 8, 12, 16, __ \u2014 What comes next?",h:"Multiples of 4.",a:"20"},
+{d:"easy",q:"100, 95, 85, 70, 50, __ \u2014 What comes next?",h:"Look at how much is subtracted each time.",a:"25"},
+{d:"easy",q:"1, 2, 4, 8, 16, __ \u2014 What comes next?",h:"Powers of 2.",a:"32"},
+{d:"easy",q:"5, 10, 15, 20, 25, __ \u2014 What comes next?",h:"Multiples of 5.",a:"30"},
+{d:"medium",q:"1, 2, 4, 7, 11, 16, __ \u2014 What comes next?",h:"The difference between terms increases by 1 each time.",a:"22"},
+{d:"medium",q:"1, 8, 27, 64, 125, __ \u2014 What comes next?",h:"Think about perfect cubes.",a:"216"},
+{d:"medium",q:"2, 5, 10, 17, 26, __ \u2014 What comes next?",h:"Look at the differences: 3, 5, 7, 9 ...",a:"37"},
+{d:"medium",q:"0, 1, 4, 9, 16, __ \u2014 What comes next?",h:"These are perfect squares starting from 0.",a:"25"},
+{d:"hard",q:"3, 5, 11, 29, 83, __ \u2014 What comes next?",h:"Each term equals previous term x 3 minus 4.",a:"245"},
 {d:"hard",q:"What is the next number: 1, 11, 21, 1211, 111221, __?",h:"Read each number aloud to describe the previous one.",a:"312211"},
 {d:"hard",q:"What is the next prime number after 89?",h:"Check 97: is it divisible by 2, 3, 5, 7?",a:"97"},
 {d:"hard",q:"2, 12, 36, 80, 150, __? What comes next?",h:"Try n squared times (n+1).",a:"252"}
@@ -492,7 +503,7 @@ var C=[
 ]},
 {t:"Rebus",s:"rebus-riddles",p:[
 {d:"easy",q:"What phrase does HE + ART represent?",h:"Read the letters and their position.",a:"heart"},
-{d:"easy",q:"HIJKLMNO — What one word does this represent?",h:"These letters span H to O.",a:"water"},
+{d:"easy",q:"HIJKLMNO \u2014 What one word does this represent?",h:"These letters span H to O.",a:"water"},
 {d:"easy",q:"What does BAN + ANA represent?",h:"Put the sounds together.",a:"banana"},
 {d:"easy",q:"What does EZ represent?",h:"Say the letters aloud.",a:"easy"},
 {d:"easy",q:"What phrase does HEAD over HEELS represent?",h:"One word is above another.",a:"head over heels"},
@@ -505,7 +516,7 @@ var C=[
 {d:"medium",q:"What does this mean: DEATH LIFE?",h:"Think about what comes between the two words.",a:"life after death"},
 {d:"hard",q:"What does MAN / BOARD represent?",h:"Think about position.",a:"man overboard"},
 {d:"hard",q:"What does NE14 10S mean?",h:"Say each part aloud.",a:"anyone for tennis"},
-{d:"hard",q:"TIMING TIM ING — what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing"},
+{d:"hard",q:"TIMING TIM ING \u2014 what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing"},
 {d:"hard",q:"What does ROADS represent?",h:"Think about crossroads.",a:"crossroads"}
 ]},
 {t:"GK",s:"general-knowledge-quizzes-and-riddles",p:[
@@ -605,13 +616,13 @@ var C=[
 {d:"easy",q:"What gets bigger the more you take away from it?",h:"Think about digging.",a:"hole"},
 {d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin"},
 {d:"easy",q:"What stays in a corner but travels all over the world?",h:"You put me on an envelope.",a:"stamp"},
-{d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one — not the Sphinx riddle.",a:"table"},
+{d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one \u2014 not the Sphinx riddle.",a:"table"},
 {d:"easy",q:"What has a lot of keys but cannot open any door?",h:"You use it to play music.",a:"piano"},
 {d:"medium",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them"},
 {d:"medium",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella"},
-{d:"medium",q:"A man has 10 horses and 9 stables. One horse in each stable — possible?",h:"Re-read: does it say one horse PER stable?",a:"no 10 horses only 9 stables"},
+{d:"medium",q:"A man has 10 horses and 9 stables. One horse in each stable \u2014 possible?",h:"Re-read: does it say one horse PER stable?",a:"no 10 horses only 9 stables"},
 {d:"medium",q:"What can you keep after giving it to someone?",h:"Think about something intangible.",a:"your word"},
-{d:"hard",q:"The word CANDY can be spelled using just 2 letters. How?",h:"C and Y — CandY.",a:"C and Y"},
+{d:"hard",q:"The word CANDY can be spelled using just 2 letters. How?",h:"C and Y \u2014 CandY.",a:"C and Y"},
 {d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of: one, two, three ...",a:"N"},
 {d:"hard",q:"A farmer has 5 haystacks in one field and 4 in another. He combines them. How many haystacks?",h:"What happens when you combine haystacks?",a:"1"},
 {d:"hard",q:"What is special about the number 8,549,176,320?",h:"Think about what it contains.",a:"contains all digits 0-9 each once"}
@@ -678,7 +689,7 @@ var C=[
 {d:"easy",q:"You have 3L and 5L jugs. How do you measure exactly 4L?",h:"Fill 5, pour into 3, dump, repeat.",a:"fill 5 pour into 3 leaving 2 fill 3 from 5 gives 4"},
 {d:"easy",q:"How many times do the hands of a clock overlap in 12 hours?",h:"They overlap approximately every 65.45 minutes.",a:"11"},
 {d:"easy",q:"How many windows are in your city?",h:"Estimate population then multiply by windows per person.",a:"estimate based on population"},
-{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively — this is a judgement test.",a:"move the reference point or tunnel through it"},
+{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively \u2014 this is a judgement test.",a:"move the reference point or tunnel through it"},
 {d:"medium",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings"},
 {d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200"},
 {d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Think about heat from a bulb.",a:"leave one on wait turn off turn another on then enter check heat"},
@@ -722,7 +733,7 @@ var C=[
 {d:"hard",q:"The sum of the ages of a father and son is 60. Six years ago, the father was 5 times as old as the son. Find their current ages.",h:"Set up two equations using their current ages and their ages 6 years ago.",a:"father 46 son 14"},
 {d:"hard",q:"A two-digit number is 4 times the sum of its digits. If 27 is added to the number, its digits reverse. Find the number.",h:"Let the number be 10t+u, then use both conditions to solve for t and u.",a:"36"},
 {d:"hard",q:"Two numbers are in the ratio 3:5. If 10 is subtracted from each, the new ratio becomes 1:3. Find the numbers.",h:"Let the numbers be 3x and 5x, then solve using the new ratio.",a:"15 and 25"},
-{d:"hard",q:"A clock shows 4:20. What is the angle between the hour and minute hands?",h:"The hour hand moves too — it is not exactly on the 4.",a:"10 degrees"}
+{d:"hard",q:"A clock shows 4:20. What is the angle between the hour and minute hands?",h:"The hour hand moves too \u2014 it is not exactly on the 4.",a:"10 degrees"}
 ]},
 {t:"Missing Vowels",s:"missing-vowels-quiz-puzzles",p:[
 {d:"easy",q:"Fill in the vowels to find the word: PPL (a common fruit)",h:"Think of a fruit that's often red or green.",a:"apple"},
@@ -744,7 +755,7 @@ var C=[
 ]}
 ];
 
-/* ── Helpers ── */
+/* \u2500\u2500 Helpers \u2500\u2500 */
 function _td(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 function _sh(a,s){var r=a.slice(),x=(s||1)&0x7fffffff,i,j,t;for(i=r.length-1;i>0;i--){x=(x*1664525+1013904223)&0x7fffffff;j=x%(i+1);t=r[i];r[i]=r[j];r[j]=t;}return r;}
 function _rnd(a){var r=a.slice(),i,j,t;for(i=r.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=r[i];r[i]=r[j];r[j]=t;}return r;}
@@ -763,36 +774,73 @@ function _fz(r,a){
   var h=cw.filter(function(w){return w.length>3&&rw.indexOf(w)!==-1;});
   return h.length>=Math.max(1,Math.floor(cw.length*0.6));
 }
-/* extract image from blogger post html
-   Handles ALL blogger CDN URL formats:
-   - /s640-rw/image.PNG  (old)
-   - /w400-h266-p-k-no-nu/image.png  (new)
-   - /s72-c/image.png  (thumbnail old)
-   - /w72-h72-p-k-no-nu/image.png  (thumbnail new)
-   Strategy: grab full blogger CDN URL then normalise size to s600 */
-function _img(html){
-  if(!html)return null;
-  /* match ANY blogger googleusercontent URL */
-  var m=html.match(/src=["'](https?:\/\/[^"']*blogger[^"']*googleusercontent[^"']*\/[^"'\/]+\/[^"']+)/i);
-  if(m){
-    var u=m[1];
-    /* normalise size portion — replace whatever comes before the filename */
-    u=u.replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/');
-    return u;
+/* Normalise ANY Blogger/Google-hosted image CDN URL to a large, UNCROPPED size.
+   Google's image CDN encodes size (and sometimes a crop flag) in one of several
+   places depending on when the post was made:
+     - /s640-rw/photo.jpg              (old, slash-delimited)
+     - /w400-h266-p-k-no-nu/photo.jpg  (newer, slash-delimited)
+     - /s72-c/photo.jpg                (old thumbnail \u2014 "-c" means square-cropped)
+     - photo.jpg=w72-h72-p-k-no-nu-mo  (newest, trailing \u2014 no slashes at all)
+     - photo.jpg=s72-c                 (older trailing form)
+   Every one of these gets rewritten to a plain "s1200" token with any "-c" crop
+   flag dropped, so we always request the FULL uncropped image at a size large
+   enough to fill the card at full width on retina screens. Previously the
+   regex only handled the slash-delimited forms, so newer "=w..-h.." trailing
+   URLs passed through untouched and rendered as tiny, often square-cropped
+   thumbnails. */
+function _normImgUrl(u){
+  if(!u)return u;
+  if(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//.test(u)){
+    return u.replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s1200/');
   }
-  /* fallback: any image src */
-  var m2=html.match(/src=["']([^"']+\.(?:jpg|jpeg|png|gif|webp|PNG|JPG)[^"']*)/i);
-  return m2?m2[1]:null;
+  if(/=w\d+-h\d+[^=]*$/.test(u)){
+    return u.replace(/=w\d+-h\d+[^=]*$/,'=s1200');
+  }
+  if(/=s\d+(-c)?$/.test(u)){
+    return u.replace(/=s\d+(-c)?$/,'=s1200');
+  }
+  return u;
+}
+/* extract image from blogger post html
+   Handles ALL blogger CDN URL formats \u2014 see _normImgUrl above.
+   Strategy: grab the full blogger CDN URL, then normalise its size separately. */
+/* Extracts the post's embedded image, AND its width/height attributes if the
+   source <img> tag includes them (Blogger's native uploader usually does).
+   Knowing the real aspect ratio ahead of time lets the card reserve the
+   correct height before the image even starts downloading, instead of only
+   finding out once it loads \u2014 this is what keeps layout shift to a minimum. */
+function _imgWithDims(html){
+  if(!html)return null;
+  var tag=null,url=null;
+  var m=html.match(/<img[^>]*\bsrc=["'](https?:\/\/[^"']*blogger[^"']*googleusercontent[^"']*\/[^"'\/]+\/[^"']+)["'][^>]*>/i);
+  if(m){tag=m[0];url=m[1];}
+  else{
+    var m2=html.match(/<img[^>]*\bsrc=["']([^"']+\.(?:jpg|jpeg|png|gif|webp|PNG|JPG)[^"']*)["'][^>]*>/i);
+    if(m2){tag=m2[0];url=m2[1];}
+  }
+  if(!url)return null;
+  var w=null,h=null;
+  if(tag){
+    var wm=tag.match(/\bwidth=["']?(\d+)/i);
+    var hm=tag.match(/\bheight=["']?(\d+)/i);
+    if(wm)w=parseInt(wm[1],10);
+    if(hm)h=parseInt(hm[1],10);
+  }
+  return{url:_normImgUrl(url),w:(w&&h)?w:null,h:(w&&h)?h:null};
+}
+function _img(html){
+  var r=_imgWithDims(html);
+  return r?r.url:null;
 }
 
-/* ── Widget factory ── */
+/* \u2500\u2500 Widget factory \u2500\u2500 */
 function _boot(tid,_SK,_TK){
   var el=document.getElementById(tid);if(!el)return;
   var ds=_ds(),td=_td();
   /* shuffle offline cats daily so the order rotates */
   /* Show only 3 offline tabs per day, picked from the full category pool (C).
      _sh(C,ds) shuffles the ENTIRE pool deterministically using today's date
-     as the seed, so every visitor sees the same 3 categories today — and a
+     as the seed, so every visitor sees the same 3 categories today \u2014 and a
      different 3 tomorrow, since ds changes daily. Slicing to 3 keeps the
      tab bar to "3 tabs + Explore" no matter how large the pool grows. */
   var TABS_PER_DAY=3;
@@ -825,14 +873,18 @@ function _boot(tid,_SK,_TK){
   function g(id){return document.getElementById(px+'_'+id);}
 
   /* Explore state */
-  /* Shuffle label order daily — same order for all visitors same day */
+  /* Shuffle the REAL categories' order daily; "Random Puzzles" (pulls from
+     the whole site, no label filter) always stays first and is unaffected
+     by the shuffle or by which 3 offline tabs are showing today. */
+  var RANDOM_LABEL={d:'\uD83C\uDFB2 Random Puzzles',l:null,h:'p/index.html'};
   var shuffledLabels=_sh(LABELS.slice(),ds+99);
-  var expLabelObj=shuffledLabels[0];
+  var allExpOptions=[RANDOM_LABEL].concat(shuffledLabels);
+  var expLabelObj=allExpOptions[0];
   var expPosts=[],expIdx=0,expLoading=false;
   var expCache={};
   var expTotals={}; /* label -> total post count in that category, so a repeat visit/refresh skips the count lookup */
 
-  /* ── Build HTML ── */
+  /* \u2500\u2500 Build HTML \u2500\u2500 */
   el.innerHTML=
     '<div class="fwpw"><div class="fwpc">'
     +'<div class="fwph">'
@@ -888,9 +940,9 @@ function _boot(tid,_SK,_TK){
     +'<div class="fwpattr">Powered by <a href="'+B+'" target="_blank" rel="noopener">funwithpuzzles.com</a></div>'
     +'</div></div>';
 
-  /* populate dropdown — daily shuffled order */
+  /* populate dropdown \u2014 Random Puzzles first, then daily-shuffled categories */
   var sel=g('expsel');
-  shuffledLabels.forEach(function(lb,i){
+  allExpOptions.forEach(function(lb,i){
     var o=document.createElement('option');
     o.value=i;
     o.textContent=lb.d;
@@ -901,7 +953,7 @@ function _boot(tid,_SK,_TK){
   g('date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
   g('sk').textContent=sk;
 
-  /* ── Offline render ── */
+  /* \u2500\u2500 Offline render \u2500\u2500 */
   function rend(){
     var p=cp[st.puzz],kk=k(st.tab,st.puzz),ans=st.ans[kk],rev=st.rev[kk];
     g('q').textContent=p.q;
@@ -961,6 +1013,10 @@ function _boot(tid,_SK,_TK){
     g('prog').style.width=Math.round((dn/tot)*100)+'%';
   }
 
+  function _moreLinkText(labelObj){
+    return labelObj.l ? ('More '+labelObj.d+' puzzles') : 'More puzzles';
+  }
+
   function _sw(n){
     st.tab=n;st.puzz=0;sv();
     document.querySelectorAll('#'+px+'_tabs .fwptab').forEach(function(b,i){
@@ -969,10 +1025,10 @@ function _boot(tid,_SK,_TK){
     if(n===EXPLORE_IDX){
       g('offline').style.display='none';
       g('exp').style.display='block';
-      g('more').textContent='More '+expLabelObj.d+' puzzles';
+      g('more').textContent=_moreLinkText(expLabelObj);
       g('more').href=B+'/'+expLabelObj.h;
       /* posts may already be sitting in memory from the idle-time
-         background prefetch done right after boot — render immediately
+         background prefetch done right after boot \u2014 render immediately
          instead of re-fetching, so the tab feels instant */
       if(expPosts.length>0)_expRender();
       else if(!expLoading)_expFetch(expLabelObj,false);
@@ -990,7 +1046,7 @@ function _boot(tid,_SK,_TK){
     st.ans[kk]=raw;sv();rend();
   }
 
-  /* ── Explore render ── */
+  /* \u2500\u2500 Explore render \u2500\u2500 */
   function _expRender(){
     if(expPosts.length===0){
       g('expcard').innerHTML=
@@ -1004,9 +1060,15 @@ function _boot(tid,_SK,_TK){
     }
     var p=expPosts[expIdx];
     g('expctr').textContent='Puzzle '+(expIdx+1)+' of '+expPosts.length;
-    /* build card */
+    /* build card. When we know the image's real aspect ratio (from width/
+       height attributes on the source <img> tag), set it inline via the
+       CSS aspect-ratio property so the box is already the right height
+       before the image starts downloading \u2014 this is what removes most of
+       the layout shift. Falls back to the fixed min-height when unknown
+       (some older/external posts don't include width/height attributes). */
+    var wrapStyle=(p.aspect&&isFinite(p.aspect))?(' style="aspect-ratio:'+p.aspect.toFixed(4)+'"'):'';
     var imgHtml=p.img
-      ?'<div class="fwpexp-imgwrap"><img class="fwpexp-img" src="'+p.img+'" alt="'+p.title.replace(/[<>"]/g,'')+'" onerror="this.parentNode.innerHTML=\'<div class=fwpexp-imgph><img src='+LG+' /></div>\'"/></div>'
+      ?'<div class="fwpexp-imgwrap"'+wrapStyle+'><img class="fwpexp-img" src="'+p.img+'" alt="'+p.title.replace(/[<>"]/g,'')+'" onerror="this.parentNode.innerHTML=\'<div class=fwpexp-imgph><img src='+LG+' /></div>\'"/></div>'
       :'<div class="fwpexp-imgph"><img src="'+LG+'"/></div>';
     g('expcard').innerHTML=
       '<a class="fwpexp-card" href="'+p.url+'" target="_blank" rel="noopener">'
@@ -1028,12 +1090,12 @@ function _boot(tid,_SK,_TK){
     });
   }
 
-  /* ── Explore fetch via JSONP ──
+  /* \u2500\u2500 Explore fetch via JSONP \u2500\u2500
      Two-step strategy instead of pulling the 150 newest posts every time:
        1) ask Blogger for just the total post count in the category (tiny reply)
        2) fetch a small window (up to 20 posts) starting at a UNIFORMLY RANDOM
           offset across the category's whole history, then sample 5 from it
-     This makes every post — including the very oldest — equally likely to be
+     This makes every post \u2014 including the very oldest \u2014 equally likely to be
      picked, and downloads far less JSON than before, so it loads faster. */
   function _jsonp(url,onData,onFail){
     var cbName='fwpjp_'+px+'_'+Date.now()+'_'+Math.floor(Math.random()*1e6);
@@ -1057,15 +1119,22 @@ function _boot(tid,_SK,_TK){
     var pUrl='';
     if(e.link){for(var i=0;i<e.link.length;i++){if(e.link[i].rel==='alternate'){pUrl=e.link[i].href;break;}}}
     var content=(e.content&&e.content.$t)||(e.summary&&e.summary.$t)||'';
-    /* try media thumbnail first — most reliable */
-    var img=null;
-    if(e.media$thumbnail&&e.media$thumbnail.url){
-      img=e.media$thumbnail.url
-        .replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/')
-        .replace(/=s\d+(-c)?/,'=s600');
+    /* Prefer the image embedded in the post content \u2014 it's the real, full
+       picture at its natural aspect ratio. media$thumbnail is a fallback
+       only, because Blogger pre-crops thumbnails to a square ("-c" flag),
+       which is why images used to render tiny/off-centre inside the card. */
+    var img=null,aspect=null;
+    var contentImg=_imgWithDims(content);
+    if(contentImg){
+      img=contentImg.url;
+      if(contentImg.w&&contentImg.h)aspect=contentImg.w/contentImg.h;
     }
-    if(!img)img=_img(content);
-    return{title:title,url:pUrl,img:img};
+    if(!img&&e.media$thumbnail&&e.media$thumbnail.url){
+      img=_normImgUrl(e.media$thumbnail.url);
+      /* NOT using the thumbnail's own width/height here \u2014 it's a square
+         crop, so its aspect ratio does not represent the real picture. */
+    }
+    return{title:title,url:pUrl,img:img,aspect:aspect};
   }
 
   /* preload the images for the current post set in the background so that
@@ -1088,12 +1157,19 @@ function _boot(tid,_SK,_TK){
     g('expctr').textContent='';g('expdots').innerHTML='';
   }
 
+  /* Builds the Blogger feed URL for a category. When labelObj.l is null (the
+     "Random Puzzles" entry), the /-/LABEL segment is omitted entirely so the
+     feed returns posts from across the WHOLE site, not one category. */
+  function _feedUrl(labelObj,params){
+    var base=labelObj.l?(B+'/feeds/posts/default/-/'+encodeURIComponent(labelObj.l)):(B+'/feeds/posts/default');
+    return base+'?alt=json'+params;
+  }
+
   function _expFetchWindow(labelObj,total,cacheKey){
     var batch=Math.min(20,total);
     var maxStart=Math.max(1,total-batch+1);
     var start=1+Math.floor(Math.random()*maxStart); /* Blogger start-index is 1-based */
-    var url=B+'/feeds/posts/default/-/'+encodeURIComponent(labelObj.l)
-      +'?alt=json&max-results='+batch+'&start-index='+start;
+    var url=_feedUrl(labelObj,'&max-results='+batch+'&start-index='+start);
     _jsonp(url,function(data){
       expLoading=false;
       var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
@@ -1109,7 +1185,7 @@ function _boot(tid,_SK,_TK){
   }
 
   function _expFetchCount(labelObj,cacheKey){
-    var url=B+'/feeds/posts/default/-/'+encodeURIComponent(labelObj.l)+'?alt=json&max-results=1';
+    var url=_feedUrl(labelObj,'&max-results=1');
     _jsonp(url,function(data){
       var total=(data&&data.feed&&data.feed.openSearch$totalResults&&parseInt(data.feed.openSearch$totalResults.$t,10))||0;
       if(!total){expLoading=false;expPosts=[];_expRender();return;}
@@ -1122,7 +1198,7 @@ function _boot(tid,_SK,_TK){
 
   function _expFetch(labelObj,forceRefresh){
     if(expLoading)return;
-    var cacheKey=labelObj.l;
+    var cacheKey=labelObj.l||'__random__'; /* the Random entry has no label string, so use a fixed key */
     if(!forceRefresh&&expCache[cacheKey]){
       expPosts=_rnd(expCache[cacheKey]).slice(0,5);
       expIdx=0;_expRender();_expPreload();return;
@@ -1150,7 +1226,7 @@ function _boot(tid,_SK,_TK){
     +'</div>';
   }
 
-  /* ── Build tabs ── */
+  /* \u2500\u2500 Build tabs \u2500\u2500 */
   var te=g('tabs');
   ac.forEach(function(cat,i){
     var btn=document.createElement('button');
@@ -1167,7 +1243,7 @@ function _boot(tid,_SK,_TK){
   expBtn.onclick=function(){_sw(EXPLORE_IDX);};
   te.appendChild(expBtn);
 
-  /* ── Wire offline events ── */
+  /* \u2500\u2500 Wire offline events \u2500\u2500 */
   g('prev').onclick=function(){st.puzz=(st.puzz-1+cp.length)%cp.length;sv();rend();};
   g('next').onclick=function(){st.puzz=(st.puzz+1)%cp.length;sv();rend();};
   g('hbtn').onclick=function(){ho=!ho;g('hbox').style.display=ho?'block':'none';this.textContent=ho?'\uD83D\uDE48 Hide hint':'\uD83D\uDCA1 Show hint';};
@@ -1194,11 +1270,11 @@ function _boot(tid,_SK,_TK){
     else{window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt+'\n'+url),'_blank');}
   };
 
-  /* ── Wire explore events ── */
+  /* \u2500\u2500 Wire explore events \u2500\u2500 */
   g('expsel').onchange=function(){
-    expLabelObj=shuffledLabels[parseInt(this.value,10)];
+    expLabelObj=allExpOptions[parseInt(this.value,10)];
     expPosts=[];expIdx=0;
-    g('more').textContent='More '+expLabelObj.d+' puzzles';
+    g('more').textContent=_moreLinkText(expLabelObj);
     g('more').href=B+'/'+expLabelObj.h;
     _expFetch(expLabelObj,false);
   };
@@ -1220,7 +1296,7 @@ function _boot(tid,_SK,_TK){
     else{var ta=document.createElement('textarea');ta.value=EC;ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
   };
 
-  /* ── Boot ── */
+  /* \u2500\u2500 Boot \u2500\u2500 */
   cp=_pk(ac[st.tab],ds*31+st.tab);
   rend();
 
