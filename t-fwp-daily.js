@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.0 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget F1.0.2 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -169,12 +169,15 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpw .fwpexp-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px);}'
 /* IMAGE FIX:
    - padding-top:56.25% reserves exact 16:9 space BEFORE image loads = zero layout shift
-   - object-fit:contain = full image visible, no cropping on sidebar OR desktop
-   - background:#f8f9ff fills any letterbox gaps cleanly */
-+'.fwpw .fwpexp-imgwrap{width:100%;padding-top:56.25%;position:relative;background:#f8f9ff;overflow:hidden;}'
-+'.fwpw .fwpexp-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;display:block;transition:transform .3s;}'
+   - object-fit:cover = image always fills the FULL card width and height, regardless
+     of its native size/aspect ratio (source images vary a lot — some are small square
+     thumbnails, some are wide screenshots). Any excess on one axis is cropped rather
+     than letterboxed, so nothing ever renders small/off-centre inside the card.
+   - background:#f8f9ff shows briefly behind the image while it loads */
++'.fwpw .fwpexp-imgwrap{width:100% !important;padding-top:56.25%;position:relative;background:#f8f9ff;overflow:hidden;max-width:none !important;}'
++'.fwpw .fwpexp-img{position:absolute !important;top:0 !important;left:0 !important;width:100% !important;height:100% !important;max-width:none !important;max-height:none !important;object-fit:cover !important;object-position:center;display:block;transition:transform .3s;margin:0 !important;}'
 +'.fwpw .fwpexp-card:hover .fwpexp-img{transform:scale(1.02);}'
-+'.fwpw .fwpexp-imgph{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
++'.fwpw .fwpexp-imgph{position:absolute !important;top:0 !important;left:0 !important;width:100% !important;height:100% !important;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
 +'.fwpw .fwpexp-imgph img{width:52px;height:52px;opacity:.35;object-fit:contain;}'
 /* card body */
 +'.fwpexp-cbody{padding:11px 13px 13px;}'
@@ -763,23 +766,41 @@ function _fz(r,a){
   var h=cw.filter(function(w){return w.length>3&&rw.indexOf(w)!==-1;});
   return h.length>=Math.max(1,Math.floor(cw.length*0.6));
 }
+/* Normalise ANY Blogger/Google-hosted image CDN URL to a large, UNCROPPED size.
+   Google's image CDN encodes size (and sometimes a crop flag) in one of several
+   places depending on when the post was made:
+     - /s640-rw/photo.jpg              (old, slash-delimited)
+     - /w400-h266-p-k-no-nu/photo.jpg  (newer, slash-delimited)
+     - /s72-c/photo.jpg                (old thumbnail — "-c" means square-cropped)
+     - photo.jpg=w72-h72-p-k-no-nu-mo  (newest, trailing — no slashes at all)
+     - photo.jpg=s72-c                 (older trailing form)
+   Every one of these gets rewritten to a plain "s1200" token with any "-c" crop
+   flag dropped, so we always request the FULL uncropped image at a size large
+   enough to fill the card at full width on retina screens. Previously the
+   regex only handled the slash-delimited forms, so newer "=w..-h.." trailing
+   URLs passed through untouched and rendered as tiny, often square-cropped
+   thumbnails. */
+function _normImgUrl(u){
+  if(!u)return u;
+  if(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//.test(u)){
+    return u.replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s1200/');
+  }
+  if(/=w\d+-h\d+[^=]*$/.test(u)){
+    return u.replace(/=w\d+-h\d+[^=]*$/,'=s1200');
+  }
+  if(/=s\d+(-c)?$/.test(u)){
+    return u.replace(/=s\d+(-c)?$/,'=s1200');
+  }
+  return u;
+}
 /* extract image from blogger post html
-   Handles ALL blogger CDN URL formats:
-   - /s640-rw/image.PNG  (old)
-   - /w400-h266-p-k-no-nu/image.png  (new)
-   - /s72-c/image.png  (thumbnail old)
-   - /w72-h72-p-k-no-nu/image.png  (thumbnail new)
-   Strategy: grab full blogger CDN URL then normalise size to s600 */
+   Handles ALL blogger CDN URL formats — see _normImgUrl above.
+   Strategy: grab the full blogger CDN URL, then normalise its size separately. */
 function _img(html){
   if(!html)return null;
   /* match ANY blogger googleusercontent URL */
   var m=html.match(/src=["'](https?:\/\/[^"']*blogger[^"']*googleusercontent[^"']*\/[^"'\/]+\/[^"']+)/i);
-  if(m){
-    var u=m[1];
-    /* normalise size portion — replace whatever comes before the filename */
-    u=u.replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/');
-    return u;
-  }
+  if(m)return _normImgUrl(m[1]);
   /* fallback: any image src */
   var m2=html.match(/src=["']([^"']+\.(?:jpg|jpeg|png|gif|webp|PNG|JPG)[^"']*)/i);
   return m2?m2[1]:null;
@@ -1057,14 +1078,14 @@ function _boot(tid,_SK,_TK){
     var pUrl='';
     if(e.link){for(var i=0;i<e.link.length;i++){if(e.link[i].rel==='alternate'){pUrl=e.link[i].href;break;}}}
     var content=(e.content&&e.content.$t)||(e.summary&&e.summary.$t)||'';
-    /* try media thumbnail first — most reliable */
-    var img=null;
-    if(e.media$thumbnail&&e.media$thumbnail.url){
-      img=e.media$thumbnail.url
-        .replace(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//,'/s600/')
-        .replace(/=s\d+(-c)?/,'=s600');
+    /* Prefer the image embedded in the post content — it's the real, full
+       picture at its natural aspect ratio. media$thumbnail is a fallback
+       only, because Blogger pre-crops thumbnails to a square ("-c" flag),
+       which is why images used to render tiny/off-centre inside the card. */
+    var img=_img(content);
+    if(!img&&e.media$thumbnail&&e.media$thumbnail.url){
+      img=_normImgUrl(e.media$thumbnail.url);
     }
-    if(!img)img=_img(content);
     return{title:title,url:pUrl,img:img};
   }
 
