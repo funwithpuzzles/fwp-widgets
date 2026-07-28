@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.0.5 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.0.6 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -50,7 +50,7 @@ var LABELS=[
   {d:'\ud83d\udd0d Find the Pair',             l:'Find the Pair Puzzles',                      h:'p/find-pair-picture-puzzles.html'},
   {d:'\ud83c\udd70\ufe0f Can You Read This',         l:'Can you Read this',                          h:'p/can-you-read-this.html'},
   {d:'\ud83c\udf11 Shadow Riddles',            l:'Shadow Riddles',                             h:'p/shadow-picture-riddles.html'},
-  {d:'\ud83e\udde0 Visual Puzzles',            l:'Brain Teasers: Picture Puzzles',              h:'p/visual-puzzles-test-your-observation.html'},
+  {d:'\ud83e\udde0 Visual Puzzles',            l:'Brain Teasers: Visual Puzzles',              h:'p/visual-puzzles-test-your-observation.html'},
   /* Chess */
   {d:'\u265f\ufe0f Chess Puzzles',             l:'Chess Puzzles',                              h:'p/fun-chess-puzzles.html'},
   {d:'\u265f\ufe0f Easy Chess',                l:'Easy Chess Puzzles',                         h:'p/easy-chess-puzzles.html'},
@@ -182,7 +182,7 @@ if(!document.getElementById('fwpv6css')){
      card to a huge height. Typical wide/landscape puzzle images render at
      full width with no cap kicking in at all.
    - background:#f8f9ff shows briefly behind the image while it loads */
-+'.fwpw .fwpexp-imgwrap{width:100% !important;max-width:none !important;min-height:220px;max-height:420px;position:relative;background:#f8f9ff;overflow:hidden;text-align:center;line-height:0;}'
++'.fwpw .fwpexp-imgwrap{width:100% !important;max-width:none !important;max-height:420px;position:relative;background:#f8f9ff;overflow:hidden;text-align:center;line-height:0;}'
 +'.fwpw .fwpexp-img{display:block !important;position:static !important;width:100% !important;height:auto !important;max-width:100% !important;max-height:420px !important;object-fit:contain !important;object-position:center;margin:0 auto !important;transition:transform .3s;}'
 +'.fwpw .fwpexp-card:hover .fwpexp-img{transform:scale(1.02);}'
 +'.fwpw .fwpexp-imgph{position:static !important;width:100% !important;height:220px !important;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
@@ -876,7 +876,7 @@ function _boot(tid,_SK,_TK){
   /* Shuffle the REAL categories' order daily; "Random Puzzles" (pulls from
      the whole site, no label filter) always stays first and is unaffected
      by the shuffle or by which 3 offline tabs are showing today. */
-  var RANDOM_LABEL={d:'\uD83C\uDFB2 Random Puzzles',l:null,h:''};
+  var RANDOM_LABEL={d:'\uD83C\uDFB2 Random Puzzles',l:null,h:'p/index.html'};
   var shuffledLabels=_sh(LABELS.slice(),ds+99);
   var allExpOptions=[RANDOM_LABEL].concat(shuffledLabels);
   var expLabelObj=allExpOptions[0];
@@ -1066,7 +1066,7 @@ function _boot(tid,_SK,_TK){
        before the image starts downloading \u2014 this is what removes most of
        the layout shift. Falls back to the fixed min-height when unknown
        (some older/external posts don't include width/height attributes). */
-    var wrapStyle=(p.aspect&&isFinite(p.aspect))?(' style="aspect-ratio:'+p.aspect.toFixed(4)+'"'):'';
+    var wrapStyle=(p.aspect&&isFinite(p.aspect))?(' style="aspect-ratio:'+p.aspect.toFixed(4)+'"'):(' style="min-height:220px"');
     var imgHtml=p.img
       ?'<div class="fwpexp-imgwrap"'+wrapStyle+'><img class="fwpexp-img" src="'+p.img+'" alt="'+p.title.replace(/[<>"]/g,'')+'" onerror="this.parentNode.innerHTML=\'<div class=fwpexp-imgph><img src='+LG+' /></div>\'"/></div>'
       :'<div class="fwpexp-imgph"><img src="'+LG+'"/></div>';
