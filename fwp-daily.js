@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.0.6 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.0.8 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -105,14 +105,14 @@ if(!document.getElementById('fwpv6css')){
 +'.fwppr{height:3px;background:#e5e7eb;}'
 +'.fwppf{height:3px;background:#0A0AFF;width:0%;transition:width .4s ease;}'
 /* tabs */
-+'.fwptabs{display:flex;padding:9px 10px 0;background:#f4f5ff;border-bottom:2px solid #0A0AFF;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}'
-+'.fwptabs::-webkit-scrollbar{display:none;}'
-+'.fwptab{flex:0 0 auto;padding:6px 11px;font-size:10.5px;font-weight:700;color:#6b7280;background:#fff;border:1.5px solid #d1d5db;border-bottom:2px solid #d1d5db;border-radius:7px 7px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s;margin-bottom:-2px;position:relative;}'
++'.fwptabs{display:flex;padding:9px 10px 0;background:#f4f5ff;border-bottom:2px solid #0A0AFF;gap:4px;}'
++'.fwptab{flex:1 1 0;min-width:0;padding:6px 6px;font-size:10.5px;font-weight:700;color:#6b7280;background:#fff;border:1.5px solid #d1d5db;border-bottom:2px solid #d1d5db;border-radius:7px 7px 0 0;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:inherit;transition:all .15s;margin-bottom:-2px;position:relative;}'
 +'.fwptab.on{color:#0A0AFF;border-color:#0A0AFF;border-bottom-color:#f4f5ff;background:#f4f5ff;z-index:1;}'
 +'.fwptab:hover:not(.on){color:#374151;border-color:#a5b4fc;background:#eef1ff;}'
 +'.fwptab.exptab{color:#7c3aed;}'
 +'.fwptab.exptab.on{color:#7c3aed;border-color:#7c3aed;border-bottom-color:#f4f5ff;}'
 +'.fwptab.exptab:hover:not(.on){color:#6d28d9;border-color:#c4b5fd;background:#f5f3ff;}'
++'@media (max-width:360px){.fwptab{font-size:9px;padding:6px 3px;letter-spacing:-.2px;}}'
 /* offline body */
 +'.fwpbody{padding:13px 14px;}'
 +'.fwptop{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}'
@@ -752,6 +752,42 @@ var C=[
 {d:"hard",q:"Fill in the vowels: DCTNRY (contains definitions of words)",h:"You look up word meanings here.",a:"dictionary"},
 {d:"hard",q:"Fill in the vowels: NVRSTY (a place of higher education)",h:"Students earn degrees here.",a:"university"},
 {d:"hard",q:"Fill in the vowels: RFRGRTR (keeps your food cold)",h:"A large kitchen appliance.",a:"refrigerator"}
+]},
+{t:"Hidden Animals",s:"hidden-animal-puzzles",p:[
+{d:"easy",q:"Find the hidden animal: The store sells CATALOGS of furniture.",h:"Look at the very start of the word catalog.",a:"cat"},
+{d:"easy",q:"Find the hidden animal: That belief is pure DOGMA with no evidence.",h:"Look at the start of the word dogma.",a:"dog"},
+{d:"easy",q:"Find the hidden animal: She wore a COWL over her head to stay warm.",h:"A cowl is a hooded cloak \u2014 look at its first three letters.",a:"cow"},
+{d:"easy",q:"Find the hidden animal: She wore a PIGMENT-stained apron while painting.",h:"Look at the start of the word pigment.",a:"pig"},
+{d:"easy",q:"Find the hidden animal: This is a valuable ANTIQUE vase from the 1800s.",h:"Look at the start of the word antique.",a:"ant"},
+{d:"easy",q:"Find the hidden animal: HENCE, we must leave right now.",h:"Look at the start of the word hence.",a:"hen"},
+{d:"easy",q:"Find the hidden animal: Please replace the BATTERY in the remote.",h:"Look at the start of the word battery.",a:"bat"},
+{d:"easy",q:"Find the hidden animal: They danced the FOXTROT beautifully all night.",h:"The foxtrot is a classic ballroom dance \u2014 look at its start.",a:"fox"},
+{d:"medium",q:"Find the hidden animal: He grew a thick BEARD over the winter.",h:"Look right after the first letter of beard.",a:"bear"},
+{d:"medium",q:"Find the hidden animal: I love HORSERADISH sauce with my roast beef.",h:"Look at the first five letters of horseradish.",a:"horse"},
+{d:"medium",q:"Find the hidden animal: The senate will RATIFY the new treaty tomorrow.",h:"Look at the start of the word ratify.",a:"rat"},
+{d:"medium",q:"Find the hidden animal: The cat kept PROWLING around the garden at night.",h:"Look in the middle of the word prowling.",a:"owl"},
+{d:"hard",q:"Find the hidden animal: We played SCRABBLE all evening with the family.",h:"Look right after the first two letters of scrabble.",a:"crab"},
+{d:"hard",q:"Find the hidden animal: She bought beautiful new JEWELRY for the party.",h:"Look right after the first letter of jewelry \u2014 it's a female sheep.",a:"ewe"},
+{d:"hard",q:"Find the hidden animal: I love eating fresh GRAPES in the summer.",h:"Look at the last three letters of grape.",a:"ape"},
+{d:"hard",q:"Find the hidden animal: Please DECODE this secret message for me.",h:"Look in the middle of the word decode \u2014 it's a type of fish.",a:"cod"}
+]},
+{t:"Emoji",s:"emoji-puzzles",p:[
+{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF27\uFE0F\u2614",h:"Think about weather and what you'd carry outside.",a:"rainy day"},
+{d:"easy",q:"What phrase do these emoji spell out?\n\uD83D\uDD25\uD83D\uDE92",h:"A vehicle that puts out fires.",a:"fire truck"},
+{d:"easy",q:"What phrase do these emoji spell out?\n\uD83D\uDC1D\uD83C\uDF6F",h:"An insect that makes something sweet.",a:"honey bee"},
+{d:"easy",q:"What phrase do these emoji spell out?\n\u2600\uFE0F\uD83C\uDF3B",h:"A flower that turns to follow the sun.",a:"sunflower"},
+{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF82\uD83C\uDF89",h:"A yearly celebration with cake.",a:"birthday party"},
+{d:"easy",q:"What phrase do these emoji spell out?\n\uD83D\uDCDA\uD83C\uDF92",h:"Where you go on weekday mornings with books.",a:"school"},
+{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF19\u2B50",h:"What you see in the sky after sunset.",a:"night sky"},
+{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF4E\uD83D\uDC68\u200D\uD83C\uDFEB",h:"A classic gift for someone who teaches.",a:"teacher"},
+{d:"medium",q:"What phrase do these emoji spell out?\n\u23F0\uD83D\uDC26",h:"Think of a saying about catching a worm.",a:"early bird"},
+{d:"medium",q:"What phrase do these emoji spell out?\n\uD83E\uDDCA\uD83C\uDFD4\uFE0F",h:"Mostly hidden below the ocean surface.",a:"iceberg"},
+{d:"medium",q:"What phrase do these emoji spell out?\n\uD83E\uDD8B\uD83C\uDF38",h:"A place full of flowers and flying insects.",a:"butterfly garden"},
+{d:"medium",q:"What phrase do these emoji spell out?\n\uD83D\uDC22\uD83D\uDC07",h:"A classic fable about a slow-and-steady race.",a:"tortoise and the hare"},
+{d:"hard",q:"What phrase do these emoji spell out?\n\uD83C\uDFA3\uD83D\uDC1F\uD83C\uDF73",h:"Catching, then cooking, a meal from the water.",a:"fish fry"},
+{d:"hard",q:"What phrase do these emoji spell out?\n\uD83C\uDF2A\uFE0F\uD83C\uDFE0\uD83D\uDCA8",h:"A severe, rotating windstorm.",a:"tornado"},
+{d:"hard",q:"What phrase do these emoji spell out?\n\uD83E\uDDE0\uD83D\uDCA1",h:"A sudden clever thought.",a:"bright idea"},
+{d:"hard",q:"What phrase do these emoji spell out?\n\uD83D\uDD70\uFE0F\u23EA",h:"A phrase about reversing the clock.",a:"turn back time"}
 ]}
 ];
 
@@ -1165,22 +1201,69 @@ function _boot(tid,_SK,_TK){
     return base+'?alt=json'+params;
   }
 
-  function _expFetchWindow(labelObj,total,cacheKey){
-    var batch=Math.min(20,total);
-    var maxStart=Math.max(1,total-batch+1);
-    var start=1+Math.floor(Math.random()*maxStart); /* Blogger start-index is 1-based */
-    var url=_feedUrl(labelObj,'&max-results='+batch+'&start-index='+start);
-    _jsonp(url,function(data){
+  /* Fetches WANT_COUNT puzzles spread across the category's ENTIRE history,
+     instead of picking them all from one random contiguous window (which
+     kept giving 5 puzzles clustered close together in posting time, even
+     though the window's position changed on every refresh). We split the
+     full 1..total range into WANT_COUNT equal segments and fetch ONE random
+     post from each segment, in parallel \u2014 so every refresh gives 5 puzzles
+     spread from oldest to newest, each drawn independently at random within
+     its own slice of the timeline. */
+  var WANT_COUNT=5;
+  function _expFetchStratified(labelObj,total,cacheKey){
+    if(total<=WANT_COUNT){
+      /* Small category: nothing to stratify, just grab everything available. */
+      var url=_feedUrl(labelObj,'&max-results='+total);
+      _jsonp(url,function(data){
+        expLoading=false;
+        var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
+        var entries=(data&&data.feed&&data.feed.entry)||[];
+        var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
+        if(posts.length===0){expPosts=[];_expRender();return;}
+        expCache[cacheKey]=posts;
+        expPosts=_rnd(posts).slice(0,WANT_COUNT);
+        expIdx=0;_expRender();_expPreload();
+      },function(){
+        _expFail(labelObj,'Timed out. The feed took too long to respond.');
+      });
+      return;
+    }
+
+    var segSize=Math.floor(total/WANT_COUNT);
+    var starts=[];
+    for(var i=0;i<WANT_COUNT;i++){
+      var segStart=i*segSize+1;
+      var segEnd=(i===WANT_COUNT-1)?total:((i+1)*segSize);
+      var span=Math.max(1,segEnd-segStart+1);
+      starts.push(segStart+Math.floor(Math.random()*span));
+    }
+
+    var results=new Array(WANT_COUNT).fill(null);
+    var remaining=WANT_COUNT;
+    function finalize(){
       expLoading=false;
       var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
-      var entries=(data&&data.feed&&data.feed.entry)||[];
-      var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
-      if(posts.length===0){expPosts=[];_expRender();return;}
+      var posts=results.filter(function(p){return p&&p.url;});
+      if(posts.length===0){
+        _expFail(labelObj,'Could not load puzzles. Please check your connection.');
+        return;
+      }
       expCache[cacheKey]=posts;
-      expPosts=_rnd(posts).slice(0,5);
+      expPosts=posts;
       expIdx=0;_expRender();_expPreload();
-    },function(){
-      _expFail(labelObj,'Timed out. The feed took too long to respond.');
+    }
+    starts.forEach(function(start,idx){
+      var url=_feedUrl(labelObj,'&max-results=1&start-index='+start);
+      _jsonp(url,function(data){
+        remaining--;
+        var entries=(data&&data.feed&&data.feed.entry)||[];
+        var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
+        if(posts.length)results[idx]=posts[0];
+        if(remaining===0)finalize();
+      },function(){
+        remaining--;
+        if(remaining===0)finalize();
+      });
     });
   }
 
@@ -1190,7 +1273,7 @@ function _boot(tid,_SK,_TK){
       var total=(data&&data.feed&&data.feed.openSearch$totalResults&&parseInt(data.feed.openSearch$totalResults.$t,10))||0;
       if(!total){expLoading=false;expPosts=[];_expRender();return;}
       expTotals[cacheKey]=total;
-      _expFetchWindow(labelObj,total,cacheKey);
+      _expFetchStratified(labelObj,total,cacheKey);
     },function(){
       _expFail(labelObj,'Could not load puzzles. Please check your connection.');
     });
@@ -1200,7 +1283,7 @@ function _boot(tid,_SK,_TK){
     if(expLoading)return;
     var cacheKey=labelObj.l||'__random__'; /* the Random entry has no label string, so use a fixed key */
     if(!forceRefresh&&expCache[cacheKey]){
-      expPosts=_rnd(expCache[cacheKey]).slice(0,5);
+      expPosts=expCache[cacheKey];
       expIdx=0;_expRender();_expPreload();return;
     }
     expLoading=true;
@@ -1209,7 +1292,7 @@ function _boot(tid,_SK,_TK){
     g('expctr').textContent='Fetching puzzles...';
     g('expdots').innerHTML='';
 
-    if(expTotals[cacheKey]){_expFetchWindow(labelObj,expTotals[cacheKey],cacheKey);}
+    if(expTotals[cacheKey]){_expFetchStratified(labelObj,expTotals[cacheKey],cacheKey);}
     else{_expFetchCount(labelObj,cacheKey);}
   }
 
