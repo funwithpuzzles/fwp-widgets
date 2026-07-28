@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.0.8 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.0.9 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -50,7 +50,7 @@ var LABELS=[
   {d:'\ud83d\udd0d Find the Pair',             l:'Find the Pair Puzzles',                      h:'p/find-pair-picture-puzzles.html'},
   {d:'\ud83c\udd70\ufe0f Can You Read This',         l:'Can you Read this',                          h:'p/can-you-read-this.html'},
   {d:'\ud83c\udf11 Shadow Riddles',            l:'Shadow Riddles',                             h:'p/shadow-picture-riddles.html'},
-  {d:'\ud83e\udde0 Visual Puzzles',            l:'Brain Teasers: Visual Puzzles',              h:'p/visual-puzzles-test-your-observation.html'},
+  {d:'\ud83e\udde0 Visual Puzzles',            l:'Brain Teasers: Picture Puzzles',              h:'p/visual-puzzles-test-your-observation.html'},
   /* Chess */
   {d:'\u265f\ufe0f Chess Puzzles',             l:'Chess Puzzles',                              h:'p/fun-chess-puzzles.html'},
   {d:'\u265f\ufe0f Easy Chess',                l:'Easy Chess Puzzles',                         h:'p/easy-chess-puzzles.html'},
@@ -912,7 +912,7 @@ function _boot(tid,_SK,_TK){
   /* Shuffle the REAL categories' order daily; "Random Puzzles" (pulls from
      the whole site, no label filter) always stays first and is unaffected
      by the shuffle or by which 3 offline tabs are showing today. */
-  var RANDOM_LABEL={d:'\uD83C\uDFB2 Random Puzzles',l:null,h:'p/index.html'};
+  var RANDOM_LABEL={d:'\uD83C\uDFB2 Random Puzzles',l:null,h:''};
   var shuffledLabels=_sh(LABELS.slice(),ds+99);
   var allExpOptions=[RANDOM_LABEL].concat(shuffledLabels);
   var expLabelObj=allExpOptions[0];
