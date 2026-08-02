@@ -1,4 +1,5 @@
-/* FWP Daily Challenge Widget f1.1.1 | funwithpuzzles.com */
+<script>
+/* FWP Daily Challenge Widget f1.1.2 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -16,8 +17,29 @@ var SHOW_ADD_TO_SITE = true;
    until then these are inert placeholders. */
 var SHOW_GOOGLE_PLAY_PROMO = false;
 var SHOW_APPLE_APP_PROMO = false;
-var GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?'; /* e.g. https://play.google.com/store/apps/details?id=com.funwithpuzzles.app */
-var APPLE_APP_URL   = 'https://apps.apple.com/app/id0000000000';   /* e.g. https://apps.apple.com/app/id0000000000 */
+var GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.funwithpuzzles.dailychallenges';
+var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';   /* e.g. https://apps.apple.com/app/id0000000000 */
+
+/* Categories to hide from the offline tabs \u2014 e.g. while you're improving a
+   category's puzzles. Add the exact category title (the "t" value on that
+   category in the C array further down, e.g. "Riddles", "Matchstick", "GK")
+   and it will never be picked as one of the day's 3 offline tabs. Safe to
+   edit freely; it only affects which categories are eligible, not the data
+   itself, and it has no effect on the Explore tab (which pulls from the
+   live website, not this offline dataset). */
+var BLOCKED_CATEGORIES=[];
+
+/* Labels that exist on the live site for housekeeping/administrative posts
+   rather than actual puzzles (event announcements, video posts, index
+   pages, championship recaps, etc). Posts carrying ONLY these labels won't
+   have a relevant puzzle image, so they're filtered out of the Explore
+   tab's Random Puzzles feed (which otherwise pulls from every label on the
+   site). Edit this list freely to match your site's label names exactly. */
+var EXCLUDED_RANDOM_LABELS=[
+  'Puzzle and Sudoku Events','Brain Teasers Videos','Administrative Posts',
+  'Conceptis Puzzles','Images','Puzzle Index Pages','Sudoku Championships',
+  'Puzzle Championships','Puzzle Sites','Puzzle Tutorials','Logic Puzzles Printable'
+];
 
 /* \u2500\u2500 Explore labels: display name, exact Blogger label, hub page URL \u2500\u2500
    All label names verified from lebel-hubpage-mapping.txt
@@ -245,7 +267,9 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
 /* share menu popup */
 +'.fwpsharemenu{position:absolute;bottom:46px;right:14px;background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.16);padding:6px;display:none;flex-direction:column;gap:2px;z-index:20;min-width:170px;}'
-+'.fwpsharemenu button{background:none;border:none;text-align:left;padding:8px 10px;font-size:12px;color:#111827;cursor:pointer;border-radius:6px;font-family:inherit;display:flex;align-items:center;gap:8px;width:100%;}'
++'.fwpsharemenu button{background:none;border:none;text-align:left;padding:7px 9px;font-size:12px;color:#111827;cursor:pointer;border-radius:6px;font-family:inherit;display:flex;align-items:center;gap:9px;width:100%;}'
++'.fwpsharemenu button svg{flex-shrink:0;}'
++'.fwpsharemenu button span{font-weight:600;}'
 +'.fwpsharemenu button:hover{background:#f4f5ff;}'
 /* add to site */
 +'.fwpadd{border-top:2px dashed #c7d2fe;padding:9px 14px;background:#f0f2ff;}'
@@ -383,7 +407,7 @@ var C=[
 {d:"easy",q:"How many times can you subtract 10 from 100?",h:"After the first time the number is no longer 100.",a:"once",c:["ten times","nine times","twice"]},
 {d:"easy",q:"What comes next: 1, 2, 4, 8, 16, __?",h:"Each number is doubled.",a:"32"},
 {d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet",c:["heavier","invisible","purple"]},
-{d:"easy",q:"How many sides does a circle have?",h:"Think carefully — it is not zero.",a:"one curved side",c:["zero sides","infinite sides","two sides"]},
+{d:"easy",q:"How many sides does a circle have?",h:"Think carefully \u2014 it is not zero.",a:"one curved side",c:["zero sides","infinite sides","two sides"]},
 {d:"easy",q:"What is 1000 plus 20 plus 1000 plus 30 plus 1000 plus 1040?",h:"Add carefully step by step.",a:"4090"},
 {d:"medium",q:"I am an odd number. Take away one letter and I become even. What number am I?",h:"Think about the word not the digit.",a:"seven",c:["nine","three","five"]},
 {d:"medium",q:"A bat and ball cost Rs 110 together. The bat costs Rs 100 more than the ball. What is the cost of the ball?",h:"Do not just say Rs 10. Set up a proper equation.",a:"5"},
@@ -392,40 +416,40 @@ var C=[
 {d:"hard",q:"A clock loses 3 minutes every hour. Set at noon, when will it next show the correct time?",h:"It must lose exactly 12 hours.",a:"240 days"},
 {d:"hard",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings",c:["three weighings","one weighing","four weighings"]},
 {d:"hard",q:"What 3 positive numbers give the same result when multiplied and when added?",h:"Try simple numbers like 1, 2, 3.",a:"1 2 3"},
-{d:"hard",q:"You have two hourglasses — a 4-minute and a 7-minute. How do you measure exactly 9 minutes?",h:"Start both, flip the 4 when done, then flip again.",a:"flip strategically",c:["flip both together","wait 11 minutes","flip only the 7"]}
+{d:"hard",q:"You have two hourglasses \u2014 a 4-minute and a 7-minute. How do you measure exactly 9 minutes?",h:"Start both, flip the 4 when done, then flip again.",a:"flip strategically",c:["flip both together","wait 11 minutes","flip only the 7"]}
 ]},
 {t:"Missing #",s:"missing-number-puzzles",p:[
-{d:"easy",q:"2, 4, 6, 8, __ — What comes next?",h:"Each number increases by the same amount.",a:"10"},
-{d:"easy",q:"1, 1, 2, 3, 5, 8, __ — What comes next?",h:"Each number is the sum of the two before it.",a:"13"},
-{d:"easy",q:"10, 20, 30, 40, __ — What comes next?",h:"Count in tens.",a:"50"},
-{d:"easy",q:"5, 10, 20, 40, __ — What comes next?",h:"Each number is doubled.",a:"80"},
-{d:"easy",q:"100, 90, 80, 70, __ — What comes next?",h:"Counting backwards by tens.",a:"60"},
-{d:"easy",q:"1, 4, 9, 16, 25, __ — What comes next?",h:"Think about perfect squares.",a:"36"},
-{d:"easy",q:"3, 9, 27, 81, __ — What comes next?",h:"Each number is multiplied by 3.",a:"243"},
-{d:"easy",q:"2, 4, 8, 16, __ — What comes next?",h:"Each number doubles.",a:"32"},
-{d:"medium",q:"3, 6, 12, 24, __ — What comes next?",h:"Each number is multiplied by the same value.",a:"48"},
+{d:"easy",q:"2, 4, 6, 8, __ \u2014 What comes next?",h:"Each number increases by the same amount.",a:"10"},
+{d:"easy",q:"1, 1, 2, 3, 5, 8, __ \u2014 What comes next?",h:"Each number is the sum of the two before it.",a:"13"},
+{d:"easy",q:"10, 20, 30, 40, __ \u2014 What comes next?",h:"Count in tens.",a:"50"},
+{d:"easy",q:"5, 10, 20, 40, __ \u2014 What comes next?",h:"Each number is doubled.",a:"80"},
+{d:"easy",q:"100, 90, 80, 70, __ \u2014 What comes next?",h:"Counting backwards by tens.",a:"60"},
+{d:"easy",q:"1, 4, 9, 16, 25, __ \u2014 What comes next?",h:"Think about perfect squares.",a:"36"},
+{d:"easy",q:"3, 9, 27, 81, __ \u2014 What comes next?",h:"Each number is multiplied by 3.",a:"243"},
+{d:"easy",q:"2, 4, 8, 16, __ \u2014 What comes next?",h:"Each number doubles.",a:"32"},
+{d:"medium",q:"3, 6, 12, 24, __ \u2014 What comes next?",h:"Each number is multiplied by the same value.",a:"48"},
 {d:"medium",q:"Grid:\n2  4  8\n3  9  27\n4  16  ?\nWhat replaces the ?",h:"Look at the pattern across each row.",a:"64"},
-{d:"medium",q:"7, 14, 21, 28, __ — What comes next?",h:"Multiples of 7.",a:"35"},
-{d:"medium",q:"1, 3, 6, 10, 15, __ — What comes next?",h:"These are triangle numbers.",a:"21"},
-{d:"hard",q:"1, 2, 6, 24, 120, __ — What comes next?",h:"Each term equals previous term multiplied by its position.",a:"720"},
+{d:"medium",q:"7, 14, 21, 28, __ \u2014 What comes next?",h:"Multiples of 7.",a:"35"},
+{d:"medium",q:"1, 3, 6, 10, 15, __ \u2014 What comes next?",h:"These are triangle numbers.",a:"21"},
+{d:"hard",q:"1, 2, 6, 24, 120, __ \u2014 What comes next?",h:"Each term equals previous term multiplied by its position.",a:"720"},
 {d:"hard",q:"Find the missing number:\n6  13  25\n11 23  45\n16 33  __",h:"Look at the relationship across each row.",a:"65"},
 {d:"hard",q:"What is the sum of the first 100 natural numbers?",h:"Use the formula n x (n+1) divided by 2.",a:"5050"},
 {d:"hard",q:"What comes next: 0, 1, 1, 2, 3, 5, 8, 13, 21, __?",h:"Each number is the sum of the two before it.",a:"34"}
 ]},
 {t:"Series",s:"maths-reasoning-number-series-puzzles",p:[
-{d:"easy",q:"2, 6, 18, 54, __ — What comes next?",h:"Each number is multiplied by 3.",a:"162"},
-{d:"easy",q:"3, 6, 9, 12, 15, __ — What comes next?",h:"Multiples of 3.",a:"18"},
-{d:"easy",q:"1, 3, 5, 7, 9, __ — What comes next?",h:"These are odd numbers in order.",a:"11"},
-{d:"easy",q:"2, 3, 5, 7, 11, 13, __ — What comes next?",h:"These are all prime numbers.",a:"17"},
-{d:"easy",q:"4, 8, 12, 16, __ — What comes next?",h:"Multiples of 4.",a:"20"},
-{d:"easy",q:"100, 95, 85, 70, 50, __ — What comes next?",h:"Look at how much is subtracted each time.",a:"25"},
-{d:"easy",q:"1, 2, 4, 8, 16, __ — What comes next?",h:"Powers of 2.",a:"32"},
-{d:"easy",q:"5, 10, 15, 20, 25, __ — What comes next?",h:"Multiples of 5.",a:"30"},
-{d:"medium",q:"1, 2, 4, 7, 11, 16, __ — What comes next?",h:"The difference between terms increases by 1 each time.",a:"22"},
-{d:"medium",q:"1, 8, 27, 64, 125, __ — What comes next?",h:"Think about perfect cubes.",a:"216"},
-{d:"medium",q:"2, 5, 10, 17, 26, __ — What comes next?",h:"Look at the differences: 3, 5, 7, 9 ...",a:"37"},
-{d:"medium",q:"0, 1, 4, 9, 16, __ — What comes next?",h:"These are perfect squares starting from 0.",a:"25"},
-{d:"hard",q:"3, 5, 11, 29, 83, __ — What comes next?",h:"Each term equals previous term x 3 minus 4.",a:"245"},
+{d:"easy",q:"2, 6, 18, 54, __ \u2014 What comes next?",h:"Each number is multiplied by 3.",a:"162"},
+{d:"easy",q:"3, 6, 9, 12, 15, __ \u2014 What comes next?",h:"Multiples of 3.",a:"18"},
+{d:"easy",q:"1, 3, 5, 7, 9, __ \u2014 What comes next?",h:"These are odd numbers in order.",a:"11"},
+{d:"easy",q:"2, 3, 5, 7, 11, 13, __ \u2014 What comes next?",h:"These are all prime numbers.",a:"17"},
+{d:"easy",q:"4, 8, 12, 16, __ \u2014 What comes next?",h:"Multiples of 4.",a:"20"},
+{d:"easy",q:"100, 95, 85, 70, 50, __ \u2014 What comes next?",h:"Look at how much is subtracted each time.",a:"25"},
+{d:"easy",q:"1, 2, 4, 8, 16, __ \u2014 What comes next?",h:"Powers of 2.",a:"32"},
+{d:"easy",q:"5, 10, 15, 20, 25, __ \u2014 What comes next?",h:"Multiples of 5.",a:"30"},
+{d:"medium",q:"1, 2, 4, 7, 11, 16, __ \u2014 What comes next?",h:"The difference between terms increases by 1 each time.",a:"22"},
+{d:"medium",q:"1, 8, 27, 64, 125, __ \u2014 What comes next?",h:"Think about perfect cubes.",a:"216"},
+{d:"medium",q:"2, 5, 10, 17, 26, __ \u2014 What comes next?",h:"Look at the differences: 3, 5, 7, 9 ...",a:"37"},
+{d:"medium",q:"0, 1, 4, 9, 16, __ \u2014 What comes next?",h:"These are perfect squares starting from 0.",a:"25"},
+{d:"hard",q:"3, 5, 11, 29, 83, __ \u2014 What comes next?",h:"Each term equals previous term x 3 minus 4.",a:"245"},
 {d:"hard",q:"What is the next number: 1, 11, 21, 1211, 111221, __?",h:"Read each number aloud to describe the previous one.",a:"312211"},
 {d:"hard",q:"What is the next prime number after 89?",h:"Check 97: is it divisible by 2, 3, 5, 7?",a:"97"},
 {d:"hard",q:"2, 12, 36, 80, 150, __? What comes next?",h:"Try n squared times (n+1).",a:"252"}
@@ -521,26 +545,26 @@ var C=[
 {d:"hard",q:"How can you throw a ball so it goes a short distance, comes to a complete stop, and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up",c:["throw it against a wall","throw it at an angle","roll it instead"]}
 ]},
 {t:"Matchstick",s:"matchstick-maths-puzzles",p:[
-{d:"easy",q:"How many matchsticks does it take to build a single square?",h:"Count the sides.",a:"4"},
-{d:"easy",q:"5 + 5 + 5 = 550 is wrong. Add ONE straight line to make it correct.",h:"You can draw on any digit or symbol.",a:"545+5=550"},
-{d:"easy",q:"How many matchsticks does it take to write number 8 on a digital display?",h:"Count all the segments.",a:"7"},
-{d:"easy",q:"Move 1 matchstick in 5+5=6 to make it correct.",h:"You can change any digit or the operator.",a:"5+1=6"},
-{d:"easy",q:"Using exactly 4 matchsticks, what is the maximum number of squares you can make?",h:"Think about sharing sides between shapes.",a:"2"},
-{d:"easy",q:"How many matchsticks make the number 1 on a digital display?",h:"Count the segments in a digital 1.",a:"2"},
-{d:"easy",q:"How many triangles can you make with 3 matchsticks?",h:"Each matchstick is one side.",a:"1"},
-{d:"easy",q:"How many matchsticks does it take to make the number 0 on a digital display?",h:"Count all segments of a digital zero.",a:"6"},
-{d:"medium",q:"How many triangles can you make with 6 equal matchsticks without breaking any?",h:"Think in three dimensions.",a:"4"},
-{d:"medium",q:"Move ONE matchstick in VI - IV = IX to make it correct.",h:"Roman numerals. One stick changes a numeral.",a:"VI + IV = X",c:["VI - IV = II","V + IV = IX","VI + IV = IX"]},
-{d:"medium",q:"How many squares of ANY size are in a 3x3 matchstick grid?",h:"Count 1x1, 2x2, and 3x3 squares separately.",a:"14"},
-{d:"medium",q:"Remove 2 matchsticks from a 2x2 grid of squares to leave exactly 2 squares.",h:"Think about shared sides.",a:"remove two adjacent sides",c:["remove two opposite sides","remove one side only","remove the middle side"]},
-{d:"hard",q:"Remove 2 matchsticks from a 3x3 grid of squares to leave exactly 3 squares.",h:"Removing a shared side destroys two squares at once.",a:"remove two shared sides",c:["remove two outer sides","remove one shared side","remove three sides"]},
-{d:"hard",q:"How many squares of all sizes are in a 4x4 matchstick grid?",h:"Count 1x1=16, 2x2=9, 3x3=4, 4x4=1.",a:"30"},
-{d:"hard",q:"Move 2 matchsticks in 8-4=11 to make it correct.",h:"You can change any part of the equation.",a:"8-4=4"},
-{d:"hard",q:"How many matchsticks are needed to spell CAT in capital block letters?",h:"Count each letter carefully using straight lines.",a:"9"}
+{d:"easy",q:"How many matchsticks are needed to form one triangle?",h:"Each side of the triangle takes one matchstick.",a:"3"},
+{d:"easy",q:"How many matchsticks are needed to form one square?",h:"Each side of the square takes one matchstick.",a:"4"},
+{d:"easy",q:"How many matchsticks are needed to form one hexagon?",h:"A hexagon has six equal sides.",a:"6"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 7 on a digital display?",h:"The digit 7 lights up the top segment and the two segments on the right.",a:"3"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 4 on a digital display?",h:"The digit 4 uses two verticals and one horizontal, with no top segment.",a:"4"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 1 on a digital display?",h:"The digit 1 only lights up the two segments on the right.",a:"2"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 0 on a digital display?",h:"The digit 0 lights up every segment except the middle one.",a:"6"},
+{d:"easy",q:"Using exactly 4 matchsticks with no overlaps, how many complete squares can you form?",h:"Think about how many sticks a single square actually needs.",a:"1"},
+{d:"medium",q:"How many matchsticks are needed to write the digit 8 on a digital display?",h:"The digit 8 lights up every one of the seven segments.",a:"7"},
+{d:"medium",q:"Six equal matchsticks are arranged into triangles, without breaking any and without any sticks left over. What is the maximum number of triangles you can form?",h:"Think in three dimensions, not flat on the table.",a:"4"},
+{d:"medium",q:"How many squares of ANY size can you count in a 3x3 grid made of matchsticks?",h:"Count the 1x1 squares, then the 2x2 squares, then the 3x3 square.",a:"14"},
+{d:"medium",q:"A row of 5 squares is built from matchsticks, each square sharing one side with the next. How many matchsticks are used in total?",h:"Each new square after the first only needs 3 extra matchsticks since it shares a side.",a:"16"},
+{d:"hard",q:"How many squares of ALL sizes can you count in a 4x4 grid made of matchsticks?",h:"Count 1x1, 2x2, 3x3 and 4x4 squares separately, then add them up.",a:"30"},
+{d:"hard",q:"A row of 10 squares is built from matchsticks, each sharing one side with the next. How many matchsticks are used in total?",h:"Use the pattern: each shared square after the first adds 3 sticks.",a:"31"},
+{d:"hard",q:"A 3x3 grid of 9 small squares is built entirely from matchsticks. How many matchsticks are used in total?",h:"There are 4 horizontal lines and 4 vertical lines, each 3 sticks long.",a:"24"},
+{d:"hard",q:"A large triangle is divided into 4 smaller equal triangles, all built from matchsticks. How many matchsticks are used in total for the whole figure?",h:"It's the same shape as the classic 4-triangle picture puzzle, just built from matchsticks.",a:"9"}
 ]},
 {t:"Rebus",s:"rebus-riddles",p:[
 {d:"easy",q:"What phrase does HE + ART represent?",h:"Read the letters and their position.",a:"heart",c:["heartbeat","sweetheart","art gallery"]},
-{d:"easy",q:"HIJKLMNO — What one word does this represent?",h:"These letters span H to O.",a:"water",c:["alphabet","letters","ocean"]},
+{d:"easy",q:"HIJKLMNO \u2014 What one word does this represent?",h:"These letters span H to O.",a:"water",c:["alphabet","letters","ocean"]},
 {d:"easy",q:"What does BAN + ANA represent?",h:"Put the sounds together.",a:"banana",c:["bandana","banjo","banana split"]},
 {d:"easy",q:"What does EZ represent?",h:"Say the letters aloud.",a:"easy",c:["breezy","peasy","zesty"]},
 {d:"easy",q:"What phrase does HEAD over HEELS represent?",h:"One word is above another.",a:"head over heels",c:["heels over head","upside down","top to bottom"]},
@@ -553,7 +577,7 @@ var C=[
 {d:"medium",q:"What does this mean: DEATH LIFE?",h:"Think about what comes between the two words.",a:"life after death",c:["death before life","life and death","fear of death"]},
 {d:"hard",q:"What does MAN / BOARD represent?",h:"Think about position.",a:"man overboard",c:["board the man","overworked man","man on board"]},
 {d:"hard",q:"What does NE14 10S mean?",h:"Say each part aloud.",a:"anyone for tennis",c:["any tennis players","tennis anyone","ten tennis players"]},
-{d:"hard",q:"TIMING TIM ING — what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing",c:["perfect timing","timing is everything","dead on time"]},
+{d:"hard",q:"TIMING TIM ING \u2014 what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing",c:["perfect timing","timing is everything","dead on time"]},
 {d:"hard",q:"What does ROADS represent?",h:"Think about crossroads.",a:"crossroads",c:["road trip","cross country","dirt roads"]}
 ]},
 {t:"GK",s:"general-knowledge-quizzes-and-riddles",p:[
@@ -653,13 +677,13 @@ var C=[
 {d:"easy",q:"What gets bigger the more you take away from it?",h:"Think about digging.",a:"hole",c:["tunnel","pit","gap"]},
 {d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin",c:["dice","button","key"]},
 {d:"easy",q:"What stays in a corner but travels all over the world?",h:"You put me on an envelope.",a:"stamp",c:["coin","map","photo"]},
-{d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one — not the Sphinx riddle.",a:"table",c:["chair","stool","bench"]},
+{d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one \u2014 not the Sphinx riddle.",a:"table",c:["chair","stool","bench"]},
 {d:"easy",q:"What has a lot of keys but cannot open any door?",h:"You use it to play music.",a:"piano",c:["guitar","keyboard","organ"]},
 {d:"medium",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them",c:["only february","only april","only 4 months"]},
 {d:"medium",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella",c:["raincoat","boots","hat"]},
-{d:"medium",q:"A man has 10 horses and 9 stables. One horse in each stable — possible?",h:"Re-read: does it say one horse PER stable?",a:"no 10 horses only 9 stables",c:["yes with room to spare","only if two share","no it's impossible either way"]},
+{d:"medium",q:"A man has 10 horses and 9 stables. One horse in each stable \u2014 possible?",h:"Re-read: does it say one horse PER stable?",a:"no 10 horses only 9 stables",c:["yes with room to spare","only if two share","no it's impossible either way"]},
 {d:"medium",q:"What can you keep after giving it to someone?",h:"Think about something intangible.",a:"your word",c:["your money","your time","your name"]},
-{d:"hard",q:"The word CANDY can be spelled using just 2 letters. How?",h:"C and Y — CandY.",a:"C and Y",c:["c and d","a and y","c and n"]},
+{d:"hard",q:"The word CANDY can be spelled using just 2 letters. How?",h:"C and Y \u2014 CandY.",a:"C and Y",c:["c and d","a and y","c and n"]},
 {d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of: one, two, three ...",a:"N",c:["m","t","e"]},
 {d:"hard",q:"A farmer has 5 haystacks in one field and 4 in another. He combines them. How many haystacks?",h:"What happens when you combine haystacks?",a:"1"},
 {d:"hard",q:"What is special about the number 8,549,176,320?",h:"Think about what it contains.",a:"contains all digits 0-9 each once",c:["is a perfect square","is divisible by 9","is a palindrome"]}
@@ -726,7 +750,7 @@ var C=[
 {d:"easy",q:"You have 3L and 5L jugs. How do you measure exactly 4L?",h:"Fill 5, pour into 3, dump, repeat.",a:"fill 5 pour into 3 leaving 2 fill 3 from 5 gives 4",c:["fill 3 twice","fill 5 and pour out 1","pour both together"]},
 {d:"easy",q:"How many times do the hands of a clock overlap in 12 hours?",h:"They overlap approximately every 65.45 minutes.",a:"11"},
 {d:"easy",q:"How many windows are in your city?",h:"Estimate population then multiply by windows per person.",a:"estimate based on population",c:["count every window by hand","ask the city council","impossible to know"]},
-{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively — this is a judgement test.",a:"move the reference point or tunnel through it",c:["physically push it","melt it down","ship it piece by piece"]},
+{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively \u2014 this is a judgement test.",a:"move the reference point or tunnel through it",c:["physically push it","melt it down","ship it piece by piece"]},
 {d:"medium",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings",c:["three weighings","one weighing","four weighings"]},
 {d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200",c:["about 20","about 2000","about 20000"]},
 {d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Think about heat from a bulb.",a:"leave one on wait turn off turn another on then enter check heat",c:["flip all switches at once","enter and guess randomly","turn them on one at a time while inside"]},
@@ -770,7 +794,7 @@ var C=[
 {d:"hard",q:"The sum of the ages of a father and son is 60. Six years ago, the father was 5 times as old as the son. Find their current ages.",h:"Set up two equations using their current ages and their ages 6 years ago.",a:"father 46 son 14",c:["father 40 son 20","father 45 son 15","father 50 son 10"]},
 {d:"hard",q:"A two-digit number is 4 times the sum of its digits. If 27 is added to the number, its digits reverse. Find the number.",h:"Let the number be 10t+u, then use both conditions to solve for t and u.",a:"36"},
 {d:"hard",q:"Two numbers are in the ratio 3:5. If 10 is subtracted from each, the new ratio becomes 1:3. Find the numbers.",h:"Let the numbers be 3x and 5x, then solve using the new ratio.",a:"15 and 25"},
-{d:"hard",q:"A clock shows 4:20. What is the angle between the hour and minute hands?",h:"The hour hand moves too — it is not exactly on the 4.",a:"10 degrees"}
+{d:"hard",q:"A clock shows 4:20. What is the angle between the hour and minute hands?",h:"The hour hand moves too \u2014 it is not exactly on the 4.",a:"10 degrees"}
 ]},
 {t:"Missing Vowels",s:"missing-vowels-quiz-puzzles",p:[
 {d:"easy",q:"Fill in the vowels to find the word: PPL (a common fruit)",h:"Think of a fruit that's often red or green.",a:"apple",c:["apples","apply","ample"]},
@@ -793,38 +817,146 @@ var C=[
 {t:"Hidden Animals",s:"hidden-animal-puzzles",p:[
 {d:"easy",q:"Find the hidden animal: The store sells CATALOGS of furniture.",h:"Look at the very start of the word catalog.",a:"cat",c:["dog","rat","cow"]},
 {d:"easy",q:"Find the hidden animal: That belief is pure DOGMA with no evidence.",h:"Look at the start of the word dogma.",a:"dog",c:["cat","hen","fox"]},
-{d:"easy",q:"Find the hidden animal: She wore a COWL over her head to stay warm.",h:"A cowl is a hooded cloak — look at its first three letters.",a:"cow",c:["cat","dog","pig"]},
+{d:"easy",q:"Find the hidden animal: She wore a COWL over her head to stay warm.",h:"A cowl is a hooded cloak \u2014 look at its first three letters.",a:"cow",c:["cat","dog","pig"]},
 {d:"easy",q:"Find the hidden animal: She wore a PIGMENT-stained apron while painting.",h:"Look at the start of the word pigment.",a:"pig",c:["cow","hen","bat"]},
 {d:"easy",q:"Find the hidden animal: This is a valuable ANTIQUE vase from the 1800s.",h:"Look at the start of the word antique.",a:"ant",c:["bat","owl","cod"]},
 {d:"easy",q:"Find the hidden animal: HENCE, we must leave right now.",h:"Look at the start of the word hence.",a:"hen",c:["hog","cow","fox"]},
 {d:"easy",q:"Find the hidden animal: Please replace the BATTERY in the remote.",h:"Look at the start of the word battery.",a:"bat",c:["cat","rat","ant"]},
-{d:"easy",q:"Find the hidden animal: They danced the FOXTROT beautifully all night.",h:"The foxtrot is a classic ballroom dance — look at its start.",a:"fox",c:["dog","cow","hen"]},
+{d:"easy",q:"Find the hidden animal: They danced the FOXTROT beautifully all night.",h:"The foxtrot is a classic ballroom dance \u2014 look at its start.",a:"fox",c:["dog","cow","hen"]},
 {d:"medium",q:"Find the hidden animal: He grew a thick BEARD over the winter.",h:"Look right after the first letter of beard.",a:"bear",c:["boar","bull","deer"]},
 {d:"medium",q:"Find the hidden animal: I love HORSERADISH sauce with my roast beef.",h:"Look at the first five letters of horseradish.",a:"horse",c:["mule","goat","deer"]},
 {d:"medium",q:"Find the hidden animal: The senate will RATIFY the new treaty tomorrow.",h:"Look at the start of the word ratify.",a:"rat",c:["cat","bat","owl"]},
 {d:"medium",q:"Find the hidden animal: The cat kept PROWLING around the garden at night.",h:"Look in the middle of the word prowling.",a:"owl",c:["crow","hawk","dove"]},
 {d:"hard",q:"Find the hidden animal: We played SCRABBLE all evening with the family.",h:"Look right after the first two letters of scrabble.",a:"crab",c:["clam","crow","carp"]},
-{d:"hard",q:"Find the hidden animal: She bought beautiful new JEWELRY for the party.",h:"Look right after the first letter of jewelry — it's a female sheep.",a:"ewe",c:["cow","ram","doe"]},
+{d:"hard",q:"Find the hidden animal: She bought beautiful new JEWELRY for the party.",h:"Look right after the first letter of jewelry \u2014 it's a female sheep.",a:"ewe",c:["cow","ram","doe"]},
 {d:"hard",q:"Find the hidden animal: I love eating fresh GRAPES in the summer.",h:"Look at the last three letters of grape.",a:"ape",c:["cat","fox","owl"]},
-{d:"hard",q:"Find the hidden animal: Please DECODE this secret message for me.",h:"Look in the middle of the word decode — it's a type of fish.",a:"cod",c:["carp","eel","koi"]}
+{d:"hard",q:"Find the hidden animal: Please DECODE this secret message for me.",h:"Look in the middle of the word decode \u2014 it's a type of fish.",a:"cod",c:["carp","eel","koi"]}
 ]},
 {t:"Emoji",s:"emoji-puzzles",p:[
-{d:"easy",q:"What phrase do these emoji spell out?\n🌧️☔",h:"Think about weather and what you'd carry outside.",a:"rainy day",c:["sunny day","cloudy sky","stormy night"]},
-{d:"easy",q:"What phrase do these emoji spell out?\n🔥🚒",h:"A vehicle that puts out fires.",a:"fire truck",c:["fire drill","fire alarm","forest fire"]},
-{d:"easy",q:"What phrase do these emoji spell out?\n🐝🍯",h:"An insect that makes something sweet.",a:"honey bee",c:["bumble bee","worker bee","honeycomb"]},
-{d:"easy",q:"What phrase do these emoji spell out?\n☀️🌻",h:"A flower that turns to follow the sun.",a:"sunflower",c:["daisy chain","sunrise","summer garden"]},
-{d:"easy",q:"What phrase do these emoji spell out?\n🎂🎉",h:"A yearly celebration with cake.",a:"birthday party",c:["surprise party","dinner party","graduation party"]},
-{d:"easy",q:"What phrase do these emoji spell out?\n📚🎒",h:"Where you go on weekday mornings with books.",a:"school",c:["library","classroom","university"]},
-{d:"easy",q:"What phrase do these emoji spell out?\n🌙⭐",h:"What you see in the sky after sunset.",a:"night sky",c:["shooting star","starry night","moonlight"]},
-{d:"easy",q:"What phrase do these emoji spell out?\n🍎👨‍🏫",h:"A classic gift for someone who teaches.",a:"teacher",c:["professor","classmate","principal"]},
-{d:"medium",q:"What phrase do these emoji spell out?\n⏰🐦",h:"Think of a saying about catching a worm.",a:"early bird",c:["night owl","late bloomer","busy bee"]},
-{d:"medium",q:"What phrase do these emoji spell out?\n🧊🏔️",h:"Mostly hidden below the ocean surface.",a:"iceberg",c:["glacier","snowball","ice cube"]},
-{d:"medium",q:"What phrase do these emoji spell out?\n🦋🌸",h:"A place full of flowers and flying insects.",a:"butterfly garden",c:["flower field","rose garden","spring meadow"]},
-{d:"medium",q:"What phrase do these emoji spell out?\n🐢🐇",h:"A classic fable about a slow-and-steady race.",a:"tortoise and the hare",c:["fox and the grapes","boy who cried wolf","ant and the grasshopper"]},
-{d:"hard",q:"What phrase do these emoji spell out?\n🎣🐟🍳",h:"Catching, then cooking, a meal from the water.",a:"fish fry",c:["seafood boil","fish market","catch of the day"]},
-{d:"hard",q:"What phrase do these emoji spell out?\n🌪️🏠💨",h:"A severe, rotating windstorm.",a:"tornado",c:["hurricane","earthquake","thunderstorm"]},
-{d:"hard",q:"What phrase do these emoji spell out?\n🧠💡",h:"A sudden clever thought.",a:"bright idea",c:["deep thought","genius plan","light bulb moment"]},
-{d:"hard",q:"What phrase do these emoji spell out?\n🕰️⏪",h:"A phrase about reversing the clock.",a:"turn back time",c:["stop the clock","fast forward","rewind the past"]}
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf27\ufe0f\u2614",h:"Think about weather and what you'd carry outside.",a:"rainy day",c:["sunny day","cloudy sky","stormy night"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83d\udd25\ud83d\ude92",h:"A vehicle that puts out fires.",a:"fire truck",c:["fire drill","fire alarm","forest fire"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83d\udc1d\ud83c\udf6f",h:"An insect that makes something sweet.",a:"honey bee",c:["bumble bee","worker bee","honeycomb"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\u2600\ufe0f\ud83c\udf3b",h:"A flower that turns to follow the sun.",a:"sunflower",c:["daisy chain","sunrise","summer garden"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf82\ud83c\udf89",h:"A yearly celebration with cake.",a:"birthday party",c:["surprise party","dinner party","graduation party"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83d\udcda\ud83c\udf92",h:"Where you go on weekday mornings with books.",a:"school",c:["library","classroom","university"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf19\u2b50",h:"What you see in the sky after sunset.",a:"night sky",c:["shooting star","starry night","moonlight"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf4e\ud83d\udc68\u200d\ud83c\udfeb",h:"A classic gift for someone who teaches.",a:"teacher",c:["professor","classmate","principal"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\u23f0\ud83d\udc26",h:"Think of a saying about catching a worm.",a:"early bird",c:["night owl","late bloomer","busy bee"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\ud83e\uddca\ud83c\udfd4\ufe0f",h:"Mostly hidden below the ocean surface.",a:"iceberg",c:["glacier","snowball","ice cube"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\ud83e\udd8b\ud83c\udf38",h:"A place full of flowers and flying insects.",a:"butterfly garden",c:["flower field","rose garden","spring meadow"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\ud83d\udc22\ud83d\udc07",h:"A classic fable about a slow-and-steady race.",a:"tortoise and the hare",c:["fox and the grapes","boy who cried wolf","ant and the grasshopper"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83c\udfa3\ud83d\udc1f\ud83c\udf73",h:"Catching, then cooking, a meal from the water.",a:"fish fry",c:["seafood boil","fish market","catch of the day"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83c\udf2a\ufe0f\ud83c\udfe0\ud83d\udca8",h:"A severe, rotating windstorm.",a:"tornado",c:["hurricane","earthquake","thunderstorm"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83e\udde0\ud83d\udca1",h:"A sudden clever thought.",a:"bright idea",c:["deep thought","genius plan","light bulb moment"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83d\udd70\ufe0f\u23ea",h:"A phrase about reversing the clock.",a:"turn back time",c:["stop the clock","fast forward","rewind the past"]}
+]},
+{t:"Reasoning",s:"logical-reasoning-puzzles",p:[
+{d:"easy",q:"If all cats are animals, and Tom is a cat, what can we conclude about Tom?",h:"Apply the general rule directly to Tom.",a:"tom is an animal",c:["tom is a dog","we cannot tell","tom is not an animal"]},
+{d:"easy",q:"If it rains, the ground gets wet. The ground is wet. Does that prove it rained?",h:"Think about other ways the ground could get wet.",a:"no",c:["yes","maybe","only if it thundered too"]},
+{d:"easy",q:"Every triangle has three sides. Shape X has three sides. Is shape X definitely a triangle?",h:"In this simple case, three straight sides is exactly the definition of a triangle.",a:"yes",c:["no","maybe","only if it's equilateral"]},
+{d:"easy",q:"A is taller than B. B is taller than C. Who is the shortest of the three?",h:"Line them up from tallest to shortest.",a:"c",c:["a","b","cannot be determined"]},
+{d:"easy",q:"If today is Wednesday, what day was it two days ago?",h:"Count backwards from Wednesday.",a:"monday",c:["tuesday","sunday","thursday"]},
+{d:"medium",q:"All roses are flowers. Some flowers fade quickly. Can we conclude that all roses fade quickly?",h:"The second statement only talks about 'some' flowers, not all of them.",a:"no",c:["yes","maybe","only red roses"]},
+{d:"medium",q:"Five friends sit in a row. Amy is to the left of Ben, who is to the left of Cara. Who is sitting in the middle?",h:"List the order from left to right: Amy, Ben, Cara.",a:"ben",c:["amy","cara","cannot be determined"]},
+{d:"hard",q:"In a race, Priya finished before Raj but after Sam. Who finished first?",h:"Order them out: Sam, then Priya, then Raj.",a:"sam",c:["priya","raj","cannot be determined"]},
+{d:"hard",q:"All Zibs are Zabs. No Zabs are Zops. Are any Zibs also Zops?",h:"If Zabs can never be Zops, and Zibs are always Zabs, follow the chain through.",a:"no",c:["yes","maybe","only some zibs"]},
+{d:"easy",q:"If all birds can fly, and a sparrow is a bird, can a sparrow fly (based on the statement alone)?",h:"Just follow the rule given, even if it's not always true in real life.",a:"yes",c:["no","maybe","only some sparrows"]},
+{d:"easy",q:"A is older than B. C is older than A. Who is the oldest of the three?",h:"Line them up from oldest to youngest.",a:"c",c:["a","b","cannot be determined"]},
+{d:"easy",q:"If Monday comes before Tuesday, and Tuesday comes before Wednesday, does Monday come before Wednesday?",h:"This is a simple chain of order.",a:"yes",c:["no","maybe","only in some weeks"]},
+{d:"medium",q:"No fish can walk. A shark is a fish. Can a shark walk?",h:"Apply the rule about fish directly to the shark.",a:"no",c:["yes","maybe","only baby sharks"]},
+{d:"medium",q:"Three boxes are red, blue and green. The red box is heavier than the blue box. The green box is lighter than the blue box. Which box is the lightest?",h:"Order them: red heaviest, blue middle, green lightest.",a:"green",c:["red","blue","cannot be determined"]},
+{d:"hard",q:"If some Toves are Borogoves, and all Borogoves are Slithy, can we be certain all Toves are Slithy?",h:"'Some' Toves being Borogoves doesn't cover every Tove.",a:"no",c:["yes","maybe","only slithy toves"]},
+{d:"hard",q:"Four runners finish a race. Priya beats Sam. Raj beats Priya. Sam beats Tia. Who finishes last?",h:"Work out the order: Raj, Priya, Sam, Tia.",a:"tia",c:["sam","priya","raj"]}
+]},
+{t:"Triangle",s:"triangle-maths-logic-puzzles",p:[
+{d:"easy",q:"How many sides does a triangle have?",h:"It's right there in the name.",a:"3"},
+{d:"easy",q:"How many angles does a triangle have?",h:"One angle for each corner.",a:"3"},
+{d:"easy",q:"What is the sum of the interior angles of any triangle, in degrees?",h:"This is always true no matter the triangle's shape.",a:"180"},
+{d:"easy",q:"An equilateral triangle has how many equal sides?",h:"'Equilateral' means all sides match.",a:"3"},
+{d:"easy",q:"A right triangle has one angle equal to how many degrees?",h:"That's the angle that gives it its name.",a:"90"},
+{d:"medium",q:"A large triangle is divided into 4 smaller equal triangles. How many small triangles are there in total?",h:"Picture one triangle split evenly into 4 pieces.",a:"4"},
+{d:"medium",q:"A triangle has sides of length 3, 4 and 5. What type of triangle is it, based on its angles?",h:"This is the most famous set of triangle side lengths in maths.",a:"right triangle",c:["scalene triangle","obtuse triangle","equilateral triangle"]},
+{d:"hard",q:"A triangle's two angles measure 50 degrees and 60 degrees. What is the third angle, in degrees?",h:"All three angles must add up to 180.",a:"70"},
+{d:"hard",q:"How many triangles of all sizes can you count in a large triangle divided into 9 smaller equal triangles (3 rows)?",h:"Count every size: the 9 smallest, then the medium ones, then the whole triangle.",a:"13"},
+{d:"easy",q:"In an isosceles triangle, how many sides are equal in length?",h:"'Isosceles' means two sides match.",a:"2"},
+{d:"easy",q:"A scalene triangle has how many equal sides?",h:"'Scalene' means every side is a different length.",a:"0"},
+{d:"easy",q:"If two angles of a triangle are each 45 degrees, what is the third angle, in degrees?",h:"All three angles add up to 180.",a:"90"},
+{d:"medium",q:"An equilateral triangle has three equal angles. How many degrees is each angle?",h:"Split 180 degrees evenly three ways.",a:"60"},
+{d:"medium",q:"A triangle has a base of 10 and a height of 6. What is its area?",h:"Area of a triangle = half of base times height.",a:"30"},
+{d:"hard",q:"A right triangle has legs of length 6 and 8. What is the length of its hypotenuse?",h:"Use the Pythagorean theorem: 6 squared plus 8 squared.",a:"10"},
+{d:"hard",q:"How many small triangles, of the smallest size only, make up a large triangle divided into 9 equal smaller triangles (3 rows)?",h:"This is simply the count of the smallest pieces, not every size.",a:"9"}
+]},
+{t:"Circle",s:"circle-reasoning-puzzles",p:[
+{d:"easy",q:"How many degrees are there in a full circle?",h:"This is the same for every circle, no matter the size.",a:"360"},
+{d:"easy",q:"How many straight sides does a circle have?",h:"A circle is made entirely of one curve.",a:"0"},
+{d:"easy",q:"What do you call the distance from the centre of a circle to its edge?",h:"It's half of the diameter.",a:"radius",c:["diameter","circumference","tangent"]},
+{d:"easy",q:"What do you call the distance straight across a circle, passing through its centre?",h:"It's twice the radius.",a:"diameter",c:["radius","circumference","chord"]},
+{d:"easy",q:"If the radius of a circle is 5, what is its diameter?",h:"Diameter is always double the radius.",a:"10"},
+{d:"medium",q:"A circle is divided into 8 equal slices, like a pizza. How many degrees is each slice?",h:"Divide the full circle's degrees by the number of slices.",a:"45"},
+{d:"medium",q:"What do you call a straight line that touches a circle at exactly one point?",h:"It grazes the circle without crossing into it.",a:"tangent",c:["radius","chord","secant"]},
+{d:"hard",q:"If the diameter of a circle is 14, approximately what is its circumference (using pi = 22/7)?",h:"Circumference = pi times the diameter.",a:"44"},
+{d:"hard",q:"Two circles overlap. At most how many points can they intersect at?",h:"Picture two overlapping rings \u2014 count where their edges cross.",a:"2"},
+{d:"easy",q:"What do you call a straight line segment that joins two points on a circle's edge?",h:"If it passes through the centre, it becomes the diameter.",a:"chord",c:["radius","tangent","arc"]},
+{d:"easy",q:"What do you call the outer boundary of a circle?",h:"It's the 'perimeter' of a circle, just with a different name.",a:"circumference",c:["diameter","radius","chord"]},
+{d:"easy",q:"If a circle's diameter is 20, what is its radius?",h:"Radius is always half the diameter.",a:"10"},
+{d:"medium",q:"A circle is divided into 6 equal slices. How many degrees is each slice?",h:"Divide 360 degrees by the number of slices.",a:"60"},
+{d:"medium",q:"What do you call a part of a circle's boundary, like a curved section of its edge?",h:"Think of it as a curved slice of the circumference.",a:"arc",c:["chord","tangent","sector"]},
+{d:"hard",q:"If the radius of a circle is 7, approximately what is its area (using pi = 22/7)?",h:"Area = pi times radius squared.",a:"154"},
+{d:"hard",q:"A circle is inscribed exactly inside a square with a side length of 10. What is the circle's diameter?",h:"The circle touches all four sides, so its diameter equals the square's side.",a:"10"}
+]},
+{t:"Maths Riddles",s:"maths-riddles",p:[
+{d:"easy",q:"I am a number. Double me and add 4, and you get 10. What number am I?",h:"Work backwards from 10: subtract 4, then halve.",a:"3"},
+{d:"easy",q:"I am an even number between 10 and 20. My digits add up to 3. What number am I?",h:"Try the even numbers in that range one by one.",a:"12"},
+{d:"easy",q:"Half of me is 8. What number am I?",h:"If half of me is 8, double it to find me.",a:"16"},
+{d:"easy",q:"I am a number. If you square me, you get 25. What number am I?",h:"Think about which number times itself gives 25.",a:"5"},
+{d:"easy",q:"I am the smallest prime number. What number am I?",h:"A prime number has exactly two factors: 1 and itself.",a:"2"},
+{d:"medium",q:"I am a number. Add 5 to me, then double the result, and you get 30. What number am I?",h:"Work backwards: halve 30 first, then subtract 5.",a:"10"},
+{d:"medium",q:"I am a three-digit number. All my digits are the same, and I am divisible by 3. What is the smallest number I could be?",h:"Try the smallest repeated-digit numbers, starting from 111.",a:"111"},
+{d:"hard",q:"I am a number less than 100. I am divisible by both 6 and 9, and I am the largest such number below 100. What number am I?",h:"Find the lowest common multiple of 6 and 9, then find the largest multiple of it under 100.",a:"90"},
+{d:"hard",q:"I am a number. If you multiply me by myself and then subtract me, you get 20. What number am I?",h:"Try small whole numbers: does 5 times 5 minus 5 work?",a:"5"},
+{d:"easy",q:"I am a number. Triple me and you get 21. What number am I?",h:"Divide 21 by 3.",a:"7"},
+{d:"easy",q:"I am a number. Take away 6 and I become 6. What number am I?",h:"Add 6 back to 6.",a:"12"},
+{d:"easy",q:"I am the only even prime number. What number am I?",h:"Every other even number can be divided by 2 and something else.",a:"2"},
+{d:"medium",q:"I am a number. If you add my digits together, you get 9, and I am a multiple of 9 less than 50. What number am I?",h:"Try multiples of 9 under 50: 9, 18, 27, 36, 45.",a:"45"},
+{d:"medium",q:"I am a number. Half of me, plus 3, equals 10. What number am I?",h:"Work backwards: subtract 3 from 10, then double it.",a:"14"},
+{d:"hard",q:"I am a two-digit number. I am one more than a multiple of 5, and one less than a multiple of 4. The smallest number I could be is?",h:"Try small two-digit numbers that fit both conditions.",a:"11"},
+{d:"hard",q:"I am a number. My square is 12 more than 4 times myself. What number am I?",h:"Try small numbers: does 6 times 6 equal 12 more than 4 times 6?",a:"6"}
+]},
+{t:"Hidden Letters",s:"hidden-letter-puzzles",p:[
+{d:"easy",q:"Find the hidden number: I need to buy a TENT before the trip.",h:"Look at the start of the word TENT.",a:"ten",c:["nine","two","six"]},
+{d:"easy",q:"Find the hidden colour: The REDACTED report was confusing to read.",h:"Look at the start of the word REDACTED.",a:"red",c:["blue","green","pink"]},
+{d:"easy",q:"Find the hidden colour: I bought a new BLUEPRINT for the house.",h:"Look at the start of the word BLUEPRINT.",a:"blue",c:["red","green","teal"]},
+{d:"easy",q:"Find the hidden colour: She wore a TANGERINE dress to the party.",h:"Look at the start of the word TANGERINE.",a:"tan",c:["tangerine orange","orange","gold"]},
+{d:"easy",q:"Find the hidden number: SEVENTY students attended the lecture.",h:"Look at the start of the word SEVENTY.",a:"seven",c:["six","eight","two"]},
+{d:"medium",q:"Find the hidden body part: The HEARTBREAK hotel was fully booked.",h:"Look at the start of the word HEARTBREAK.",a:"heart",c:["head","hand","hip"]},
+{d:"medium",q:"Find the hidden body part: I need to buy a new ARMCHAIR for the lounge.",h:"Look at the start of the word ARMCHAIR.",a:"arm",c:["leg","ear","eye"]},
+{d:"hard",q:"Find the hidden body part: The SHINBONE was clearly visible in the X-ray.",h:"Look at the start of the word SHINBONE.",a:"shin",c:["chin","chest","cheek"]},
+{d:"hard",q:"Find the hidden body part: The CHEEKY puppy stole a sock from the laundry.",h:"Look at the start of the word CHEEKY.",a:"cheek",c:["chest","chin","cheekbone"]},
+{d:"easy",q:"Find the hidden colour: The GREENHOUSE was full of growing vegetables.",h:"Look at the start of the word GREENHOUSE.",a:"green",c:["blue","red","yellow"]},
+{d:"easy",q:"Find the hidden number: The store had a SIXTY percent discount today.",h:"Look at the start of the word SIXTY.",a:"six",c:["five","nine","two"]},
+{d:"easy",q:"Find the hidden colour: She painted the fence a bright WHITEWASH colour.",h:"Look at the start of the word WHITEWASH.",a:"white",c:["black","grey","cream"]},
+{d:"medium",q:"Find the hidden body part: The HIPSTER cafe served excellent coffee.",h:"Look at the start of the word HIPSTER.",a:"hip",c:["leg","rib","toe"]},
+{d:"medium",q:"Find the hidden body part: The EARLIEST train leaves at dawn.",h:"Look at the start of the word EARLIEST.",a:"ear",c:["eye","nose","chin"]},
+{d:"hard",q:"Find the hidden body part: The company issued a SKINNY new logo design.",h:"Look at the start of the word SKINNY.",a:"skin",c:["shin","spine","scalp"]},
+{d:"hard",q:"Find the hidden body part: The HIPPOPOTAMUS wallowed happily in the mud.",h:"Look at the start of the word HIPPOPOTAMUS.",a:"hip",c:["rib","jaw","gum"]}
+]},
+{t:"Mental Ability",s:"mental-ability-questions-brain-test",p:[
+{d:"easy",q:"If A=1, B=2, C=3, what does D equal?",h:"Just keep counting up the alphabet.",a:"4"},
+{d:"easy",q:"What comes next in the pattern: Monday, Wednesday, Friday, __?",h:"Each day skips one day ahead.",a:"sunday",c:["saturday","thursday","tuesday"]},
+{d:"easy",q:"Which number is the odd one out: 2, 4, 6, 7, 8?",h:"Four of these numbers share something the fifth doesn't.",a:"7"},
+{d:"easy",q:"If a dozen equals 12, how many is half a dozen?",h:"Split 12 into two equal halves.",a:"6"},
+{d:"easy",q:"What is the next letter in the sequence: A, C, E, G, __?",h:"Each letter skips one letter ahead.",a:"i",c:["h","j","k"]},
+{d:"medium",q:"A clock shows 3:00 exactly. What angle, in degrees, do the hour and minute hands make?",h:"At 3:00 the hands form a perfect right angle.",a:"90"},
+{d:"medium",q:"If Monday is the 1st day of the week, which day is the 5th day?",h:"Count forward from Monday: 1 Mon, 2 Tue, 3 Wed...",a:"friday",c:["thursday","saturday","sunday"]},
+{d:"hard",q:"A is the mother of B. B is the mother of C. What is A to C?",h:"Think about the family tree across three generations.",a:"grandmother",c:["aunt","sister","mother"]},
+{d:"hard",q:"Look at this series: 2, 1, 1/2, 1/4, __. What number should come next?",h:"Each number is half of the one before it.",a:"1/8"},
+{d:"easy",q:"Which shape has the most sides: a triangle, a square, or a pentagon?",h:"Compare 3, 4 and 5 sides.",a:"pentagon",c:["triangle","square","they're equal"]},
+{d:"easy",q:"What comes next in the sequence: 1, 2, 4, 8, __?",h:"Each number is double the one before it.",a:"16"},
+{d:"easy",q:"If 3 pencils cost 30 cents, how much do 6 pencils cost, in cents?",h:"Double both the pencils and the price.",a:"60"},
+{d:"medium",q:"A is twice as old as B. If B is 8, how old is A?",h:"Multiply B's age by 2.",a:"16"},
+{d:"medium",q:"Which word does not belong: apple, orange, carrot, banana?",h:"Three of these are fruits.",a:"carrot",c:["apple","orange","banana"]},
+{d:"hard",q:"In a code, CAT is written as DBU (each letter shifted forward by 1). How is DOG written using the same code?",h:"Shift each letter of DOG forward by one place in the alphabet.",a:"eph",c:["dog","cnf","fqh"]},
+{d:"hard",q:"If 5 machines make 5 toys in 5 minutes, how many minutes would it take 100 machines to make 100 toys?",h:"Work out how long ONE machine takes to make ONE toy first.",a:"5"}
 ]}
 ];
 
@@ -1025,7 +1157,8 @@ function _boot(tid,_SK,_TK){
      different 3 tomorrow, since ds changes daily. Slicing to 3 keeps the
      tab bar to "3 tabs + Explore" no matter how large the pool grows. */
   var TABS_PER_DAY=3;
-  var ac=_sh(C,ds).slice(0,TABS_PER_DAY);
+  var eligibleC=C.filter(function(cat){return BLOCKED_CATEGORIES.indexOf(cat.t)===-1;});
+  var ac=_sh(eligibleC,ds).slice(0,TABS_PER_DAY);
   var EXPLORE_IDX=ac.length; /* Explore tab always sits right after the offline category tabs */
   var st;
   try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
@@ -1342,7 +1475,25 @@ function _boot(tid,_SK,_TK){
       /* NOT using the thumbnail's own width/height here \u2014 it's a square
          crop, so its aspect ratio does not represent the real picture. */
     }
-    return{title:title,url:pUrl,img:img,aspect:aspect};
+    /* Blogger's JSON feed lists each post's labels under entry.category as
+       [{term:"Label Name"}, ...]. Collected here so posts that only carry
+       housekeeping labels (see EXCLUDED_RANDOM_LABELS near the top of the
+       file) can be filtered out of Random Puzzles instead of showing a
+       non-puzzle page with no relevant image. */
+    var labels=[];
+    if(e.category){
+      for(var k=0;k<e.category.length;k++){
+        if(e.category[k]&&e.category[k].term)labels.push(e.category[k].term);
+      }
+    }
+    return{title:title,url:pUrl,img:img,aspect:aspect,labels:labels};
+  }
+  function _isExcludedPost(p){
+    if(!p.labels||!p.labels.length)return false;
+    for(var i=0;i<p.labels.length;i++){
+      if(EXCLUDED_RANDOM_LABELS.indexOf(p.labels[i])!==-1)return true;
+    }
+    return false;
   }
 
   /* preload the images for the current post set in the background so that
@@ -1390,7 +1541,7 @@ function _boot(tid,_SK,_TK){
         expLoading=false;
         var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
         var entries=(data&&data.feed&&data.feed.entry)||[];
-        var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
+        var posts=entries.map(_expParseEntry).filter(function(p){return p.url&&!_isExcludedPost(p);});
         if(posts.length===0){expPosts=[];_expRender();return;}
         expCache[cacheKey]=posts;
         expPosts=_rnd(posts).slice(0,WANT_COUNT);
@@ -1415,7 +1566,7 @@ function _boot(tid,_SK,_TK){
     function finalize(){
       expLoading=false;
       var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
-      var posts=results.filter(function(p){return p&&p.url;});
+      var posts=results.filter(function(p){return p&&p.url&&!_isExcludedPost(p);});
       if(posts.length===0){
         _expFail(labelObj,'Could not load puzzles. Please check your connection.');
         return;
@@ -1429,7 +1580,7 @@ function _boot(tid,_SK,_TK){
       _jsonp(url,function(data){
         remaining--;
         var entries=(data&&data.feed&&data.feed.entry)||[];
-        var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
+        var posts=entries.map(_expParseEntry).filter(function(p){return p.url&&!_isExcludedPost(p);});
         if(posts.length)results[idx]=posts[0];
         if(remaining===0)finalize();
       },function(){
@@ -1548,14 +1699,23 @@ function _boot(tid,_SK,_TK){
     }
     return B+'/p/daily-challenge.html';
   }
+  function _icon(bg,inner){
+    return '<svg width="22" height="22" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="'+bg+'"/>'+inner+'</svg>';
+  }
+  var ICON_WHATSAPP=_icon('#25D366','<path transform="translate(6,6) scale(0.032)" fill="#fff" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>');
+  var ICON_X=_icon('#000','<path transform="translate(5,5) scale(0.035)" fill="#fff" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>');
+  var ICON_FACEBOOK=_icon('#1877F2','<path transform="translate(8,4) scale(0.033)" fill="#fff" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>');
+  var ICON_TELEGRAM=_icon('#29B6F6','<path transform="translate(4,4) scale(0.039)" fill="#fff" d="M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z"/>');
+  var ICON_COPY=_icon('#6B7280','<g fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M11 17l6-6"/><path d="M13 8.5l1.8-1.8a3.2 3.2 0 014.5 4.5L17.5 13"/><path d="M15 19.5l-1.8 1.8a3.2 3.2 0 01-4.5-4.5L10.5 15"/></g>');
+  var ICON_SHARE=_icon('#6B7280','<g fill="#fff"><circle cx="9" cy="14" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="19" cy="21" r="2.4"/></g><g stroke="#fff" stroke-width="1.6"><line x1="11" y1="13" x2="17" y2="8.3"/><line x1="11" y1="15" x2="17" y2="19.7"/></g>');
   var SHARE_PLATFORMS=[
-    {id:'whatsapp',label:'\uD83D\uDCAC WhatsApp',open:function(txt,url){window.open('https://wa.me/?text='+encodeURIComponent(txt+'\n\n'+url),'_blank');}},
-    {id:'twitter',label:'\uD83D\uDC26 X / Twitter',open:function(txt,url){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(url),'_blank');}},
-    {id:'facebook',label:'\uD83D\uDCD8 Facebook',open:function(txt,url){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'&quote='+encodeURIComponent(txt),'_blank');}},
-    {id:'telegram',label:'\u2708\uFE0F Telegram',open:function(txt,url){window.open('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(txt),'_blank');}},
-    {id:'copy',label:'\uD83D\uDD17 Copy link',open:function(txt,url){
+    {id:'whatsapp',icon:ICON_WHATSAPP,label:'WhatsApp',open:function(txt,url){window.open('https://wa.me/?text='+encodeURIComponent(txt+'\n\n'+url),'_blank');}},
+    {id:'twitter',icon:ICON_X,label:'X / Twitter',open:function(txt,url){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(url),'_blank');}},
+    {id:'facebook',icon:ICON_FACEBOOK,label:'Facebook',open:function(txt,url){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'&quote='+encodeURIComponent(txt),'_blank');}},
+    {id:'telegram',icon:ICON_TELEGRAM,label:'Telegram',open:function(txt,url){window.open('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(txt),'_blank');}},
+    {id:'copy',icon:ICON_COPY,label:'Copy link',open:function(txt,url){
       var full=txt+'\n\n'+url;
-      function done(){var b=smEl.querySelector('[data-p="copy"]');if(b){var old=b.textContent;b.textContent='\u2713 Copied!';setTimeout(function(){b.textContent=old;},1800);}}
+      function done(){var b=smEl.querySelector('[data-p="copy"] span');if(b){var old=b.textContent;b.textContent='Copied!';setTimeout(function(){b.textContent=old;},1800);}}
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(full).then(done).catch(function(){});}
       else{var ta=document.createElement('textarea');ta.value=full;ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
     }}
@@ -1564,7 +1724,8 @@ function _boot(tid,_SK,_TK){
     smEl.innerHTML='';
     SHARE_PLATFORMS.forEach(function(pl){
       var b=document.createElement('button');
-      b.type='button';b.setAttribute('data-p',pl.id);b.textContent=pl.label;
+      b.type='button';b.setAttribute('data-p',pl.id);
+      b.innerHTML=pl.icon+'<span>'+pl.label+'</span>';
       b.onclick=function(e){
         e.stopPropagation();
         pl.open(_shareText(),_shareUrl());
@@ -1574,7 +1735,8 @@ function _boot(tid,_SK,_TK){
     });
     if(navigator.share){
       var nb=document.createElement('button');
-      nb.type='button';nb.textContent='\uD83D\uDCE4 More apps...';
+      nb.type='button';
+      nb.innerHTML=ICON_SHARE+'<span>More apps...</span>';
       nb.onclick=function(e){
         e.stopPropagation();
         smEl.style.display='none';
