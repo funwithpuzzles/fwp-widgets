@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.1.0 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.1.2 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -9,6 +9,36 @@ var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.ne
 /* Controls whether the "Add this widget to your website" promo section
    renders at the bottom of the widget. Set to false to hide it entirely. */
 var SHOW_ADD_TO_SITE = true;
+
+/* Controls the "Get the app" promo badges near the bottom of the widget.
+   Each store has its own on/off flag so you can launch Android and iOS on
+   different dates. Drop the real store URLs in once the apps are live \u2014
+   until then these are inert placeholders. */
+var SHOW_GOOGLE_PLAY_PROMO = false;
+var SHOW_APPLE_APP_PROMO = false;
+var GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.funwithpuzzles.dailychallenges';
+var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';   /* e.g. https://apps.apple.com/app/id0000000000 */
+
+/* Categories to hide from the offline tabs \u2014 e.g. while you're improving a
+   category's puzzles. Add the exact category title (the "t" value on that
+   category in the C array further down, e.g. "Riddles", "Matchstick", "GK")
+   and it will never be picked as one of the day's 3 offline tabs. Safe to
+   edit freely; it only affects which categories are eligible, not the data
+   itself, and it has no effect on the Explore tab (which pulls from the
+   live website, not this offline dataset). */
+var BLOCKED_CATEGORIES=[];
+
+/* Labels that exist on the live site for housekeeping/administrative posts
+   rather than actual puzzles (event announcements, video posts, index
+   pages, championship recaps, etc). Posts carrying ONLY these labels won't
+   have a relevant puzzle image, so they're filtered out of the Explore
+   tab's Random Puzzles feed (which otherwise pulls from every label on the
+   site). Edit this list freely to match your site's label names exactly. */
+var EXCLUDED_RANDOM_LABELS=[
+  'Puzzle and Sudoku Events','Brain Teasers Videos','Administrative Posts',
+  'Conceptis Puzzles','Images','Puzzle Index Pages','Sudoku Championships',
+  'Puzzle Championships','Puzzle Sites','Puzzle Tutorials','Logic Puzzles Printable'
+];
 
 /* \u2500\u2500 Explore labels: display name, exact Blogger label, hub page URL \u2500\u2500
    All label names verified from lebel-hubpage-mapping.txt
@@ -140,8 +170,9 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpchk{height:40px;padding:0 14px;background:#0A0AFF;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}'
 +'.fwpchk:hover{background:#2222ff;}'
 /* multiple-choice answers */
-+'.fwpmcq{display:flex;flex-direction:column;gap:8px;margin-top:11px;}'
-+'.fwpmcqbtn{text-align:left;padding:10px 13px;border:1.5px solid #e5e7eb;border-radius:9px;background:#fff;font-size:12.5px;line-height:1.4;color:#111827;cursor:pointer;font-family:inherit;transition:all .15s;}'
++'.fwpmcq{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px;align-items:stretch;}'
++'@media (max-width:400px){.fwpmcq{grid-template-columns:1fr;}}'
++'.fwpmcqbtn{text-align:left;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:9px;background:#fff;font-size:12px;line-height:1.4;color:#111827;cursor:pointer;font-family:inherit;transition:all .15s;white-space:normal;word-break:break-word;overflow-wrap:anywhere;height:auto;}'
 +'.fwpmcqbtn:hover:not(:disabled){border-color:#0A0AFF;background:#eef1ff;}'
 +'.fwpmcqbtn:disabled{cursor:default;}'
 +'.fwpmcqbtn.correct{background:#EAF3DE;border-color:#16a34a;color:#166534;font-weight:700;}'
@@ -235,7 +266,9 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
 /* share menu popup */
 +'.fwpsharemenu{position:absolute;bottom:46px;right:14px;background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.16);padding:6px;display:none;flex-direction:column;gap:2px;z-index:20;min-width:170px;}'
-+'.fwpsharemenu button{background:none;border:none;text-align:left;padding:8px 10px;font-size:12px;color:#111827;cursor:pointer;border-radius:6px;font-family:inherit;display:flex;align-items:center;gap:8px;width:100%;}'
++'.fwpsharemenu button{background:none;border:none;text-align:left;padding:7px 9px;font-size:12px;color:#111827;cursor:pointer;border-radius:6px;font-family:inherit;display:flex;align-items:center;gap:9px;width:100%;}'
++'.fwpsharemenu button svg{flex-shrink:0;}'
++'.fwpsharemenu button span{font-weight:600;}'
 +'.fwpsharemenu button:hover{background:#f4f5ff;}'
 /* add to site */
 +'.fwpadd{border-top:2px dashed #c7d2fe;padding:9px 14px;background:#f0f2ff;}'
@@ -247,6 +280,16 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpcb{margin-top:7px;background:#0A0AFF;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}'
 +'.fwpcb:hover{background:#2222ff;}'
 +'.fwpcb.copied{background:#16a34a;}'
+/* app store promo badges */
++'.fwpapps{border-top:2px dashed #c7d2fe;padding:12px 14px;background:#f8f9ff;text-align:center;}'
++'.fwpapps-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:9px;}'
++'.fwpapps-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}'
++'.fwpapp-badge{display:flex;align-items:center;gap:7px;background:#111827;color:#fff;border-radius:8px;padding:7px 13px;text-decoration:none;transition:opacity .15s,transform .15s;}'
++'.fwpapp-badge:hover{opacity:.85;transform:translateY(-1px);}'
++'.fwpapp-ic{font-size:19px;line-height:1;}'
++'.fwpapp-txt{display:flex;flex-direction:column;line-height:1.2;text-align:left;}'
++'.fwpapp-txt small{font-size:8px;color:#d1d5db;text-transform:uppercase;letter-spacing:.4px;}'
++'.fwpapp-txt b{font-size:12.5px;font-weight:700;color:#fff;}'
 +'.fwpattr{font-size:10px;color:#9ca3af;text-align:center;padding:5px 0 8px;}'
 +'.fwpattr a{color:#0A0AFF;text-decoration:none;}'
 +'.fwpattr a:hover{text-decoration:underline;}';
@@ -265,114 +308,114 @@ if(!document.getElementById('fwpv6preconnect')){
 /* \u2500\u2500 Offline puzzle data pool: 28 categories, 3 shown at random each day \u2500\u2500 */
 var C=[
 {t:"Riddles",s:"riddles",p:[
-{d:"easy",q:"I speak without a mouth and hear without ears. I have no body but come alive with wind. What am I?",h:"Think of sounds bouncing back in a valley.",a:"echo"},
-{d:"easy",q:"The more you take, the more you leave behind. What am I?",h:"Think about walking on a sandy beach.",a:"footsteps"},
-{d:"easy",q:"I am tall when young and short when old. What am I?",h:"Think about what burns down over time.",a:"candle"},
-{d:"easy",q:"What has one eye but cannot see?",h:"Think about sewing.",a:"needle"},
-{d:"easy",q:"What has hands but cannot clap?",h:"You look at it to know the time.",a:"clock"},
-{d:"easy",q:"What is full of holes but still holds water?",h:"You use it in the shower.",a:"sponge"},
-{d:"easy",q:"What has a head and a tail but no body?",h:"Think coins.",a:"coin"},
-{d:"easy",q:"I have no wings but I fly, no eyes but I cry. What am I?",h:"Think about weather.",a:"cloud"},
-{d:"easy",q:"What has legs but cannot walk?",h:"You sit on it.",a:"table"},
-{d:"medium",q:"I have cities but no houses, mountains but no trees, water but no fish. What am I?",h:"You can fold me and put me in your pocket.",a:"map"},
-{d:"medium",q:"I am always in front of you but can never be seen. What am I?",h:"Think about what lies ahead in time.",a:"future"},
-{d:"medium",q:"The more you remove from me, the bigger I get. What am I?",h:"Think about digging in the ground.",a:"hole"},
-{d:"medium",q:"I have a thousand needles but I do not sew. What am I?",h:"Think about a prickly plant.",a:"cactus"},
-{d:"medium",q:"I go up but never come down. What am I?",h:"Think about getting older.",a:"age"},
-{d:"hard",q:"I can be cracked, made, told and played. What am I?",h:"Comedians do this every night on stage.",a:"joke"},
-{d:"hard",q:"What has a bottom at the top?",h:"Think about clothing worn on your legs.",a:"legs"},
-{d:"hard",q:"I bind it and it walks. I loose it and it stops. What am I?",h:"Think about a sandal.",a:"sandal"},
-{d:"hard",q:"What can travel around the world while staying in a corner?",h:"Think about postage.",a:"stamp"}
+{d:"easy",q:"I speak without a mouth and hear without ears. I have no body but come alive with wind. What am I?",h:"Think of sounds bouncing back in a valley.",a:"echo",c:["shadow","whisper","silence"]},
+{d:"easy",q:"The more you take, the more you leave behind. What am I?",h:"Think about walking on a sandy beach.",a:"footsteps",c:["shadow","reflection","echo"]},
+{d:"easy",q:"I am tall when young and short when old. What am I?",h:"Think about what burns down over time.",a:"candle",c:["match","lamp","torch"]},
+{d:"easy",q:"What has one eye but cannot see?",h:"Think about sewing.",a:"needle",c:["nail","pin","hook"]},
+{d:"easy",q:"What has hands but cannot clap?",h:"You look at it to know the time.",a:"clock",c:["watch","calendar","compass"]},
+{d:"easy",q:"What is full of holes but still holds water?",h:"You use it in the shower.",a:"sponge",c:["towel","net","sieve"]},
+{d:"easy",q:"What has a head and a tail but no body?",h:"Think coins.",a:"coin",c:["dice","key","button"]},
+{d:"easy",q:"I have no wings but I fly, no eyes but I cry. What am I?",h:"Think about weather.",a:"cloud",c:["fog","smoke","mist"]},
+{d:"easy",q:"What has legs but cannot walk?",h:"You sit on it.",a:"table",c:["chair","stool","bench"]},
+{d:"medium",q:"I have cities but no houses, mountains but no trees, water but no fish. What am I?",h:"You can fold me and put me in your pocket.",a:"map",c:["globe","atlas","photo"]},
+{d:"medium",q:"I am always in front of you but can never be seen. What am I?",h:"Think about what lies ahead in time.",a:"future",c:["past","dream","tomorrow"]},
+{d:"medium",q:"The more you remove from me, the bigger I get. What am I?",h:"Think about digging in the ground.",a:"hole",c:["tunnel","pit","gap"]},
+{d:"medium",q:"I have a thousand needles but I do not sew. What am I?",h:"Think about a prickly plant.",a:"cactus",c:["hedgehog","porcupine","thistle"]},
+{d:"medium",q:"I go up but never come down. What am I?",h:"Think about getting older.",a:"age",c:["height","weight","time"]},
+{d:"hard",q:"I can be cracked, made, told and played. What am I?",h:"Comedians do this every night on stage.",a:"joke",c:["story","secret","rumour"]},
+{d:"hard",q:"What has a bottom at the top?",h:"Think about clothing worn on your legs.",a:"legs",c:["trousers","boots","shoes"]},
+{d:"hard",q:"I bind it and it walks. I loose it and it stops. What am I?",h:"Think about a sandal.",a:"sandal",c:["shoelace","belt","rope"]},
+{d:"hard",q:"What can travel around the world while staying in a corner?",h:"Think about postage.",a:"stamp",c:["coin","letter","postcard"]}
 ]},
 {t:"Tricky",s:"tricky-riddles",p:[
-{d:"easy",q:"What goes up but never comes down?",h:"Think about getting older.",a:"age"},
-{d:"easy",q:"A rooster laid an egg on the roof. Which side did it roll down?",h:"Roosters do not lay eggs.",a:"neither"},
-{d:"easy",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them"},
-{d:"easy",q:"What can you catch but not throw?",h:"You might get this when someone near you is sick.",a:"cold"},
-{d:"easy",q:"What gets wetter as it dries?",h:"You use it after a shower.",a:"towel"},
-{d:"easy",q:"What has many keys but cannot open a single lock?",h:"You use it to type text.",a:"keyboard"},
-{d:"easy",q:"You see me once in a minute, twice in a moment, but not in a thousand years. What am I?",h:"Look at the letters.",a:"letter m"},
-{d:"easy",q:"What question can you never answer yes to?",h:"Think about being awake.",a:"are you asleep"},
-{d:"medium",q:"Before Mt Everest was discovered, what was the tallest mountain on Earth?",h:"Discovery does not change geography.",a:"everest"},
-{d:"medium",q:"I am not alive but I grow. I need air but have no lungs. Water kills me. What am I?",h:"You see me in a fireplace.",a:"fire"},
-{d:"medium",q:"A man shaves many times a day yet still has a beard. How?",h:"Think about who shaves other people for a living.",a:"barber"},
-{d:"medium",q:"A woman had two sons at the same hour on the same day in the same year. Yet they were not twins. How?",h:"Think bigger than two.",a:"triplets"},
-{d:"hard",q:"What word in English is always spelled incorrectly?",h:"Read the question very literally.",a:"incorrectly"},
-{d:"hard",q:"A woman shoots her husband then holds him underwater. They go to dinner an hour later. How?",h:"What profession shoots people harmlessly?",a:"photographer"},
-{d:"hard",q:"What has a head and a tail but no body? It is not alive but you find it in your pocket.",h:"You flip it to make a decision.",a:"coin"},
-{d:"hard",q:"A man who was outside in the rain without an umbrella or hat did not get a single hair wet. How?",h:"Think about hair.",a:"he was bald"}
+{d:"easy",q:"What goes up but never comes down?",h:"Think about getting older.",a:"age",c:["height","weight","time"]},
+{d:"easy",q:"A rooster laid an egg on the roof. Which side did it roll down?",h:"Roosters do not lay eggs.",a:"neither",c:["left side","right side","straight down"]},
+{d:"easy",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them",c:["only february","only april","only 4 months"]},
+{d:"easy",q:"What can you catch but not throw?",h:"You might get this when someone near you is sick.",a:"cold",c:["flu","fever","sunburn"]},
+{d:"easy",q:"What gets wetter as it dries?",h:"You use it after a shower.",a:"towel",c:["sponge","umbrella","raincoat"]},
+{d:"easy",q:"What has many keys but cannot open a single lock?",h:"You use it to type text.",a:"keyboard",c:["map","calendar","piano"]},
+{d:"easy",q:"You see me once in a minute, twice in a moment, but not in a thousand years. What am I?",h:"Look at the letters.",a:"letter m",c:["letter e","letter s","letter t"]},
+{d:"easy",q:"What question can you never answer yes to?",h:"Think about being awake.",a:"are you asleep",c:["are you awake","are you hungry","are you here"]},
+{d:"medium",q:"Before Mt Everest was discovered, what was the tallest mountain on Earth?",h:"Discovery does not change geography.",a:"everest",c:["k2","kilimanjaro","no mountain existed"]},
+{d:"medium",q:"I am not alive but I grow. I need air but have no lungs. Water kills me. What am I?",h:"You see me in a fireplace.",a:"fire",c:["smoke","ice","rust"]},
+{d:"medium",q:"A man shaves many times a day yet still has a beard. How?",h:"Think about who shaves other people for a living.",a:"barber",c:["actor","doctor","tailor"]},
+{d:"medium",q:"A woman had two sons at the same hour on the same day in the same year. Yet they were not twins. How?",h:"Think bigger than two.",a:"triplets",c:["twins","cousins","quadruplets"]},
+{d:"hard",q:"What word in English is always spelled incorrectly?",h:"Read the question very literally.",a:"incorrectly",c:["correctly","wrongly","misspelled"]},
+{d:"hard",q:"A woman shoots her husband then holds him underwater. They go to dinner an hour later. How?",h:"What profession shoots people harmlessly?",a:"photographer",c:["doctor","hunter","lifeguard"]},
+{d:"hard",q:"What has a head and a tail but no body? It is not alive but you find it in your pocket.",h:"You flip it to make a decision.",a:"coin",c:["dice","button","key"]},
+{d:"hard",q:"A man who was outside in the rain without an umbrella or hat did not get a single hair wet. How?",h:"Think about hair.",a:"he was bald",c:["he wore a hat","he used an umbrella","he stayed indoors"]}
 ]},
 {t:"What Am I",s:"what-am-i-riddles",p:[
-{d:"easy",q:"I have keys but no locks, space but no room. You can enter but not go inside. What am I?",h:"You use me to type.",a:"keyboard"},
-{d:"easy",q:"I run but have no legs. What am I?",h:"Think about flowing water.",a:"river"},
-{d:"easy",q:"I have a neck but no head. What am I?",h:"You pour drinks from me.",a:"bottle"},
-{d:"easy",q:"I fly without wings. What am I?",h:"Think about what passes every second.",a:"time"},
-{d:"easy",q:"I have teeth but cannot bite. What am I?",h:"You use me to tidy your hair.",a:"comb"},
-{d:"easy",q:"I have hands but cannot clap. I have a face but no eyes. What am I?",h:"You look at it to know the time.",a:"clock"},
-{d:"easy",q:"I have a spine but no bones. What am I?",h:"You read me.",a:"book"},
-{d:"easy",q:"I have a tongue but cannot talk. What am I?",h:"Think about footwear.",a:"shoe"},
-{d:"medium",q:"I can travel around the world without moving from my place. What am I?",h:"Think about sending letters.",a:"stamp"},
-{d:"medium",q:"I have branches but no fruit, trunk or leaves. What am I?",h:"You go here to borrow books or save money.",a:"bank"},
-{d:"medium",q:"I am taken from a mine and shut in a wooden case. Used by everyone but never touched. What am I?",h:"Think about writing tools.",a:"pencil lead"},
-{d:"medium",q:"I get shorter as I get older. What am I?",h:"Think about what burns down over time.",a:"candle"},
-{d:"medium",q:"I have an eye but cannot see. I have a body but no legs. What am I?",h:"Think about severe weather.",a:"needle or hurricane"},
-{d:"hard",q:"The person who makes me does not need me. The buyer does not use me. The user does not know. What am I?",h:"Think about a final resting place.",a:"coffin"},
-{d:"hard",q:"You see me once in June, twice in November, not at all in May. What am I?",h:"Look at the letters of each month name.",a:"letter n"},
-{d:"hard",q:"I am always hungry and must always be fed. The finger I touch will soon turn red. What am I?",h:"Think about heat.",a:"fire"}
+{d:"easy",q:"I have keys but no locks, space but no room. You can enter but not go inside. What am I?",h:"You use me to type.",a:"keyboard",c:["map","calendar","piano"]},
+{d:"easy",q:"I run but have no legs. What am I?",h:"Think about flowing water.",a:"river",c:["road","wind","time"]},
+{d:"easy",q:"I have a neck but no head. What am I?",h:"You pour drinks from me.",a:"bottle",c:["jug","vase","cup"]},
+{d:"easy",q:"I fly without wings. What am I?",h:"Think about what passes every second.",a:"time",c:["wind","sound","light"]},
+{d:"easy",q:"I have teeth but cannot bite. What am I?",h:"You use me to tidy your hair.",a:"comb",c:["saw","fork","zipper"]},
+{d:"easy",q:"I have hands but cannot clap. I have a face but no eyes. What am I?",h:"You look at it to know the time.",a:"clock",c:["watch","calendar","mirror"]},
+{d:"easy",q:"I have a spine but no bones. What am I?",h:"You read me.",a:"book",c:["cactus","ladder","fence"]},
+{d:"easy",q:"I have a tongue but cannot talk. What am I?",h:"Think about footwear.",a:"shoe",c:["glove","hat","bell"]},
+{d:"medium",q:"I can travel around the world without moving from my place. What am I?",h:"Think about sending letters.",a:"stamp",c:["coin","map","photo"]},
+{d:"medium",q:"I have branches but no fruit, trunk or leaves. What am I?",h:"You go here to borrow books or save money.",a:"bank",c:["tree","forest","library"]},
+{d:"medium",q:"I am taken from a mine and shut in a wooden case. Used by everyone but never touched. What am I?",h:"Think about writing tools.",a:"pencil lead",c:["chalk","crayon","ink"]},
+{d:"medium",q:"I get shorter as I get older. What am I?",h:"Think about what burns down over time.",a:"candle",c:["match","lamp","torch"]},
+{d:"medium",q:"I have an eye but cannot see. I have a body but no legs. What am I?",h:"Think about severe weather.",a:"needle or hurricane",c:["storm","tornado","cyclone"]},
+{d:"hard",q:"The person who makes me does not need me. The buyer does not use me. The user does not know. What am I?",h:"Think about a final resting place.",a:"coffin",c:["safe","chest","urn"]},
+{d:"hard",q:"You see me once in June, twice in November, not at all in May. What am I?",h:"Look at the letters of each month name.",a:"letter n",c:["letter m","letter j","letter u"]},
+{d:"hard",q:"I am always hungry and must always be fed. The finger I touch will soon turn red. What am I?",h:"Think about heat.",a:"fire",c:["ice","smoke","wind"]}
 ]},
 {t:"Funny",s:"funny-riddles",p:[
-{d:"easy",q:"Why do bicycles fall over?",h:"Think about how many wheels it has.",a:"two tired"},
-{d:"easy",q:"What do you call a fish without eyes?",h:"Say it out loud and remove the letter i.",a:"fsh"},
-{d:"easy",q:"Why can a leopard never hide?",h:"Think about its coat pattern.",a:"always spotted"},
-{d:"easy",q:"What do you call a sleeping dinosaur?",h:"It makes a loud rumbling sound.",a:"dino-snore"},
-{d:"easy",q:"What do you call cheese that is not yours?",h:"It belongs to someone else.",a:"nacho cheese"},
-{d:"easy",q:"Why did the scarecrow win an award?",h:"Think about what makes a field special.",a:"outstanding in his field"},
-{d:"easy",q:"What do you call a fake noodle?",h:"It is an impasta!",a:"impasta"},
-{d:"easy",q:"Why did the math book look so sad?",h:"Think about what is inside it.",a:"too many problems"},
-{d:"medium",q:"What did the ocean say to the beach?",h:"Think of a wavy greeting.",a:"nothing it just waved"},
-{d:"medium",q:"Why do scientists not trust atoms?",h:"They are guilty of something.",a:"they make up everything"},
-{d:"medium",q:"What did one wall say to the other?",h:"Think about a corner.",a:"i will meet you at the corner"},
-{d:"medium",q:"Why did the bicycle not win the race?",h:"Think about what it was.",a:"two tired"},
-{d:"medium",q:"What is a vampire's favourite fruit?",h:"Think about the neck.",a:"a blood orange"},
-{d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human"},
-{d:"hard",q:"What word becomes shorter when you add two letters to it?",h:"Think of the word meaning not long.",a:"short"},
-{d:"hard",q:"What runs but never walks, has a mouth but never talks, has a head but never weeps?",h:"Think about flowing water.",a:"river"}
+{d:"easy",q:"Why do bicycles fall over?",h:"Think about how many wheels it has.",a:"two tired",c:["out of gas","too rusty","flat broke"]},
+{d:"easy",q:"What do you call a fish without eyes?",h:"Say it out loud and remove the letter i.",a:"fsh",c:["fysh","fis","fih"]},
+{d:"easy",q:"Why can a leopard never hide?",h:"Think about its coat pattern.",a:"always spotted",c:["always striped","always camouflaged","always hiding"]},
+{d:"easy",q:"What do you call a sleeping dinosaur?",h:"It makes a loud rumbling sound.",a:"dino-snore",c:["dino-nap","dino-doze","rex-snore"]},
+{d:"easy",q:"What do you call cheese that is not yours?",h:"It belongs to someone else.",a:"nacho cheese",c:["not-cho cheese","fake cheese","cheddar cheese"]},
+{d:"easy",q:"Why did the scarecrow win an award?",h:"Think about what makes a field special.",a:"outstanding in his field",c:["scared of birds","made of straw","great at farming"]},
+{d:"easy",q:"What do you call a fake noodle?",h:"It is an impasta!",a:"impasta",c:["fake-aroni","noodle-fake","cheat-lini"]},
+{d:"easy",q:"Why did the math book look so sad?",h:"Think about what is inside it.",a:"too many problems",c:["too many pages","too heavy to carry","full of numbers"]},
+{d:"medium",q:"What did the ocean say to the beach?",h:"Think of a wavy greeting.",a:"nothing it just waved",c:["hello ocean","see you later","have a splashy day"]},
+{d:"medium",q:"Why do scientists not trust atoms?",h:"They are guilty of something.",a:"they make up everything",c:["they are too small","they never sit still","they split too easily"]},
+{d:"medium",q:"What did one wall say to the other?",h:"Think about a corner.",a:"i will meet you at the corner",c:["nice bricks today","see you at the ceiling","watch out for cracks"]},
+{d:"medium",q:"Why did the bicycle not win the race?",h:"Think about what it was.",a:"two tired",c:["ran out of road","lost its chain","flat tyres"]},
+{d:"medium",q:"What is a vampire's favourite fruit?",h:"Think about the neck.",a:"a blood orange",c:["a neck-tarine","a bite-sized apple","a scream-berry"]},
+{d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human",c:["dog","spider","the sphinx"]},
+{d:"hard",q:"What word becomes shorter when you add two letters to it?",h:"Think of the word meaning not long.",a:"short",c:["small","tiny","brief"]},
+{d:"hard",q:"What runs but never walks, has a mouth but never talks, has a head but never weeps?",h:"Think about flowing water.",a:"river",c:["road","clock","wind"]}
 ]},
 {t:"Mystery",s:"mystery-riddles",p:[
-{d:"easy",q:"How far can a dog run into the woods?",h:"Think about the halfway point.",a:"halfway"},
-{d:"easy",q:"What is always coming but never arrives?",h:"Think about time.",a:"tomorrow"},
-{d:"easy",q:"If you drop me I will crack, but smile at me and I will smile back. What am I?",h:"You look at this every morning.",a:"mirror"},
+{d:"easy",q:"How far can a dog run into the woods?",h:"Think about the halfway point.",a:"halfway",c:["all the way","not at all","a mile"]},
+{d:"easy",q:"What is always coming but never arrives?",h:"Think about time.",a:"tomorrow",c:["yesterday","today","next year"]},
+{d:"easy",q:"If you drop me I will crack, but smile at me and I will smile back. What am I?",h:"You look at this every morning.",a:"mirror",c:["window","photo","screen"]},
 {d:"easy",q:"A father has 5 sons, each son has one sister. How many children are there?",h:"They all share the same sister.",a:"6"},
-{d:"easy",q:"A man is 20 years old but has only had 5 birthdays. How?",h:"Think about when his birthday falls.",a:"born on february 29"},
-{d:"easy",q:"What has 13 hearts but no other organs?",h:"You use it to play card games.",a:"deck of cards"},
-{d:"easy",q:"What is always the last thing to make you smile?",h:"Think about a photo.",a:"your cheeks"},
-{d:"easy",q:"A rooster lays an egg on top of a barn. Which way does it roll?",h:"Think about whether a rooster can lay eggs.",a:"roosters dont lay eggs"},
-{d:"medium",q:"A man pushes his car to a hotel and declares bankruptcy. Why?",h:"Think about a popular board game.",a:"monopoly"},
-{d:"medium",q:"A man is found dead by a cassette. Police press play, hear a gunshot and know it is murder. Why?",h:"Think about what the recording reveals.",a:"someone rewound it"},
-{d:"medium",q:"A woman lives on the 20th floor. On sunny days she takes the lift to the 10th and walks up. On rainy days all the way. Why?",h:"Think about what she carries on rainy days.",a:"umbrella"},
-{d:"medium",q:"How can a man go 25 days without sleep?",h:"He does not need to sleep during the day.",a:"he sleeps at night"},
-{d:"hard",q:"A man found dead in a field next to an unopened package. No marks, no one around. How did he die?",h:"Think about what the package was supposed to do.",a:"parachute failed to open"},
-{d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 paise per digit. She pays Rs 1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits"},
-{d:"hard",q:"3 doors: freedom behind one, lions behind others. Which do you pick?",h:"Think about lions unfed for 3 years.",a:"any they would be dead"},
-{d:"hard",q:"A man walks into a bar and asks the bartender for a glass of water. The bartender pulls out a gun. The man says thank you and leaves. Why?",h:"Think about what cures hiccups.",a:"hiccups"}
+{d:"easy",q:"A man is 20 years old but has only had 5 birthdays. How?",h:"Think about when his birthday falls.",a:"born on february 29",c:["born on new year's day","born on a leap second","he lied about his age"]},
+{d:"easy",q:"What has 13 hearts but no other organs?",h:"You use it to play card games.",a:"deck of cards",c:["calendar","chess set","dice set"]},
+{d:"easy",q:"What is always the last thing to make you smile?",h:"Think about a photo.",a:"your cheeks",c:["your eyes","your teeth","your ears"]},
+{d:"easy",q:"A rooster lays an egg on top of a barn. Which way does it roll?",h:"Think about whether a rooster can lay eggs.",a:"roosters dont lay eggs",c:["it rolls left","it rolls right","it stays put"]},
+{d:"medium",q:"A man pushes his car to a hotel and declares bankruptcy. Why?",h:"Think about a popular board game.",a:"monopoly",c:["chess","checkers","scrabble"]},
+{d:"medium",q:"A man is found dead by a cassette. Police press play, hear a gunshot and know it is murder. Why?",h:"Think about what the recording reveals.",a:"someone rewound it",c:["it was a recording","the tape was broken","it was slowed down"]},
+{d:"medium",q:"A woman lives on the 20th floor. On sunny days she takes the lift to the 10th and walks up. On rainy days all the way. Why?",h:"Think about what she carries on rainy days.",a:"umbrella",c:["raincoat","boots","hat"]},
+{d:"medium",q:"How can a man go 25 days without sleep?",h:"He does not need to sleep during the day.",a:"he sleeps at night",c:["he takes long naps","he never gets tired","he sleeps standing up"]},
+{d:"hard",q:"A man found dead in a field next to an unopened package. No marks, no one around. How did he die?",h:"Think about what the package was supposed to do.",a:"parachute failed to open",c:["he was pushed","he had a heart attack","he was struck by lightning"]},
+{d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 paise per digit. She pays Rs 1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits",c:["a phone number","a street sign","a padlock code"]},
+{d:"hard",q:"3 doors: freedom behind one, lions behind others. Which do you pick?",h:"Think about lions unfed for 3 years.",a:"any they would be dead",c:["the middle door","the first door","the last door"]},
+{d:"hard",q:"A man walks into a bar and asks the bartender for a glass of water. The bartender pulls out a gun. The man says thank you and leaves. Why?",h:"Think about what cures hiccups.",a:"hiccups",c:["a dry throat","a bad joke","he was thirsty"]}
 ]},
 {t:"Maths",s:"maths-puzzles",p:[
 {d:"easy",q:"A farmer has 17 sheep. All but 9 run away. How many are left?",h:"Read all but 9 very carefully.",a:"9"},
 {d:"easy",q:"What is half of 2 plus 2?",h:"Follow the correct order of operations.",a:"3"},
 {d:"easy",q:"If you have 3 apples and take away 2, how many apples do YOU have?",h:"Focus on the word YOU.",a:"2"},
-{d:"easy",q:"How many times can you subtract 10 from 100?",h:"After the first time the number is no longer 100.",a:"once"},
+{d:"easy",q:"How many times can you subtract 10 from 100?",h:"After the first time the number is no longer 100.",a:"once",c:["ten times","nine times","twice"]},
 {d:"easy",q:"What comes next: 1, 2, 4, 8, 16, __?",h:"Each number is doubled.",a:"32"},
-{d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet"},
-{d:"easy",q:"How many sides does a circle have?",h:"Think carefully \u2014 it is not zero.",a:"one curved side"},
+{d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet",c:["heavier","invisible","purple"]},
+{d:"easy",q:"How many sides does a circle have?",h:"Think carefully \u2014 it is not zero.",a:"one curved side",c:["zero sides","infinite sides","two sides"]},
 {d:"easy",q:"What is 1000 plus 20 plus 1000 plus 30 plus 1000 plus 1040?",h:"Add carefully step by step.",a:"4090"},
-{d:"medium",q:"I am an odd number. Take away one letter and I become even. What number am I?",h:"Think about the word not the digit.",a:"seven"},
+{d:"medium",q:"I am an odd number. Take away one letter and I become even. What number am I?",h:"Think about the word not the digit.",a:"seven",c:["nine","three","five"]},
 {d:"medium",q:"A bat and ball cost Rs 110 together. The bat costs Rs 100 more than the ball. What is the cost of the ball?",h:"Do not just say Rs 10. Set up a proper equation.",a:"5"},
 {d:"medium",q:"Two ropes each burn in 60 minutes unevenly. How do you measure exactly 45 minutes?",h:"Light both ends of one rope and one end of the other.",a:"45 minutes"},
 {d:"medium",q:"If there are 3 apples and you take away 2, how many apples do you have?",h:"YOU took 2.",a:"2"},
 {d:"hard",q:"A clock loses 3 minutes every hour. Set at noon, when will it next show the correct time?",h:"It must lose exactly 12 hours.",a:"240 days"},
-{d:"hard",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings"},
+{d:"hard",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings",c:["three weighings","one weighing","four weighings"]},
 {d:"hard",q:"What 3 positive numbers give the same result when multiplied and when added?",h:"Try simple numbers like 1, 2, 3.",a:"1 2 3"},
-{d:"hard",q:"You have two hourglasses \u2014 a 4-minute and a 7-minute. How do you measure exactly 9 minutes?",h:"Start both, flip the 4 when done, then flip again.",a:"flip strategically"}
+{d:"hard",q:"You have two hourglasses \u2014 a 4-minute and a 7-minute. How do you measure exactly 9 minutes?",h:"Start both, flip the 4 when done, then flip again.",a:"flip strategically",c:["flip both together","wait 11 minutes","flip only the 7"]}
 ]},
 {t:"Missing #",s:"missing-number-puzzles",p:[
 {d:"easy",q:"2, 4, 6, 8, __ \u2014 What comes next?",h:"Each number increases by the same amount.",a:"10"},
@@ -423,226 +466,226 @@ var C=[
 {d:"medium",q:"If RED=27, BLUE=40, then GREEN=?",h:"A=1, B=2 ... add all letter values.",a:"49"},
 {d:"medium",q:"5 people shake hands with each other exactly once. How many handshakes total?",h:"n x (n-1) divided by 2.",a:"10"},
 {d:"medium",q:"If A+B=10, B+C=15, A+C=13, what is A+B+C?",h:"Add all three equations then halve.",a:"19"},
-{d:"hard",q:"All Bloops are Razzles. All Razzles are Lazzles. Are all Bloops definitely Lazzles?",h:"If A implies B and B implies C ...",a:"yes"},
-{d:"hard",q:"If the day before yesterday was Thursday, what day is the day after tomorrow?",h:"Map out the days carefully.",a:"monday"},
-{d:"hard",q:"In a group of 23 people, roughly what is the chance two share a birthday?",h:"This is the famous birthday problem.",a:"about 50 percent"},
-{d:"hard",q:"Three friends split a Rs 300 bill. They each pay Rs 100. The waiter returns Rs 50. They each get Rs 10 back. Where did the missing Rs 10 go?",h:"There is no missing Rs 10. Recount carefully.",a:"there is no missing rupee"}
+{d:"hard",q:"All Bloops are Razzles. All Razzles are Lazzles. Are all Bloops definitely Lazzles?",h:"If A implies B and B implies C ...",a:"yes",c:["no","maybe","not necessarily"]},
+{d:"hard",q:"If the day before yesterday was Thursday, what day is the day after tomorrow?",h:"Map out the days carefully.",a:"monday",c:["sunday","tuesday","saturday"]},
+{d:"hard",q:"In a group of 23 people, roughly what is the chance two share a birthday?",h:"This is the famous birthday problem.",a:"about 50 percent",c:["about 10 percent","about 90 percent","about 25 percent"]},
+{d:"hard",q:"Three friends split a Rs 300 bill. They each pay Rs 100. The waiter returns Rs 50. They each get Rs 10 back. Where did the missing Rs 10 go?",h:"There is no missing Rs 10. Recount carefully.",a:"there is no missing rupee",c:["the waiter kept it","the maths is wrong","they were shortchanged"]}
 ]},
 {t:"Crack Code",s:"crack-code-puzzles",p:[
-{d:"easy",q:"If A=1, B=2, C=3 ... what word does 8-5-12-12-15 spell?",h:"Convert each number to its letter.",a:"hello"},
-{d:"easy",q:"ROT13: What does CHMMYR decode to?",h:"Each letter shifts 13 places forward.",a:"puzzle"},
-{d:"easy",q:"If 1=A, 2=B, 3=C ... what does 6-21-14 spell?",h:"F=6, U=21, N=14.",a:"fun"},
-{d:"easy",q:"What letter is the mirror of E in the alphabet A-Z?",h:"A=Z, B=Y, C=X ...",a:"v"},
-{d:"easy",q:"In the code BSBOC each letter is one ahead of the real letter. What word does it spell?",h:"Shift each letter one place back in the alphabet.",a:"brain"},
+{d:"easy",q:"If A=1, B=2, C=3 ... what word does 8-5-12-12-15 spell?",h:"Convert each number to its letter.",a:"hello",c:["world","hallo","hero"]},
+{d:"easy",q:"ROT13: What does CHMMYR decode to?",h:"Each letter shifts 13 places forward.",a:"puzzle",c:["riddle","secret","cipher"]},
+{d:"easy",q:"If 1=A, 2=B, 3=C ... what does 6-21-14 spell?",h:"F=6, U=21, N=14.",a:"fun",c:["fan","fin","sun"]},
+{d:"easy",q:"What letter is the mirror of E in the alphabet A-Z?",h:"A=Z, B=Y, C=X ...",a:"v",c:["u","w","y"]},
+{d:"easy",q:"In the code BSBOC each letter is one ahead of the real letter. What word does it spell?",h:"Shift each letter one place back in the alphabet.",a:"brain",c:["brave","train","drain"]},
 {d:"easy",q:"What number comes next: 2, 4, 6, 8, __?",h:"Even numbers in sequence.",a:"10"},
-{d:"easy",q:"Decode: 20-5-19-20. A=1, B=2 ...",h:"Convert each number to a letter.",a:"test"},
+{d:"easy",q:"Decode: 20-5-19-20. A=1, B=2 ...",h:"Convert each number to a letter.",a:"test",c:["rest","best","text"]},
 {d:"easy",q:"If ZAP = 26-1-16, what does CAT equal?",h:"A=1, B=2, C=3 ...",a:"3-1-20"},
 {d:"medium",q:"682: one digit right place. 614: one digit wrong place. 206: two digits wrong places. What is the code?",h:"Start with 682 to find which position is correct.",a:"042"},
 {d:"medium",q:"In a 4-digit lock using digits 1-4 with no repeats, how many codes are possible?",h:"4 x 3 x 2 x 1.",a:"24"},
-{d:"medium",q:"Caesar cipher shift 3: decode SXCCOH",h:"Shift each letter back 3 places.",a:"puzzle"},
-{d:"medium",q:"What pattern: 1, 11, 121, 1331, 14641?",h:"Think about Pascal triangle.",a:"powers of 11"},
-{d:"hard",q:"A says B is lying. B says C is lying. C says A and B are both lying. Who tells the truth?",h:"Test each possibility. Only one is consistent.",a:"c"},
+{d:"medium",q:"Caesar cipher shift 3: decode SXCCOH",h:"Shift each letter back 3 places.",a:"puzzle",c:["riddle","secret","cipher"]},
+{d:"medium",q:"What pattern: 1, 11, 121, 1331, 14641?",h:"Think about Pascal triangle.",a:"powers of 11",c:["pascal's rows","binomial sums","fibonacci steps"]},
+{d:"hard",q:"A says B is lying. B says C is lying. C says A and B are both lying. Who tells the truth?",h:"Test each possibility. Only one is consistent.",a:"c",c:["a","b","none of them"]},
 {d:"hard",q:"What is the next number: 1, 11, 21, 1211, 111221, __?",h:"Read each number aloud to describe the previous.",a:"312211"},
 {d:"hard",q:"Using digits 1, 2, 3, 4 each exactly once with + - x, make 10.",h:"Try 1+2+3+4.",a:"1+2+3+4"},
 {d:"hard",q:"A book has 500 pages. How many times does the digit 1 appear?",h:"Count pages: 1, 10-19, 100-199 ...",a:"200"}
 ]},
 {t:"Chess",s:"fun-chess-puzzles",p:[
-{d:"easy",q:"Which chess piece can jump over other pieces?",h:"It moves in an L-shape.",a:"knight"},
-{d:"easy",q:"What is it called when a king is under attack and cannot escape?",h:"Check + ___.",a:"checkmate"},
+{d:"easy",q:"Which chess piece can jump over other pieces?",h:"It moves in an L-shape.",a:"knight",c:["bishop","rook","pawn"]},
+{d:"easy",q:"What is it called when a king is under attack and cannot escape?",h:"Check + ___.",a:"checkmate",c:["stalemate","check","castling"]},
 {d:"easy",q:"How many squares are on a standard chessboard?",h:"8 x 8.",a:"64"},
-{d:"easy",q:"Which chess piece can only move diagonally?",h:"Associated with a religious leader.",a:"bishop"},
-{d:"easy",q:"What is the most powerful piece in chess?",h:"Can move in any direction any number of squares.",a:"queen"},
+{d:"easy",q:"Which chess piece can only move diagonally?",h:"Associated with a religious leader.",a:"bishop",c:["rook","knight","queen"]},
+{d:"easy",q:"What is the most powerful piece in chess?",h:"Can move in any direction any number of squares.",a:"queen",c:["king","rook","bishop"]},
 {d:"easy",q:"How many pawns does each player start with?",h:"They fill the entire second row.",a:"8"},
-{d:"easy",q:"What colour square does the white queen start on?",h:"The queen always starts on her own colour.",a:"white"},
+{d:"easy",q:"What colour square does the white queen start on?",h:"The queen always starts on her own colour.",a:"white",c:["black","either colour","depends on the set"]},
 {d:"easy",q:"How many pieces does each player start with?",h:"Count all pieces on one side.",a:"16"},
-{d:"medium",q:"A pawn reaches the last rank. Which piece can it NOT promote to?",h:"One piece is excluded from promotion.",a:"king"},
-{d:"medium",q:"Which special move allows the king and rook to switch sides?",h:"Only move where two pieces move at once.",a:"castling"},
-{d:"medium",q:"A player has no legal moves but their king is NOT in check. What is this called?",h:"The game ends immediately as a draw.",a:"stalemate"},
-{d:"medium",q:"Which chess piece is worth roughly 3 pawns?",h:"It moves in an L-shape or along diagonals.",a:"knight or bishop"},
-{d:"hard",q:"What opening starts: 1.e4 e5 2.Nf3 Nc6 3.Bc4?",h:"Named after a city in Italy.",a:"italian game"},
-{d:"hard",q:"What is en passant?",h:"A pawn captures another that just moved two squares.",a:"special pawn capture"},
+{d:"medium",q:"A pawn reaches the last rank. Which piece can it NOT promote to?",h:"One piece is excluded from promotion.",a:"king",c:["queen","rook","bishop"]},
+{d:"medium",q:"Which special move allows the king and rook to switch sides?",h:"Only move where two pieces move at once.",a:"castling",c:["en passant","promotion","stalemate"]},
+{d:"medium",q:"A player has no legal moves but their king is NOT in check. What is this called?",h:"The game ends immediately as a draw.",a:"stalemate",c:["checkmate","draw by repetition","resignation"]},
+{d:"medium",q:"Which chess piece is worth roughly 3 pawns?",h:"It moves in an L-shape or along diagonals.",a:"knight or bishop",c:["rook","pawn","king"]},
+{d:"hard",q:"What opening starts: 1.e4 e5 2.Nf3 Nc6 3.Bc4?",h:"Named after a city in Italy.",a:"italian game",c:["spanish game","french defence","sicilian defence"]},
+{d:"hard",q:"What is en passant?",h:"A pawn captures another that just moved two squares.",a:"special pawn capture",c:["a type of castling","a pawn promotion","a forced checkmate"]},
 {d:"hard",q:"How many possible games exist after each player makes 2 moves?",h:"Each side has 20 first moves and 20 second moves.",a:"400"},
 {d:"hard",q:"How many possible first moves does white have in chess?",h:"Pawns and knights can move.",a:"20"}
 ]},
 {t:"Sudoku",s:"fun-with-sudoku",p:[
 {d:"easy",q:"How many 3x3 boxes are in a standard 9x9 Sudoku?",h:"Rows of boxes multiplied by columns of boxes.",a:"9"},
-{d:"easy",q:"In Sudoku, which digit can appear more than once in the same row?",h:"Trick question. Re-read the core rule.",a:"none"},
+{d:"easy",q:"In Sudoku, which digit can appear more than once in the same row?",h:"Trick question. Re-read the core rule.",a:"none",c:["1-3","only even numbers","only odd numbers"]},
 {d:"easy",q:"How many cells are in a standard Sudoku grid?",h:"9 x 9.",a:"81"},
-{d:"easy",q:"Digits 1-9 must appear exactly once in each what?",h:"Three things: row, column, and ...",a:"row column and box"},
+{d:"easy",q:"Digits 1-9 must appear exactly once in each what?",h:"Three things: row, column, and ...",a:"row column and box",c:["only row","only column","only diagonal"]},
 {d:"easy",q:"What is the most common Mini Sudoku grid size?",h:"Think half of 9, rounded.",a:"6x6"},
-{d:"easy",q:"What does it mean for a Sudoku to have a unique solution?",h:"There is only one correct way to fill the grid.",a:"only one solution exists"},
+{d:"easy",q:"What does it mean for a Sudoku to have a unique solution?",h:"There is only one correct way to fill the grid.",a:"only one solution exists",c:["multiple solutions exist","no solution exists","any digit works"]},
 {d:"easy",q:"In a 9x9 Sudoku, how many rows are there?",h:"Count them.",a:"9"},
 {d:"easy",q:"How many numbers appear in each row of a completed Sudoku?",h:"Each digit 1 through 9 appears once.",a:"9"},
-{d:"medium",q:"In Consecutive Sudoku, what extra rule applies between adjacent cells?",h:"It involves the difference between neighbouring values.",a:"must be consecutive"},
-{d:"medium",q:"In Killer Sudoku, digits in a cage must sum to a target AND follow which rule?",h:"Same rule as every row and column.",a:"no repeat"},
-{d:"medium",q:"What is a Thermo Sudoku?",h:"Think about temperature increasing along a path.",a:"digits increase along thermometer shape"},
-{d:"medium",q:"What is the Naked Single technique in Sudoku?",h:"Only one digit can go in a cell.",a:"only one possible digit for a cell"},
+{d:"medium",q:"In Consecutive Sudoku, what extra rule applies between adjacent cells?",h:"It involves the difference between neighbouring values.",a:"must be consecutive",c:["must be even","must be prime","must sum to 10"]},
+{d:"medium",q:"In Killer Sudoku, digits in a cage must sum to a target AND follow which rule?",h:"Same rule as every row and column.",a:"no repeat",c:["must be consecutive","must be even","must be prime"]},
+{d:"medium",q:"What is a Thermo Sudoku?",h:"Think about temperature increasing along a path.",a:"digits increase along thermometer shape",c:["digits must be even","digits must be prime","digits must repeat"]},
+{d:"medium",q:"What is the Naked Single technique in Sudoku?",h:"Only one digit can go in a cell.",a:"only one possible digit for a cell",c:["two possible digits remain","the cell can be left blank","any digit is allowed"]},
 {d:"hard",q:"What is the minimum number of clues a valid Sudoku needs for a unique solution?",h:"Research by McGuire et al. 2012.",a:"17"},
 {d:"hard",q:"How many valid completed Sudoku grids exist approximately?",h:"The answer is in the billions of billions.",a:"6.7 sextillion"},
 {d:"hard",q:"In a Diagonal Sudoku, how many extra constraints are added?",h:"Count the two main diagonals.",a:"2"},
-{d:"hard",q:"What technique uses the fact that a digit must appear in one row or column of a box?",h:"It eliminates that digit from the rest of the row or column.",a:"pointing pairs"}
+{d:"hard",q:"What technique uses the fact that a digit must appear in one row or column of a box?",h:"It eliminates that digit from the rest of the row or column.",a:"pointing pairs",c:["naked pairs","hidden singles","x-wing"]}
 ]},
 {t:"Lateral",s:"lateral-thinking-puzzles",p:[
-{d:"easy",q:"A man lives on the 10th floor. He takes the lift down each morning but walks up from the 6th floor. Why?",h:"Think about a physical limitation.",a:"he is too short to reach floor 10 button"},
-{d:"easy",q:"How can a man go 8 days without sleep?",h:"He does not need to.",a:"he sleeps at night"},
-{d:"easy",q:"An electric train heads north. Which way does the smoke blow?",h:"Electric trains produce no smoke.",a:"no smoke"},
-{d:"easy",q:"A woman had two sons born same time same day. Not twins. How?",h:"Think about more than two.",a:"they are triplets"},
-{d:"easy",q:"A man walks into a bar and asks for water. The bartender pulls a gun. The man says thanks and leaves. Why?",h:"Why would someone urgently need water?",a:"hiccups"},
-{d:"easy",q:"A rooster laid an egg on a roof peak. Which way does it roll?",h:"Roosters do not lay eggs.",a:"roosters dont lay eggs"},
-{d:"easy",q:"How do you make the number 7 even?",h:"Think about removing a letter.",a:"remove the s"},
-{d:"easy",q:"A girl fell off a 20-foot ladder but was not hurt. How?",h:"Think about which rung she was on.",a:"she fell from the first rung"},
-{d:"medium",q:"A woman shoots her husband then holds him underwater. They go to dinner an hour later. How?",h:"What profession shoots people harmlessly?",a:"photographer"},
-{d:"medium",q:"A man dead in a field, unopened package beside him, no marks, no one around. How?",h:"What was the package supposed to do?",a:"parachute failed"},
-{d:"medium",q:"You are in a boat on a lake. You drop an anchor overboard. Does the lake level rise or fall?",h:"Think about weight displacement.",a:"falls"},
-{d:"medium",q:"A man is pushing his car. He stops at a hotel and says he is broke. What is he doing?",h:"Think about a board game.",a:"playing monopoly"},
-{d:"hard",q:"3 switches outside control 3 bulbs in a windowless room. Enter only once. How do you identify each?",h:"Switches do more than light bulbs. Think heat.",a:"turn one on wait turn off turn another on then enter"},
+{d:"easy",q:"A man lives on the 10th floor. He takes the lift down each morning but walks up from the 6th floor. Why?",h:"Think about a physical limitation.",a:"he is too short to reach floor 10 button",c:["the lift is broken above floor 6","he enjoys the exercise","he lives on floor 6 too"]},
+{d:"easy",q:"How can a man go 8 days without sleep?",h:"He does not need to.",a:"he sleeps at night",c:["he never needs sleep","he naps at work","he sleeps standing up"]},
+{d:"easy",q:"An electric train heads north. Which way does the smoke blow?",h:"Electric trains produce no smoke.",a:"no smoke",c:["smoke blows north","smoke blows south","smoke blows sideways"]},
+{d:"easy",q:"A woman had two sons born same time same day. Not twins. How?",h:"Think about more than two.",a:"they are triplets",c:["they are twins","they have different fathers","one was adopted"]},
+{d:"easy",q:"A man walks into a bar and asks for water. The bartender pulls a gun. The man says thanks and leaves. Why?",h:"Why would someone urgently need water?",a:"hiccups",c:["he was thirsty","he wanted ice","he was testing the bartender"]},
+{d:"easy",q:"A rooster laid an egg on a roof peak. Which way does it roll?",h:"Roosters do not lay eggs.",a:"roosters dont lay eggs",c:["it rolls left","it rolls right","it stays on the roof"]},
+{d:"easy",q:"How do you make the number 7 even?",h:"Think about removing a letter.",a:"remove the s",c:["add a zero","flip it upside down","cross out the top"]},
+{d:"easy",q:"A girl fell off a 20-foot ladder but was not hurt. How?",h:"Think about which rung she was on.",a:"she fell from the first rung",c:["she landed on a mattress","she wasn't on the ladder","the ladder was padded"]},
+{d:"medium",q:"A woman shoots her husband then holds him underwater. They go to dinner an hour later. How?",h:"What profession shoots people harmlessly?",a:"photographer",c:["doctor","hunter","lifeguard"]},
+{d:"medium",q:"A man dead in a field, unopened package beside him, no marks, no one around. How?",h:"What was the package supposed to do?",a:"parachute failed",c:["he had a heart attack","he was pushed","lightning struck him"]},
+{d:"medium",q:"You are in a boat on a lake. You drop an anchor overboard. Does the lake level rise or fall?",h:"Think about weight displacement.",a:"falls",c:["rises","stays the same","overflows"]},
+{d:"medium",q:"A man is pushing his car. He stops at a hotel and says he is broke. What is he doing?",h:"Think about a board game.",a:"playing monopoly",c:["playing chess","out of fuel","waiting for a tow"]},
+{d:"hard",q:"3 switches outside control 3 bulbs in a windowless room. Enter only once. How do you identify each?",h:"Switches do more than light bulbs. Think heat.",a:"turn one on wait turn off turn another on then enter",c:["flip all switches at once","enter and guess randomly","turn them on one at a time while inside"]},
 {d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
-{d:"hard",q:"A house has 4 sides all facing south. A bear walks by. What colour is the bear?",h:"Think about where all 4 sides can face south.",a:"white"},
-{d:"hard",q:"How can you throw a ball so it goes a short distance, comes to a complete stop, and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up"}
+{d:"hard",q:"A house has 4 sides all facing south. A bear walks by. What colour is the bear?",h:"Think about where all 4 sides can face south.",a:"white",c:["black","brown","it could be any colour"]},
+{d:"hard",q:"How can you throw a ball so it goes a short distance, comes to a complete stop, and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up",c:["throw it against a wall","throw it at an angle","roll it instead"]}
 ]},
 {t:"Matchstick",s:"matchstick-maths-puzzles",p:[
-{d:"easy",q:"How many matchsticks does it take to build a single square?",h:"Count the sides.",a:"4"},
-{d:"easy",q:"5 + 5 + 5 = 550 is wrong. Add ONE straight line to make it correct.",h:"You can draw on any digit or symbol.",a:"545+5=550"},
-{d:"easy",q:"How many matchsticks does it take to write number 8 on a digital display?",h:"Count all the segments.",a:"7"},
-{d:"easy",q:"Move 1 matchstick in 5+5=6 to make it correct.",h:"You can change any digit or the operator.",a:"5+1=6"},
-{d:"easy",q:"Using exactly 4 matchsticks, what is the maximum number of squares you can make?",h:"Think about sharing sides between shapes.",a:"2"},
-{d:"easy",q:"How many matchsticks make the number 1 on a digital display?",h:"Count the segments in a digital 1.",a:"2"},
-{d:"easy",q:"How many triangles can you make with 3 matchsticks?",h:"Each matchstick is one side.",a:"1"},
-{d:"easy",q:"How many matchsticks does it take to make the number 0 on a digital display?",h:"Count all segments of a digital zero.",a:"6"},
-{d:"medium",q:"How many triangles can you make with 6 equal matchsticks without breaking any?",h:"Think in three dimensions.",a:"4"},
-{d:"medium",q:"Move ONE matchstick in VI - IV = IX to make it correct.",h:"Roman numerals. One stick changes a numeral.",a:"VI + IV = X"},
-{d:"medium",q:"How many squares of ANY size are in a 3x3 matchstick grid?",h:"Count 1x1, 2x2, and 3x3 squares separately.",a:"14"},
-{d:"medium",q:"Remove 2 matchsticks from a 2x2 grid of squares to leave exactly 2 squares.",h:"Think about shared sides.",a:"remove two adjacent sides"},
-{d:"hard",q:"Remove 2 matchsticks from a 3x3 grid of squares to leave exactly 3 squares.",h:"Removing a shared side destroys two squares at once.",a:"remove two shared sides"},
-{d:"hard",q:"How many squares of all sizes are in a 4x4 matchstick grid?",h:"Count 1x1=16, 2x2=9, 3x3=4, 4x4=1.",a:"30"},
-{d:"hard",q:"Move 2 matchsticks in 8-4=11 to make it correct.",h:"You can change any part of the equation.",a:"8-4=4"},
-{d:"hard",q:"How many matchsticks are needed to spell CAT in capital block letters?",h:"Count each letter carefully using straight lines.",a:"9"}
+{d:"easy",q:"How many matchsticks are needed to form one triangle?",h:"Each side of the triangle takes one matchstick.",a:"3"},
+{d:"easy",q:"How many matchsticks are needed to form one square?",h:"Each side of the square takes one matchstick.",a:"4"},
+{d:"easy",q:"How many matchsticks are needed to form one hexagon?",h:"A hexagon has six equal sides.",a:"6"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 7 on a digital display?",h:"The digit 7 lights up the top segment and the two segments on the right.",a:"3"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 4 on a digital display?",h:"The digit 4 uses two verticals and one horizontal, with no top segment.",a:"4"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 1 on a digital display?",h:"The digit 1 only lights up the two segments on the right.",a:"2"},
+{d:"easy",q:"How many matchsticks are needed to write the digit 0 on a digital display?",h:"The digit 0 lights up every segment except the middle one.",a:"6"},
+{d:"easy",q:"Using exactly 4 matchsticks with no overlaps, how many complete squares can you form?",h:"Think about how many sticks a single square actually needs.",a:"1"},
+{d:"medium",q:"How many matchsticks are needed to write the digit 8 on a digital display?",h:"The digit 8 lights up every one of the seven segments.",a:"7"},
+{d:"medium",q:"Six equal matchsticks are arranged into triangles, without breaking any and without any sticks left over. What is the maximum number of triangles you can form?",h:"Think in three dimensions, not flat on the table.",a:"4"},
+{d:"medium",q:"How many squares of ANY size can you count in a 3x3 grid made of matchsticks?",h:"Count the 1x1 squares, then the 2x2 squares, then the 3x3 square.",a:"14"},
+{d:"medium",q:"A row of 5 squares is built from matchsticks, each square sharing one side with the next. How many matchsticks are used in total?",h:"Each new square after the first only needs 3 extra matchsticks since it shares a side.",a:"16"},
+{d:"hard",q:"How many squares of ALL sizes can you count in a 4x4 grid made of matchsticks?",h:"Count 1x1, 2x2, 3x3 and 4x4 squares separately, then add them up.",a:"30"},
+{d:"hard",q:"A row of 10 squares is built from matchsticks, each sharing one side with the next. How many matchsticks are used in total?",h:"Use the pattern: each shared square after the first adds 3 sticks.",a:"31"},
+{d:"hard",q:"A 3x3 grid of 9 small squares is built entirely from matchsticks. How many matchsticks are used in total?",h:"There are 4 horizontal lines and 4 vertical lines, each 3 sticks long.",a:"24"},
+{d:"hard",q:"A large triangle is divided into 4 smaller equal triangles, all built from matchsticks. How many matchsticks are used in total for the whole figure?",h:"It's the same shape as the classic 4-triangle picture puzzle, just built from matchsticks.",a:"9"}
 ]},
 {t:"Rebus",s:"rebus-riddles",p:[
-{d:"easy",q:"What phrase does HE + ART represent?",h:"Read the letters and their position.",a:"heart"},
-{d:"easy",q:"HIJKLMNO \u2014 What one word does this represent?",h:"These letters span H to O.",a:"water"},
-{d:"easy",q:"What does BAN + ANA represent?",h:"Put the sounds together.",a:"banana"},
-{d:"easy",q:"What does EZ represent?",h:"Say the letters aloud.",a:"easy"},
-{d:"easy",q:"What phrase does HEAD over HEELS represent?",h:"One word is above another.",a:"head over heels"},
-{d:"easy",q:"What word is hidden inside: PRAISECTION?",h:"Look for a smaller word inside.",a:"raise"},
-{d:"easy",q:"What does GR + 8 represent?",h:"Say each part aloud.",a:"great"},
-{d:"easy",q:"What does B4 represent?",h:"Say it aloud as a number and letter.",a:"before"},
-{d:"medium",q:"What does this represent?\nSTAND\nI I I I",h:"What are the I's doing relative to STAND?",a:"i understand"},
-{d:"medium",q:"ONCE\n----\nTIME\nWhat does this represent?",h:"Think about position.",a:"once upon a time"},
-{d:"medium",q:"What phrase is shown by TIMING TIM ING?",h:"One word is inside another.",a:"perfect timing"},
-{d:"medium",q:"What does this mean: DEATH LIFE?",h:"Think about what comes between the two words.",a:"life after death"},
-{d:"hard",q:"What does MAN / BOARD represent?",h:"Think about position.",a:"man overboard"},
-{d:"hard",q:"What does NE14 10S mean?",h:"Say each part aloud.",a:"anyone for tennis"},
-{d:"hard",q:"TIMING TIM ING \u2014 what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing"},
-{d:"hard",q:"What does ROADS represent?",h:"Think about crossroads.",a:"crossroads"}
+{d:"easy",q:"What phrase does HE + ART represent?",h:"Read the letters and their position.",a:"heart",c:["heartbeat","sweetheart","art gallery"]},
+{d:"easy",q:"HIJKLMNO \u2014 What one word does this represent?",h:"These letters span H to O.",a:"water",c:["alphabet","letters","ocean"]},
+{d:"easy",q:"What does BAN + ANA represent?",h:"Put the sounds together.",a:"banana",c:["bandana","banjo","banana split"]},
+{d:"easy",q:"What does EZ represent?",h:"Say the letters aloud.",a:"easy",c:["breezy","peasy","zesty"]},
+{d:"easy",q:"What phrase does HEAD over HEELS represent?",h:"One word is above another.",a:"head over heels",c:["heels over head","upside down","top to bottom"]},
+{d:"easy",q:"What word is hidden inside: PRAISECTION?",h:"Look for a smaller word inside.",a:"raise",c:["praise","erase","phrase"]},
+{d:"easy",q:"What does GR + 8 represent?",h:"Say each part aloud.",a:"great",c:["grate","gr8t","greater"]},
+{d:"easy",q:"What does B4 represent?",h:"Say it aloud as a number and letter.",a:"before",c:["b-four","forever","before hand"]},
+{d:"medium",q:"What does this represent?\nSTAND\nI I I I",h:"What are the I's doing relative to STAND?",a:"i understand",c:["i stand alone","standing tall","i under stand"]},
+{d:"medium",q:"ONCE\n----\nTIME\nWhat does this represent?",h:"Think about position.",a:"once upon a time",c:["time after time","once in a while","time and again"]},
+{d:"medium",q:"What phrase is shown by TIMING TIM ING?",h:"One word is inside another.",a:"perfect timing",c:["timing is everything","split second","right on time"]},
+{d:"medium",q:"What does this mean: DEATH LIFE?",h:"Think about what comes between the two words.",a:"life after death",c:["death before life","life and death","fear of death"]},
+{d:"hard",q:"What does MAN / BOARD represent?",h:"Think about position.",a:"man overboard",c:["board the man","overworked man","man on board"]},
+{d:"hard",q:"What does NE14 10S mean?",h:"Say each part aloud.",a:"anyone for tennis",c:["any tennis players","tennis anyone","ten tennis players"]},
+{d:"hard",q:"TIMING TIM ING \u2014 what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing",c:["perfect timing","timing is everything","dead on time"]},
+{d:"hard",q:"What does ROADS represent?",h:"Think about crossroads.",a:"crossroads",c:["road trip","cross country","dirt roads"]}
 ]},
 {t:"GK",s:"general-knowledge-quizzes-and-riddles",p:[
-{d:"easy",q:"Which planet has the most moons?",h:"The largest planet in our solar system.",a:"jupiter"},
-{d:"easy",q:"What is the only country that is also a continent?",h:"Southern Hemisphere, has kangaroos.",a:"australia"},
-{d:"easy",q:"Which element has the chemical symbol Fe?",h:"A common metal used in construction.",a:"iron"},
-{d:"easy",q:"What is the capital of Japan?",h:"One of the most populated cities in the world.",a:"tokyo"},
+{d:"easy",q:"Which planet has the most moons?",h:"The largest planet in our solar system.",a:"jupiter",c:["saturn","neptune","uranus"]},
+{d:"easy",q:"What is the only country that is also a continent?",h:"Southern Hemisphere, has kangaroos.",a:"australia",c:["greenland","antarctica","new zealand"]},
+{d:"easy",q:"Which element has the chemical symbol Fe?",h:"A common metal used in construction.",a:"iron",c:["tin","zinc","lead"]},
+{d:"easy",q:"What is the capital of Japan?",h:"One of the most populated cities in the world.",a:"tokyo",c:["osaka","kyoto","seoul"]},
 {d:"easy",q:"How many sides does a hexagon have?",h:"Think about the prefix hex.",a:"6"},
-{d:"easy",q:"What is the largest ocean on Earth?",h:"It covers more than one third of Earth.",a:"pacific"},
+{d:"easy",q:"What is the largest ocean on Earth?",h:"It covers more than one third of Earth.",a:"pacific",c:["atlantic","indian","arctic"]},
 {d:"easy",q:"What is the boiling point of water in Celsius?",h:"Think about cooking pasta.",a:"100"},
 {d:"easy",q:"How many continents are there on Earth?",h:"Think: Africa, Asia, Europe, Americas, etc.",a:"7"},
-{d:"medium",q:"What is the shortest war in history, lasting only 38-45 minutes?",h:"Between Britain and a Sultanate in East Africa, 1896.",a:"zanzibar"},
-{d:"medium",q:"Which element has the highest melting point of all elements?",h:"Used in light bulb filaments.",a:"tungsten"},
+{d:"medium",q:"What is the shortest war in history, lasting only 38-45 minutes?",h:"Between Britain and a Sultanate in East Africa, 1896.",a:"zanzibar",c:["gibraltar","malta","cyprus"]},
+{d:"medium",q:"Which element has the highest melting point of all elements?",h:"Used in light bulb filaments.",a:"tungsten",c:["titanium","platinum","iridium"]},
 {d:"medium",q:"What is the speed of light in a vacuum, approximately?",h:"About 300 million metres per second.",a:"300000 km per second"},
-{d:"medium",q:"What is the largest desert in the world?",h:"It is not the Sahara.",a:"antarctica"},
-{d:"hard",q:"I am a country, language and nationality all sharing one name. Capital is Amsterdam. What am I?",h:"Famous for tulips, windmills, and cycling.",a:"netherlands"},
-{d:"hard",q:"What is the only number in English with the same number of letters as its value?",h:"Count the letters in the word.",a:"four"},
-{d:"hard",q:"Which country has the most natural lakes?",h:"It has over 60 percent of the world total.",a:"canada"},
-{d:"hard",q:"What is the only planet that rotates clockwise when viewed from above?",h:"It spins backwards compared to most planets.",a:"venus"}
+{d:"medium",q:"What is the largest desert in the world?",h:"It is not the Sahara.",a:"antarctica",c:["sahara","gobi","arabian"]},
+{d:"hard",q:"I am a country, language and nationality all sharing one name. Capital is Amsterdam. What am I?",h:"Famous for tulips, windmills, and cycling.",a:"netherlands",c:["denmark","belgium","luxembourg"]},
+{d:"hard",q:"What is the only number in English with the same number of letters as its value?",h:"Count the letters in the word.",a:"four",c:["one","three","six"]},
+{d:"hard",q:"Which country has the most natural lakes?",h:"It has over 60 percent of the world total.",a:"canada",c:["russia","finland","brazil"]},
+{d:"hard",q:"What is the only planet that rotates clockwise when viewed from above?",h:"It spins backwards compared to most planets.",a:"venus",c:["mercury","mars","uranus"]}
 ]},
 {t:"Odd One",s:"odd-one-out-picture-puzzles",p:[
-{d:"easy",q:"Odd one out:\nApple, Banana, Carrot, Mango",h:"Three are fruits. One is not.",a:"carrot"},
-{d:"easy",q:"Odd one out:\nRed, Blue, Green, Yellow, Circle",h:"Four are colours. One is a shape.",a:"circle"},
-{d:"easy",q:"Odd one out:\nDog, Cat, Eagle, Rabbit",h:"Three are mammals. One is a bird.",a:"eagle"},
-{d:"easy",q:"Odd one out:\nSpain, France, India, Italy",h:"Three are European. One is not.",a:"india"},
-{d:"easy",q:"Odd one out:\nSwimming, Running, Tennis, Cycling",h:"Three do not need a partner. One does.",a:"tennis"},
-{d:"easy",q:"Odd one out:\nSon, Moon, Star, Earth",h:"Three are in space. One is a family member.",a:"son"},
-{d:"easy",q:"Odd one out:\nRose, Lotus, Tulip, Oak",h:"Three are flowers. One is not.",a:"oak"},
-{d:"easy",q:"Odd one out:\nCow, Horse, Hen, Tiger",h:"Three are domestic. One is wild.",a:"tiger"},
-{d:"medium",q:"Odd one out:\nPiano, Guitar, Violin, Trumpet, Flute",h:"Four need air or strings. One is different.",a:"piano"},
+{d:"easy",q:"Odd one out:\nApple, Banana, Carrot, Mango",h:"Three are fruits. One is not.",a:"carrot",c:["apple","banana","mango"]},
+{d:"easy",q:"Odd one out:\nRed, Blue, Green, Yellow, Circle",h:"Four are colours. One is a shape.",a:"circle",c:["red","blue","yellow"]},
+{d:"easy",q:"Odd one out:\nDog, Cat, Eagle, Rabbit",h:"Three are mammals. One is a bird.",a:"eagle",c:["dog","cat","rabbit"]},
+{d:"easy",q:"Odd one out:\nSpain, France, India, Italy",h:"Three are European. One is not.",a:"india",c:["spain","france","italy"]},
+{d:"easy",q:"Odd one out:\nSwimming, Running, Tennis, Cycling",h:"Three do not need a partner. One does.",a:"tennis",c:["swimming","running","cycling"]},
+{d:"easy",q:"Odd one out:\nSon, Moon, Star, Earth",h:"Three are in space. One is a family member.",a:"son",c:["moon","star","earth"]},
+{d:"easy",q:"Odd one out:\nRose, Lotus, Tulip, Oak",h:"Three are flowers. One is not.",a:"oak",c:["rose","lotus","tulip"]},
+{d:"easy",q:"Odd one out:\nCow, Horse, Hen, Tiger",h:"Three are domestic. One is wild.",a:"tiger",c:["cow","horse","hen"]},
+{d:"medium",q:"Odd one out:\nPiano, Guitar, Violin, Trumpet, Flute",h:"Four need air or strings. One is different.",a:"piano",c:["guitar","violin","trumpet"]},
 {d:"medium",q:"Odd one out:\n3, 5, 7, 9, 11",h:"All are odd but look at which are prime.",a:"9"},
-{d:"medium",q:"Odd one out:\nNile, Amazon, Thames, Sahara",h:"Three are rivers. One is not.",a:"sahara"},
+{d:"medium",q:"Odd one out:\nNile, Amazon, Thames, Sahara",h:"Three are rivers. One is not.",a:"sahara",c:["nile","amazon","thames"]},
 {d:"medium",q:"Odd one out:\n2, 3, 5, 7, 9, 11",h:"One is not prime.",a:"9"},
-{d:"hard",q:"Odd one out:\nMercury, Venus, Earth, Pluto, Mars",h:"Think about their official planetary status.",a:"pluto"},
+{d:"hard",q:"Odd one out:\nMercury, Venus, Earth, Pluto, Mars",h:"Think about their official planetary status.",a:"pluto",c:["mercury","venus","mars"]},
 {d:"hard",q:"Odd one out:\n121, 144, 169, 196, 225, 250",h:"Five are perfect squares. One is not.",a:"250"},
-{d:"hard",q:"Odd one out:\nNovember, April, June, September, February",h:"Think about the number of days in each month.",a:"february"},
-{d:"hard",q:"Odd one out:\nCow, Buffalo, Camel, Horse, Calf",h:"Think about the stage of life.",a:"calf"}
+{d:"hard",q:"Odd one out:\nNovember, April, June, September, February",h:"Think about the number of days in each month.",a:"february",c:["april","june","september"]},
+{d:"hard",q:"Odd one out:\nCow, Buffalo, Camel, Horse, Calf",h:"Think about the stage of life.",a:"calf",c:["cow","buffalo","camel"]}
 ]},
 {t:"Mistake",s:"find-mistake-puzzles",p:[
 {d:"easy",q:"Spot the mistake:\n1, 2, 3, 4, 5, 6, 8, 9, 10",h:"Count the numbers carefully.",a:"7 is missing"},
-{d:"easy",q:"Spot the mistake:\nMonday, Tuesday, Wednesday, Thursday, Friday, Sunday",h:"Check all the days of the week.",a:"saturday is missing"},
-{d:"easy",q:"What is wrong with: She have three cats.",h:"Subject-verb agreement.",a:"have should be has"},
-{d:"easy",q:"Spot the mistake:\nJanuary, February, March, April, May, July",h:"Check all the months.",a:"june is missing"},
-{d:"easy",q:"Which sentence has a mistake?\nA. The cat sat on the mat.\nB. She go to school every day.\nC. I am happy.",h:"Look at the verb agreement.",a:"B"},
+{d:"easy",q:"Spot the mistake:\nMonday, Tuesday, Wednesday, Thursday, Friday, Sunday",h:"Check all the days of the week.",a:"saturday is missing",c:["sunday is missing","wednesday is missing","friday is missing"]},
+{d:"easy",q:"What is wrong with: She have three cats.",h:"Subject-verb agreement.",a:"have should be has",c:["cats should be cat","she should be her","three should be tree"]},
+{d:"easy",q:"Spot the mistake:\nJanuary, February, March, April, May, July",h:"Check all the months.",a:"june is missing",c:["march is missing","april is missing","july is missing"]},
+{d:"easy",q:"Which sentence has a mistake?\nA. The cat sat on the mat.\nB. She go to school every day.\nC. I am happy.",h:"Look at the verb agreement.",a:"B",c:["a","c","none of them"]},
 {d:"easy",q:"Spot the error:\n2, 4, 6, 8, 10, 12, 15, 16",h:"Even numbers increase by 2 each time.",a:"15 should be 14"},
-{d:"easy",q:"Spot the mistake:\nA, B, C, D, E, F, H, I",h:"Check the alphabet carefully.",a:"G is missing"},
-{d:"easy",q:"What is wrong: The earth revolve around the sun.",h:"Subject-verb agreement with a singular subject.",a:"revolve should be revolves"},
+{d:"easy",q:"Spot the mistake:\nA, B, C, D, E, F, H, I",h:"Check the alphabet carefully.",a:"G is missing",c:["d is missing","f is missing","h is missing"]},
+{d:"easy",q:"What is wrong: The earth revolve around the sun.",h:"Subject-verb agreement with a singular subject.",a:"revolve should be revolves",c:["earth should be Earth","around should be round","sun should be Sun"]},
 {d:"medium",q:"Find the deliberate mistake:\n2, 4, 8, 16, 36, 64",h:"Each number should double.",a:"36 should be 32"},
-{d:"medium",q:"Which is wrong?\nWater boils at 100C.\nIce melts at 0C.\nSun rises in East.\nMoon is a planet.",h:"The moon is NOT a planet.",a:"moon is not a planet"},
-{d:"medium",q:"Find the error: There our three mistakes in this sentance.",h:"There are actually 3 errors.",a:"our should be are sentance should be sentence"},
-{d:"medium",q:"What is wrong: A triangle has 4 sides.",h:"Basic geometry.",a:"a triangle has 3 sides not 4"},
+{d:"medium",q:"Which is wrong?\nWater boils at 100C.\nIce melts at 0C.\nSun rises in East.\nMoon is a planet.",h:"The moon is NOT a planet.",a:"moon is not a planet",c:["water boils at a different temp","ice melts at a different temp","sun rises in the west"]},
+{d:"medium",q:"Find the error: There our three mistakes in this sentance.",h:"There are actually 3 errors.",a:"our should be are sentance should be sentence",c:["there should be their","three should be tree","mistakes should be mistake"]},
+{d:"medium",q:"What is wrong: A triangle has 4 sides.",h:"Basic geometry.",a:"a triangle has 3 sides not 4",c:["a triangle has 5 sides not 4","a square has 3 sides not 4","a triangle has no sides"]},
 {d:"hard",q:"Spot the mistake:\n6x8=48\n7x8=54\n8x8=64\n9x8=72",h:"Check each multiplication.",a:"7x8 should be 56 not 54"},
-{d:"hard",q:"What is wrong with a triangle of sides 3, 4, and 8?",h:"Triangle inequality: sum of two sides must exceed third.",a:"not a valid triangle"},
+{d:"hard",q:"What is wrong with a triangle of sides 3, 4, and 8?",h:"Triangle inequality: sum of two sides must exceed third.",a:"not a valid triangle",c:["it's a right triangle","it's an equilateral triangle","it's a scalene triangle"]},
 {d:"hard",q:"Find the mistake: All prime numbers are odd. Therefore 2 is not prime.",h:"2 is the only even prime number.",a:"2 is prime"},
 {d:"hard",q:"Spot the mistake:\n5! = 120\n4! = 24\n3! = 6\n2! = 1",h:"Check factorial of 2.",a:"2! should be 2 not 1"}
 ]},
 {t:"English",s:"english-word-riddles",p:[
-{d:"easy",q:"Which word in the dictionary is always spelled incorrectly?",h:"Read the question very literally.",a:"incorrectly"},
-{d:"easy",q:"What 5-letter word becomes shorter when you add 2 letters?",h:"Think of the word meaning not long.",a:"short"},
-{d:"easy",q:"What starts with E, ends with E, but only has one letter?",h:"It carries letters.",a:"envelope"},
-{d:"easy",q:"Find the hidden animal in: I visited my friend in SPARTA.",h:"Look inside the word SPARTA.",a:"rat"},
-{d:"easy",q:"What word has three consecutive double letters?",h:"Think about keeping books.",a:"bookkeeper"},
-{d:"easy",q:"What is a word that reads the same forwards and backwards?",h:"These are called palindromes.",a:"racecar"},
-{d:"easy",q:"What comes once in a minute, twice in a moment, but never in a thousand years?",h:"Think about the letter not the concept.",a:"letter m"},
-{d:"easy",q:"Rearrange SILENT to make another common English word.",h:"It uses the same 6 letters.",a:"listen"},
-{d:"medium",q:"What 8-letter word contains only one vowel?",h:"Think about building material.",a:"strength"},
-{d:"medium",q:"Which word contains all 5 vowels in order: a, e, i, o, u?",h:"A word meaning moderate in habits.",a:"abstemious"},
-{d:"medium",q:"What is the longest common English word typed using only the top keyboard row?",h:"QWERTY row: Q W E R T Y U I O P.",a:"typewriter"},
-{d:"medium",q:"What 7-letter word has hundreds of letters in it?",h:"Think about what holds many letters.",a:"mailbox or postbox"},
-{d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of numbers: one, two, three ...",a:"n"},
-{d:"hard",q:"What English word can have 4 of its 5 letters removed and still sound the same?",h:"Think about the word queue.",a:"queue"},
-{d:"hard",q:"What word contains the letters of CINEMA in order but not consecutively?",h:"C-I-N-E-M-A spread through a longer word.",a:"ceremonial"},
-{d:"hard",q:"What is the only word in English that ends in -mt?",h:"Think about something that was not allowed to happen.",a:"dreamt"}
+{d:"easy",q:"Which word in the dictionary is always spelled incorrectly?",h:"Read the question very literally.",a:"incorrectly",c:["correctly","wrongly","misspelled"]},
+{d:"easy",q:"What 5-letter word becomes shorter when you add 2 letters?",h:"Think of the word meaning not long.",a:"short",c:["small","tiny","brief"]},
+{d:"easy",q:"What starts with E, ends with E, but only has one letter?",h:"It carries letters.",a:"envelope",c:["alphabet","dictionary","postcard"]},
+{d:"easy",q:"Find the hidden animal in: I visited my friend in SPARTA.",h:"Look inside the word SPARTA.",a:"rat",c:["cat","bat","ant"]},
+{d:"easy",q:"What word has three consecutive double letters?",h:"Think about keeping books.",a:"bookkeeper",c:["accountant","librarian","typewriter"]},
+{d:"easy",q:"What is a word that reads the same forwards and backwards?",h:"These are called palindromes.",a:"racecar",c:["rowboat","kayak","canoe"]},
+{d:"easy",q:"What comes once in a minute, twice in a moment, but never in a thousand years?",h:"Think about the letter not the concept.",a:"letter m",c:["letter e","letter s","letter t"]},
+{d:"easy",q:"Rearrange SILENT to make another common English word.",h:"It uses the same 6 letters.",a:"listen",c:["silent","enlist","tinsel"]},
+{d:"medium",q:"What 8-letter word contains only one vowel?",h:"Think about building material.",a:"strength",c:["length","width","depth"]},
+{d:"medium",q:"Which word contains all 5 vowels in order: a, e, i, o, u?",h:"A word meaning moderate in habits.",a:"abstemious",c:["facetious","education","auditorium"]},
+{d:"medium",q:"What is the longest common English word typed using only the top keyboard row?",h:"QWERTY row: Q W E R T Y U I O P.",a:"typewriter",c:["keyboard","monitor","printer"]},
+{d:"medium",q:"What 7-letter word has hundreds of letters in it?",h:"Think about what holds many letters.",a:"mailbox or postbox",c:["envelope","postcard","stamp album"]},
+{d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of numbers: one, two, three ...",a:"n",c:["m","t","e"]},
+{d:"hard",q:"What English word can have 4 of its 5 letters removed and still sound the same?",h:"Think about the word queue.",a:"queue",c:["quay","cue","clue"]},
+{d:"hard",q:"What word contains the letters of CINEMA in order but not consecutively?",h:"C-I-N-E-M-A spread through a longer word.",a:"ceremonial",c:["commercial","memorial","centennial"]},
+{d:"hard",q:"What is the only word in English that ends in -mt?",h:"Think about something that was not allowed to happen.",a:"dreamt",c:["dreamed","learnt","dreampt"]}
 ]},
 {t:"Quick",s:"quick-puzzles-brain-teasers-and-riddles",p:[
-{d:"easy",q:"David's mother has 4 children: April, May, June, and who?",h:"Re-read the question. Who is mentioned first?",a:"david"},
-{d:"easy",q:"What has 13 hearts but no other organs?",h:"You use it to play card games.",a:"deck of cards"},
-{d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet"},
-{d:"easy",q:"What can you hold in your right hand but not in your left?",h:"Think about which hand is which.",a:"your left hand"},
-{d:"easy",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella"},
-{d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin"},
+{d:"easy",q:"David's mother has 4 children: April, May, June, and who?",h:"Re-read the question. Who is mentioned first?",a:"david",c:["april","may","june"]},
+{d:"easy",q:"What has 13 hearts but no other organs?",h:"You use it to play card games.",a:"deck of cards",c:["calendar","chess set","dice set"]},
+{d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet",c:["heavier","invisible","purple"]},
+{d:"easy",q:"What can you hold in your right hand but not in your left?",h:"Think about which hand is which.",a:"your left hand",c:["your right hand","your other hand","both hands"]},
+{d:"easy",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella",c:["raincoat","boots","hat"]},
+{d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin",c:["dice","button","key"]},
 {d:"easy",q:"How many seconds are in a year?",h:"Think literally about the word second.",a:"12 the 2nd of each month"},
-{d:"easy",q:"A rooster lays an egg at the very top of a slanted roof. Which side does it roll off?",h:"Can a rooster lay eggs?",a:"roosters dont lay eggs"},
+{d:"easy",q:"A rooster lays an egg at the very top of a slanted roof. Which side does it roll off?",h:"Can a rooster lay eggs?",a:"roosters dont lay eggs",c:["it rolls left","it rolls right","it stays put"]},
 {d:"medium",q:"A man drives from A to B at 60 km/h and returns at 40 km/h. What is his average speed?",h:"Do not just average the speeds. Use total distance over total time.",a:"48 km/h"},
 {d:"medium",q:"A snail is at the bottom of a 10m well. Each day it climbs 3m but slides back 2m at night. How many days to escape?",h:"On the last day it reaches the top before sliding.",a:"8 days"},
 {d:"medium",q:"100 people in a room. 99 percent have blue eyes. How many must leave so 98 percent have blue eyes?",h:"This is a tricky percentage puzzle.",a:"50"},
 {d:"medium",q:"If a doctor gives you 3 pills and tells you to take one every 30 minutes, how long until they are all gone?",h:"Count carefully from when you take the first.",a:"1 hour"},
-{d:"hard",q:"You have a candle, a match, and a gas lamp. Which do you light first?",h:"You need one thing before you can light anything.",a:"the match"},
+{d:"hard",q:"You have a candle, a match, and a gas lamp. Which do you light first?",h:"You need one thing before you can light anything.",a:"the match",c:["the candle","the gas lamp","all at once"]},
 {d:"hard",q:"If 5 cats catch 5 mice in 5 minutes, how many cats catch 100 mice in 100 minutes?",h:"Work out the rate per cat.",a:"5"},
 {d:"hard",q:"What is the next number: 1, 11, 21, 1211, 111221, __?",h:"Read each number aloud to describe the previous one.",a:"312211"},
 {d:"hard",q:"A clock shows 3:15. What is the exact angle between the hour and minute hands?",h:"The hour hand moves too. It is not at exactly 3.",a:"7.5 degrees"}
 ]},
 {t:"Kids",s:"easy-puzzles",p:[
-{d:"easy",q:"What has a face and two hands but no arms or legs?",h:"You look at it to know the time.",a:"clock"},
-{d:"easy",q:"What is black when you buy it, red when you use it, grey when you throw it away?",h:"You use it to write on a board.",a:"charcoal"},
-{d:"easy",q:"What animal has a trunk but never packs for a holiday?",h:"The largest land animal.",a:"elephant"},
-{d:"easy",q:"What gets bigger the more you take away from it?",h:"Think about digging.",a:"hole"},
-{d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin"},
-{d:"easy",q:"What stays in a corner but travels all over the world?",h:"You put me on an envelope.",a:"stamp"},
-{d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one \u2014 not the Sphinx riddle.",a:"table"},
-{d:"easy",q:"What has a lot of keys but cannot open any door?",h:"You use it to play music.",a:"piano"},
-{d:"medium",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them"},
-{d:"medium",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella"},
-{d:"medium",q:"A man has 10 horses and 9 stables. One horse in each stable \u2014 possible?",h:"Re-read: does it say one horse PER stable?",a:"no 10 horses only 9 stables"},
-{d:"medium",q:"What can you keep after giving it to someone?",h:"Think about something intangible.",a:"your word"},
-{d:"hard",q:"The word CANDY can be spelled using just 2 letters. How?",h:"C and Y \u2014 CandY.",a:"C and Y"},
-{d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of: one, two, three ...",a:"N"},
+{d:"easy",q:"What has a face and two hands but no arms or legs?",h:"You look at it to know the time.",a:"clock",c:["watch","calendar","mirror"]},
+{d:"easy",q:"What is black when you buy it, red when you use it, grey when you throw it away?",h:"You use it to write on a board.",a:"charcoal",c:["chalk","crayon","pencil lead"]},
+{d:"easy",q:"What animal has a trunk but never packs for a holiday?",h:"The largest land animal.",a:"elephant",c:["giraffe","rhino","hippo"]},
+{d:"easy",q:"What gets bigger the more you take away from it?",h:"Think about digging.",a:"hole",c:["tunnel","pit","gap"]},
+{d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin",c:["dice","button","key"]},
+{d:"easy",q:"What stays in a corner but travels all over the world?",h:"You put me on an envelope.",a:"stamp",c:["coin","map","photo"]},
+{d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one \u2014 not the Sphinx riddle.",a:"table",c:["chair","stool","bench"]},
+{d:"easy",q:"What has a lot of keys but cannot open any door?",h:"You use it to play music.",a:"piano",c:["guitar","keyboard","organ"]},
+{d:"medium",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them",c:["only february","only april","only 4 months"]},
+{d:"medium",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella",c:["raincoat","boots","hat"]},
+{d:"medium",q:"A man has 10 horses and 9 stables. One horse in each stable \u2014 possible?",h:"Re-read: does it say one horse PER stable?",a:"no 10 horses only 9 stables",c:["yes with room to spare","only if two share","no it's impossible either way"]},
+{d:"medium",q:"What can you keep after giving it to someone?",h:"Think about something intangible.",a:"your word",c:["your money","your time","your name"]},
+{d:"hard",q:"The word CANDY can be spelled using just 2 letters. How?",h:"C and Y \u2014 CandY.",a:"C and Y",c:["c and d","a and y","c and n"]},
+{d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of: one, two, three ...",a:"N",c:["m","t","e"]},
 {d:"hard",q:"A farmer has 5 haystacks in one field and 4 in another. He combines them. How many haystacks?",h:"What happens when you combine haystacks?",a:"1"},
-{d:"hard",q:"What is special about the number 8,549,176,320?",h:"Think about what it contains.",a:"contains all digits 0-9 each once"}
+{d:"hard",q:"What is special about the number 8,549,176,320?",h:"Think about what it contains.",a:"contains all digits 0-9 each once",c:["is a perfect square","is divisible by 9","is a palindrome"]}
 ]},
 {t:"Pyramid",s:"pyramid-maths-puzzles",p:[
 {d:"easy",q:"In a number pyramid each block = sum of two blocks below.\nWhat goes on top?\n?\n3  4",h:"Add the two bottom numbers.",a:"7"},
@@ -684,37 +727,37 @@ var C=[
 {d:"easy",q:"How many faces does a cube have?",h:"Think about a dice.",a:"6"},
 {d:"easy",q:"If you unfold a cube, how many squares do you see?",h:"Net of a cube.",a:"6"},
 {d:"easy",q:"How many edges does a cube have?",h:"Count the lines where two faces meet.",a:"12"},
-{d:"easy",q:"What 3D shape has a circular base and comes to a point?",h:"Think about a party hat.",a:"cone"},
+{d:"easy",q:"What 3D shape has a circular base and comes to a point?",h:"Think about a party hat.",a:"cone",c:["cylinder","pyramid","sphere"]},
 {d:"easy",q:"How many vertices does a cube have?",h:"Count the corners.",a:"8"},
-{d:"easy",q:"A shape has 4 equal sides and 4 right angles. What is it?",h:"All sides equal, all angles right angles.",a:"square"},
+{d:"easy",q:"A shape has 4 equal sides and 4 right angles. What is it?",h:"All sides equal, all angles right angles.",a:"square",c:["rectangle","rhombus","trapezoid"]},
 {d:"easy",q:"How many faces does a triangular prism have?",h:"Two triangles and three rectangles.",a:"5"},
-{d:"easy",q:"What is the shape of a football panel?",h:"Two types of polygon are used.",a:"pentagon and hexagon"},
+{d:"easy",q:"What is the shape of a football panel?",h:"Two types of polygon are used.",a:"pentagon and hexagon",c:["triangle and square","hexagon and octagon","circle and square"]},
 {d:"medium",q:"A cube painted red on all faces is cut into 27 small cubes. How many have exactly 2 red faces?",h:"Think about edge cubes not corner cubes.",a:"12"},
 {d:"medium",q:"A cylinder has how many faces, edges, and vertices?",h:"Think carefully about curved surfaces.",a:"3 faces 2 edges 0 vertices"},
 {d:"medium",q:"If a cube is cut into 64 small cubes, how many have NO painted faces?",h:"Think about the inner cubes.",a:"8"},
 {d:"medium",q:"How many small cubes have exactly 3 painted faces when a cube is cut into 27?",h:"Think about corner cubes.",a:"8"},
 {d:"hard",q:"How many different nets does a cube have?",h:"A net is an unfolded version.",a:"11"},
-{d:"hard",q:"A solid has 6 faces, 12 edges, and 8 vertices. What solid is this?",h:"Use Euler formula: F + V - E = 2.",a:"cube"},
+{d:"hard",q:"A solid has 6 faces, 12 edges, and 8 vertices. What solid is this?",h:"Use Euler formula: F + V - E = 2.",a:"cube",c:["cuboid","prism","pyramid"]},
 {d:"hard",q:"How many cubes in a 3x3x3 cube have at least one face painted on the outside?",h:"Total cubes minus inner cubes.",a:"26"},
 {d:"hard",q:"A cube has its corner cut off. How many faces does the new solid have?",h:"The cut adds a new triangular face.",a:"7"}
 ]},
 {t:"Interview",s:"interview-questions",p:[
-{d:"easy",q:"Why are manholes round and not square?",h:"Think about what happens if you drop a square cover.",a:"cannot fall in"},
-{d:"easy",q:"How many golf balls can fit in a school bus?",h:"Estimate volume of both then divide.",a:"about 500000"},
-{d:"easy",q:"How do you weigh an elephant without a scale?",h:"Think about water displacement.",a:"use a boat and mark the waterline"},
+{d:"easy",q:"Why are manholes round and not square?",h:"Think about what happens if you drop a square cover.",a:"cannot fall in",c:["easier to manufacture","cheaper to make","roll more easily"]},
+{d:"easy",q:"How many golf balls can fit in a school bus?",h:"Estimate volume of both then divide.",a:"about 500000",c:["about 5000","about 50000","about 5 million"]},
+{d:"easy",q:"How do you weigh an elephant without a scale?",h:"Think about water displacement.",a:"use a boat and mark the waterline",c:["guess based on its size","use a giant scale","measure its footprints"]},
 {d:"easy",q:"A 4x4x4 cube painted outside is cut into 1x1x1 cubes. How many have no paint?",h:"Think about the inner cubes.",a:"8"},
-{d:"easy",q:"You have 3L and 5L jugs. How do you measure exactly 4L?",h:"Fill 5, pour into 3, dump, repeat.",a:"fill 5 pour into 3 leaving 2 fill 3 from 5 gives 4"},
+{d:"easy",q:"You have 3L and 5L jugs. How do you measure exactly 4L?",h:"Fill 5, pour into 3, dump, repeat.",a:"fill 5 pour into 3 leaving 2 fill 3 from 5 gives 4",c:["fill 3 twice","fill 5 and pour out 1","pour both together"]},
 {d:"easy",q:"How many times do the hands of a clock overlap in 12 hours?",h:"They overlap approximately every 65.45 minutes.",a:"11"},
-{d:"easy",q:"How many windows are in your city?",h:"Estimate population then multiply by windows per person.",a:"estimate based on population"},
-{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively \u2014 this is a judgement test.",a:"move the reference point or tunnel through it"},
-{d:"medium",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings"},
-{d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200"},
-{d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Think about heat from a bulb.",a:"leave one on wait turn off turn another on then enter check heat"},
-{d:"medium",q:"You have 100 lockers all open. You toggle every 2nd, then every 3rd, etc. Which are open at the end?",h:"Only lockers with an odd number of factors stay open.",a:"perfect square numbered lockers"},
+{d:"easy",q:"How many windows are in your city?",h:"Estimate population then multiply by windows per person.",a:"estimate based on population",c:["count every window by hand","ask the city council","impossible to know"]},
+{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively \u2014 this is a judgement test.",a:"move the reference point or tunnel through it",c:["physically push it","melt it down","ship it piece by piece"]},
+{d:"medium",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings",c:["three weighings","one weighing","four weighings"]},
+{d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200",c:["about 20","about 2000","about 20000"]},
+{d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Think about heat from a bulb.",a:"leave one on wait turn off turn another on then enter check heat",c:["flip all switches at once","enter and guess randomly","turn them on one at a time while inside"]},
+{d:"medium",q:"You have 100 lockers all open. You toggle every 2nd, then every 3rd, etc. Which are open at the end?",h:"Only lockers with an odd number of factors stay open.",a:"perfect square numbered lockers",c:["even numbered lockers","odd numbered lockers","prime numbered lockers"]},
 {d:"hard",q:"How many times do the hands of a clock overlap in 24 hours?",h:"They overlap approximately every 65.45 minutes.",a:"22"},
 {d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
 {d:"hard",q:"If 5 cats catch 5 mice in 5 minutes, how many cats catch 100 mice in 100 minutes?",h:"Work out the rate per cat.",a:"5"},
-{d:"hard",q:"You are shrunk to penny-height and put in a blender. What do you do?",h:"Think about the physics and your tiny weight.",a:"jump out as blades spin slowly at first"}
+{d:"hard",q:"You are shrunk to penny-height and put in a blender. What do you do?",h:"Think about the physics and your tiny weight.",a:"jump out as blades spin slowly at first",c:["hold onto the blade","hide under the base","stay perfectly still"]}
 ]},
 {t:"Water Tank",s:"water-tank-puzzles",p:[
 {d:"easy",q:"A tap fills a tank in 6 hours. How long will it take to fill half the tank?",h:"Half the tank takes half the time.",a:"3 hours"},
@@ -747,64 +790,172 @@ var C=[
 {d:"medium",q:"The sum of three consecutive numbers is 72. What are the numbers?",h:"Divide 72 by 3 to find the middle number.",a:"23 24 25"},
 {d:"medium",q:"A number is such that adding 9 to it gives the same result as doubling it. What is the number?",h:"Set up: x + 9 = 2x.",a:"9"},
 {d:"medium",q:"The digits of a two-digit number add up to 9. The number itself is 9 times its units digit. What is the number?",h:"Try two-digit numbers whose digits sum to 9 and check the condition.",a:"45"},
-{d:"hard",q:"The sum of the ages of a father and son is 60. Six years ago, the father was 5 times as old as the son. Find their current ages.",h:"Set up two equations using their current ages and their ages 6 years ago.",a:"father 46 son 14"},
+{d:"hard",q:"The sum of the ages of a father and son is 60. Six years ago, the father was 5 times as old as the son. Find their current ages.",h:"Set up two equations using their current ages and their ages 6 years ago.",a:"father 46 son 14",c:["father 40 son 20","father 45 son 15","father 50 son 10"]},
 {d:"hard",q:"A two-digit number is 4 times the sum of its digits. If 27 is added to the number, its digits reverse. Find the number.",h:"Let the number be 10t+u, then use both conditions to solve for t and u.",a:"36"},
 {d:"hard",q:"Two numbers are in the ratio 3:5. If 10 is subtracted from each, the new ratio becomes 1:3. Find the numbers.",h:"Let the numbers be 3x and 5x, then solve using the new ratio.",a:"15 and 25"},
 {d:"hard",q:"A clock shows 4:20. What is the angle between the hour and minute hands?",h:"The hour hand moves too \u2014 it is not exactly on the 4.",a:"10 degrees"}
 ]},
 {t:"Missing Vowels",s:"missing-vowels-quiz-puzzles",p:[
-{d:"easy",q:"Fill in the vowels to find the word: PPL (a common fruit)",h:"Think of a fruit that's often red or green.",a:"apple"},
-{d:"easy",q:"Fill in the vowels: BLL (a round toy used in many sports)",h:"You throw, kick or bounce this.",a:"ball"},
-{d:"easy",q:"Fill in the vowels: HRT (it beats in your chest)",h:"Keeps you alive, pumps blood.",a:"heart"},
-{d:"easy",q:"Fill in the vowels: DG (man's best friend)",h:"A common pet that barks.",a:"dog"},
-{d:"easy",q:"Fill in the vowels: CT (says meow)",h:"A common household pet.",a:"cat"},
-{d:"easy",q:"Fill in the vowels: HS (where you live)",h:"A building with rooms.",a:"house"},
-{d:"easy",q:"Fill in the vowels: SN (shines in the sky during the day)",h:"You need sunglasses to look at it.",a:"sun"},
-{d:"easy",q:"Fill in the vowels: MN (visible at night in the sky)",h:"It has phases like full and crescent.",a:"moon"},
-{d:"medium",q:"Fill in the vowels: CMPTR (you're likely using one to read this)",h:"An electronic device for processing data.",a:"computer"},
-{d:"medium",q:"Fill in the vowels: LPHNT (has a long trunk)",h:"The largest land animal.",a:"elephant"},
-{d:"medium",q:"Fill in the vowels: BRTHDY (you celebrate it every year)",h:"The anniversary of the day you were born.",a:"birthday"},
-{d:"medium",q:"Fill in the vowels: MNTN (a tall natural landform)",h:"Higher than a hill.",a:"mountain"},
-{d:"hard",q:"Fill in the vowels: PZZL (you are solving one right now)",h:"A game or problem designed to test knowledge.",a:"puzzle"},
-{d:"hard",q:"Fill in the vowels: DCTNRY (contains definitions of words)",h:"You look up word meanings here.",a:"dictionary"},
-{d:"hard",q:"Fill in the vowels: NVRSTY (a place of higher education)",h:"Students earn degrees here.",a:"university"},
-{d:"hard",q:"Fill in the vowels: RFRGRTR (keeps your food cold)",h:"A large kitchen appliance.",a:"refrigerator"}
+{d:"easy",q:"Fill in the vowels to find the word: PPL (a common fruit)",h:"Think of a fruit that's often red or green.",a:"apple",c:["apples","apply","ample"]},
+{d:"easy",q:"Fill in the vowels: BLL (a round toy used in many sports)",h:"You throw, kick or bounce this.",a:"ball",c:["bell","bull","bowl"]},
+{d:"easy",q:"Fill in the vowels: HRT (it beats in your chest)",h:"Keeps you alive, pumps blood.",a:"heart",c:["heard","hoard","herd"]},
+{d:"easy",q:"Fill in the vowels: DG (man's best friend)",h:"A common pet that barks.",a:"dog",c:["dig","dug","dag"]},
+{d:"easy",q:"Fill in the vowels: CT (says meow)",h:"A common household pet.",a:"cat",c:["cot","cut","cit"]},
+{d:"easy",q:"Fill in the vowels: HS (where you live)",h:"A building with rooms.",a:"house",c:["horse","hose","hoose"]},
+{d:"easy",q:"Fill in the vowels: SN (shines in the sky during the day)",h:"You need sunglasses to look at it.",a:"sun",c:["son","sin","sane"]},
+{d:"easy",q:"Fill in the vowels: MN (visible at night in the sky)",h:"It has phases like full and crescent.",a:"moon",c:["main","mine","moan"]},
+{d:"medium",q:"Fill in the vowels: CMPTR (you're likely using one to read this)",h:"An electronic device for processing data.",a:"computer",c:["commuter","computed","compute"]},
+{d:"medium",q:"Fill in the vowels: LPHNT (has a long trunk)",h:"The largest land animal.",a:"elephant",c:["elegant","element","eloquent"]},
+{d:"medium",q:"Fill in the vowels: BRTHDY (you celebrate it every year)",h:"The anniversary of the day you were born.",a:"birthday",c:["birthdays","birthdate","birthright"]},
+{d:"medium",q:"Fill in the vowels: MNTN (a tall natural landform)",h:"Higher than a hill.",a:"mountain",c:["mounting","fountain","mountains"]},
+{d:"hard",q:"Fill in the vowels: PZZL (you are solving one right now)",h:"A game or problem designed to test knowledge.",a:"puzzle",c:["puzzled","puzzler","muzzle"]},
+{d:"hard",q:"Fill in the vowels: DCTNRY (contains definitions of words)",h:"You look up word meanings here.",a:"dictionary",c:["directory","dictation","dictionaries"]},
+{d:"hard",q:"Fill in the vowels: NVRSTY (a place of higher education)",h:"Students earn degrees here.",a:"university",c:["universe","universal","diversity"]},
+{d:"hard",q:"Fill in the vowels: RFRGRTR (keeps your food cold)",h:"A large kitchen appliance.",a:"refrigerator",c:["referigator","refrigerater","refrigator"]}
 ]},
 {t:"Hidden Animals",s:"hidden-animal-puzzles",p:[
-{d:"easy",q:"Find the hidden animal: The store sells CATALOGS of furniture.",h:"Look at the very start of the word catalog.",a:"cat"},
-{d:"easy",q:"Find the hidden animal: That belief is pure DOGMA with no evidence.",h:"Look at the start of the word dogma.",a:"dog"},
-{d:"easy",q:"Find the hidden animal: She wore a COWL over her head to stay warm.",h:"A cowl is a hooded cloak \u2014 look at its first three letters.",a:"cow"},
-{d:"easy",q:"Find the hidden animal: She wore a PIGMENT-stained apron while painting.",h:"Look at the start of the word pigment.",a:"pig"},
-{d:"easy",q:"Find the hidden animal: This is a valuable ANTIQUE vase from the 1800s.",h:"Look at the start of the word antique.",a:"ant"},
-{d:"easy",q:"Find the hidden animal: HENCE, we must leave right now.",h:"Look at the start of the word hence.",a:"hen"},
-{d:"easy",q:"Find the hidden animal: Please replace the BATTERY in the remote.",h:"Look at the start of the word battery.",a:"bat"},
-{d:"easy",q:"Find the hidden animal: They danced the FOXTROT beautifully all night.",h:"The foxtrot is a classic ballroom dance \u2014 look at its start.",a:"fox"},
-{d:"medium",q:"Find the hidden animal: He grew a thick BEARD over the winter.",h:"Look right after the first letter of beard.",a:"bear"},
-{d:"medium",q:"Find the hidden animal: I love HORSERADISH sauce with my roast beef.",h:"Look at the first five letters of horseradish.",a:"horse"},
-{d:"medium",q:"Find the hidden animal: The senate will RATIFY the new treaty tomorrow.",h:"Look at the start of the word ratify.",a:"rat"},
-{d:"medium",q:"Find the hidden animal: The cat kept PROWLING around the garden at night.",h:"Look in the middle of the word prowling.",a:"owl"},
-{d:"hard",q:"Find the hidden animal: We played SCRABBLE all evening with the family.",h:"Look right after the first two letters of scrabble.",a:"crab"},
-{d:"hard",q:"Find the hidden animal: She bought beautiful new JEWELRY for the party.",h:"Look right after the first letter of jewelry \u2014 it's a female sheep.",a:"ewe"},
-{d:"hard",q:"Find the hidden animal: I love eating fresh GRAPES in the summer.",h:"Look at the last three letters of grape.",a:"ape"},
-{d:"hard",q:"Find the hidden animal: Please DECODE this secret message for me.",h:"Look in the middle of the word decode \u2014 it's a type of fish.",a:"cod"}
+{d:"easy",q:"Find the hidden animal: The store sells CATALOGS of furniture.",h:"Look at the very start of the word catalog.",a:"cat",c:["dog","rat","cow"]},
+{d:"easy",q:"Find the hidden animal: That belief is pure DOGMA with no evidence.",h:"Look at the start of the word dogma.",a:"dog",c:["cat","hen","fox"]},
+{d:"easy",q:"Find the hidden animal: She wore a COWL over her head to stay warm.",h:"A cowl is a hooded cloak \u2014 look at its first three letters.",a:"cow",c:["cat","dog","pig"]},
+{d:"easy",q:"Find the hidden animal: She wore a PIGMENT-stained apron while painting.",h:"Look at the start of the word pigment.",a:"pig",c:["cow","hen","bat"]},
+{d:"easy",q:"Find the hidden animal: This is a valuable ANTIQUE vase from the 1800s.",h:"Look at the start of the word antique.",a:"ant",c:["bat","owl","cod"]},
+{d:"easy",q:"Find the hidden animal: HENCE, we must leave right now.",h:"Look at the start of the word hence.",a:"hen",c:["hog","cow","fox"]},
+{d:"easy",q:"Find the hidden animal: Please replace the BATTERY in the remote.",h:"Look at the start of the word battery.",a:"bat",c:["cat","rat","ant"]},
+{d:"easy",q:"Find the hidden animal: They danced the FOXTROT beautifully all night.",h:"The foxtrot is a classic ballroom dance \u2014 look at its start.",a:"fox",c:["dog","cow","hen"]},
+{d:"medium",q:"Find the hidden animal: He grew a thick BEARD over the winter.",h:"Look right after the first letter of beard.",a:"bear",c:["boar","bull","deer"]},
+{d:"medium",q:"Find the hidden animal: I love HORSERADISH sauce with my roast beef.",h:"Look at the first five letters of horseradish.",a:"horse",c:["mule","goat","deer"]},
+{d:"medium",q:"Find the hidden animal: The senate will RATIFY the new treaty tomorrow.",h:"Look at the start of the word ratify.",a:"rat",c:["cat","bat","owl"]},
+{d:"medium",q:"Find the hidden animal: The cat kept PROWLING around the garden at night.",h:"Look in the middle of the word prowling.",a:"owl",c:["crow","hawk","dove"]},
+{d:"hard",q:"Find the hidden animal: We played SCRABBLE all evening with the family.",h:"Look right after the first two letters of scrabble.",a:"crab",c:["clam","crow","carp"]},
+{d:"hard",q:"Find the hidden animal: She bought beautiful new JEWELRY for the party.",h:"Look right after the first letter of jewelry \u2014 it's a female sheep.",a:"ewe",c:["cow","ram","doe"]},
+{d:"hard",q:"Find the hidden animal: I love eating fresh GRAPES in the summer.",h:"Look at the last three letters of grape.",a:"ape",c:["cat","fox","owl"]},
+{d:"hard",q:"Find the hidden animal: Please DECODE this secret message for me.",h:"Look in the middle of the word decode \u2014 it's a type of fish.",a:"cod",c:["carp","eel","koi"]}
 ]},
 {t:"Emoji",s:"emoji-puzzles",p:[
-{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF27\uFE0F\u2614",h:"Think about weather and what you'd carry outside.",a:"rainy day"},
-{d:"easy",q:"What phrase do these emoji spell out?\n\uD83D\uDD25\uD83D\uDE92",h:"A vehicle that puts out fires.",a:"fire truck"},
-{d:"easy",q:"What phrase do these emoji spell out?\n\uD83D\uDC1D\uD83C\uDF6F",h:"An insect that makes something sweet.",a:"honey bee"},
-{d:"easy",q:"What phrase do these emoji spell out?\n\u2600\uFE0F\uD83C\uDF3B",h:"A flower that turns to follow the sun.",a:"sunflower"},
-{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF82\uD83C\uDF89",h:"A yearly celebration with cake.",a:"birthday party"},
-{d:"easy",q:"What phrase do these emoji spell out?\n\uD83D\uDCDA\uD83C\uDF92",h:"Where you go on weekday mornings with books.",a:"school"},
-{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF19\u2B50",h:"What you see in the sky after sunset.",a:"night sky"},
-{d:"easy",q:"What phrase do these emoji spell out?\n\uD83C\uDF4E\uD83D\uDC68\u200D\uD83C\uDFEB",h:"A classic gift for someone who teaches.",a:"teacher"},
-{d:"medium",q:"What phrase do these emoji spell out?\n\u23F0\uD83D\uDC26",h:"Think of a saying about catching a worm.",a:"early bird"},
-{d:"medium",q:"What phrase do these emoji spell out?\n\uD83E\uDDCA\uD83C\uDFD4\uFE0F",h:"Mostly hidden below the ocean surface.",a:"iceberg"},
-{d:"medium",q:"What phrase do these emoji spell out?\n\uD83E\uDD8B\uD83C\uDF38",h:"A place full of flowers and flying insects.",a:"butterfly garden"},
-{d:"medium",q:"What phrase do these emoji spell out?\n\uD83D\uDC22\uD83D\uDC07",h:"A classic fable about a slow-and-steady race.",a:"tortoise and the hare"},
-{d:"hard",q:"What phrase do these emoji spell out?\n\uD83C\uDFA3\uD83D\uDC1F\uD83C\uDF73",h:"Catching, then cooking, a meal from the water.",a:"fish fry"},
-{d:"hard",q:"What phrase do these emoji spell out?\n\uD83C\uDF2A\uFE0F\uD83C\uDFE0\uD83D\uDCA8",h:"A severe, rotating windstorm.",a:"tornado"},
-{d:"hard",q:"What phrase do these emoji spell out?\n\uD83E\uDDE0\uD83D\uDCA1",h:"A sudden clever thought.",a:"bright idea"},
-{d:"hard",q:"What phrase do these emoji spell out?\n\uD83D\uDD70\uFE0F\u23EA",h:"A phrase about reversing the clock.",a:"turn back time"}
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf27\ufe0f\u2614",h:"Think about weather and what you'd carry outside.",a:"rainy day",c:["sunny day","cloudy sky","stormy night"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83d\udd25\ud83d\ude92",h:"A vehicle that puts out fires.",a:"fire truck",c:["fire drill","fire alarm","forest fire"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83d\udc1d\ud83c\udf6f",h:"An insect that makes something sweet.",a:"honey bee",c:["bumble bee","worker bee","honeycomb"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\u2600\ufe0f\ud83c\udf3b",h:"A flower that turns to follow the sun.",a:"sunflower",c:["daisy chain","sunrise","summer garden"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf82\ud83c\udf89",h:"A yearly celebration with cake.",a:"birthday party",c:["surprise party","dinner party","graduation party"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83d\udcda\ud83c\udf92",h:"Where you go on weekday mornings with books.",a:"school",c:["library","classroom","university"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf19\u2b50",h:"What you see in the sky after sunset.",a:"night sky",c:["shooting star","starry night","moonlight"]},
+{d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf4e\ud83d\udc68\u200d\ud83c\udfeb",h:"A classic gift for someone who teaches.",a:"teacher",c:["professor","classmate","principal"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\u23f0\ud83d\udc26",h:"Think of a saying about catching a worm.",a:"early bird",c:["night owl","late bloomer","busy bee"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\ud83e\uddca\ud83c\udfd4\ufe0f",h:"Mostly hidden below the ocean surface.",a:"iceberg",c:["glacier","snowball","ice cube"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\ud83e\udd8b\ud83c\udf38",h:"A place full of flowers and flying insects.",a:"butterfly garden",c:["flower field","rose garden","spring meadow"]},
+{d:"medium",q:"What phrase do these emoji spell out?\n\ud83d\udc22\ud83d\udc07",h:"A classic fable about a slow-and-steady race.",a:"tortoise and the hare",c:["fox and the grapes","boy who cried wolf","ant and the grasshopper"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83c\udfa3\ud83d\udc1f\ud83c\udf73",h:"Catching, then cooking, a meal from the water.",a:"fish fry",c:["seafood boil","fish market","catch of the day"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83c\udf2a\ufe0f\ud83c\udfe0\ud83d\udca8",h:"A severe, rotating windstorm.",a:"tornado",c:["hurricane","earthquake","thunderstorm"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83e\udde0\ud83d\udca1",h:"A sudden clever thought.",a:"bright idea",c:["deep thought","genius plan","light bulb moment"]},
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83d\udd70\ufe0f\u23ea",h:"A phrase about reversing the clock.",a:"turn back time",c:["stop the clock","fast forward","rewind the past"]}
+]},
+{t:"Reasoning",s:"logical-reasoning-puzzles",p:[
+{d:"easy",q:"If all cats are animals, and Tom is a cat, what can we conclude about Tom?",h:"Apply the general rule directly to Tom.",a:"tom is an animal",c:["tom is a dog","we cannot tell","tom is not an animal"]},
+{d:"easy",q:"If it rains, the ground gets wet. The ground is wet. Does that prove it rained?",h:"Think about other ways the ground could get wet.",a:"no",c:["yes","maybe","only if it thundered too"]},
+{d:"easy",q:"Every triangle has three sides. Shape X has three sides. Is shape X definitely a triangle?",h:"In this simple case, three straight sides is exactly the definition of a triangle.",a:"yes",c:["no","maybe","only if it's equilateral"]},
+{d:"easy",q:"A is taller than B. B is taller than C. Who is the shortest of the three?",h:"Line them up from tallest to shortest.",a:"c",c:["a","b","cannot be determined"]},
+{d:"easy",q:"If today is Wednesday, what day was it two days ago?",h:"Count backwards from Wednesday.",a:"monday",c:["tuesday","sunday","thursday"]},
+{d:"medium",q:"All roses are flowers. Some flowers fade quickly. Can we conclude that all roses fade quickly?",h:"The second statement only talks about 'some' flowers, not all of them.",a:"no",c:["yes","maybe","only red roses"]},
+{d:"medium",q:"Five friends sit in a row. Amy is to the left of Ben, who is to the left of Cara. Who is sitting in the middle?",h:"List the order from left to right: Amy, Ben, Cara.",a:"ben",c:["amy","cara","cannot be determined"]},
+{d:"hard",q:"In a race, Priya finished before Raj but after Sam. Who finished first?",h:"Order them out: Sam, then Priya, then Raj.",a:"sam",c:["priya","raj","cannot be determined"]},
+{d:"hard",q:"All Zibs are Zabs. No Zabs are Zops. Are any Zibs also Zops?",h:"If Zabs can never be Zops, and Zibs are always Zabs, follow the chain through.",a:"no",c:["yes","maybe","only some zibs"]},
+{d:"easy",q:"If all birds can fly, and a sparrow is a bird, can a sparrow fly (based on the statement alone)?",h:"Just follow the rule given, even if it's not always true in real life.",a:"yes",c:["no","maybe","only some sparrows"]},
+{d:"easy",q:"A is older than B. C is older than A. Who is the oldest of the three?",h:"Line them up from oldest to youngest.",a:"c",c:["a","b","cannot be determined"]},
+{d:"easy",q:"If Monday comes before Tuesday, and Tuesday comes before Wednesday, does Monday come before Wednesday?",h:"This is a simple chain of order.",a:"yes",c:["no","maybe","only in some weeks"]},
+{d:"medium",q:"No fish can walk. A shark is a fish. Can a shark walk?",h:"Apply the rule about fish directly to the shark.",a:"no",c:["yes","maybe","only baby sharks"]},
+{d:"medium",q:"Three boxes are red, blue and green. The red box is heavier than the blue box. The green box is lighter than the blue box. Which box is the lightest?",h:"Order them: red heaviest, blue middle, green lightest.",a:"green",c:["red","blue","cannot be determined"]},
+{d:"hard",q:"If some Toves are Borogoves, and all Borogoves are Slithy, can we be certain all Toves are Slithy?",h:"'Some' Toves being Borogoves doesn't cover every Tove.",a:"no",c:["yes","maybe","only slithy toves"]},
+{d:"hard",q:"Four runners finish a race. Priya beats Sam. Raj beats Priya. Sam beats Tia. Who finishes last?",h:"Work out the order: Raj, Priya, Sam, Tia.",a:"tia",c:["sam","priya","raj"]}
+]},
+{t:"Triangle",s:"triangle-maths-logic-puzzles",p:[
+{d:"easy",q:"How many sides does a triangle have?",h:"It's right there in the name.",a:"3"},
+{d:"easy",q:"How many angles does a triangle have?",h:"One angle for each corner.",a:"3"},
+{d:"easy",q:"What is the sum of the interior angles of any triangle, in degrees?",h:"This is always true no matter the triangle's shape.",a:"180"},
+{d:"easy",q:"An equilateral triangle has how many equal sides?",h:"'Equilateral' means all sides match.",a:"3"},
+{d:"easy",q:"A right triangle has one angle equal to how many degrees?",h:"That's the angle that gives it its name.",a:"90"},
+{d:"medium",q:"A large triangle is divided into 4 smaller equal triangles. How many small triangles are there in total?",h:"Picture one triangle split evenly into 4 pieces.",a:"4"},
+{d:"medium",q:"A triangle has sides of length 3, 4 and 5. What type of triangle is it, based on its angles?",h:"This is the most famous set of triangle side lengths in maths.",a:"right triangle",c:["scalene triangle","obtuse triangle","equilateral triangle"]},
+{d:"hard",q:"A triangle's two angles measure 50 degrees and 60 degrees. What is the third angle, in degrees?",h:"All three angles must add up to 180.",a:"70"},
+{d:"hard",q:"How many triangles of all sizes can you count in a large triangle divided into 9 smaller equal triangles (3 rows)?",h:"Count every size: the 9 smallest, then the medium ones, then the whole triangle.",a:"13"},
+{d:"easy",q:"In an isosceles triangle, how many sides are equal in length?",h:"'Isosceles' means two sides match.",a:"2"},
+{d:"easy",q:"A scalene triangle has how many equal sides?",h:"'Scalene' means every side is a different length.",a:"0"},
+{d:"easy",q:"If two angles of a triangle are each 45 degrees, what is the third angle, in degrees?",h:"All three angles add up to 180.",a:"90"},
+{d:"medium",q:"An equilateral triangle has three equal angles. How many degrees is each angle?",h:"Split 180 degrees evenly three ways.",a:"60"},
+{d:"medium",q:"A triangle has a base of 10 and a height of 6. What is its area?",h:"Area of a triangle = half of base times height.",a:"30"},
+{d:"hard",q:"A right triangle has legs of length 6 and 8. What is the length of its hypotenuse?",h:"Use the Pythagorean theorem: 6 squared plus 8 squared.",a:"10"},
+{d:"hard",q:"How many small triangles, of the smallest size only, make up a large triangle divided into 9 equal smaller triangles (3 rows)?",h:"This is simply the count of the smallest pieces, not every size.",a:"9"}
+]},
+{t:"Circle",s:"circle-reasoning-puzzles",p:[
+{d:"easy",q:"How many degrees are there in a full circle?",h:"This is the same for every circle, no matter the size.",a:"360"},
+{d:"easy",q:"How many straight sides does a circle have?",h:"A circle is made entirely of one curve.",a:"0"},
+{d:"easy",q:"What do you call the distance from the centre of a circle to its edge?",h:"It's half of the diameter.",a:"radius",c:["diameter","circumference","tangent"]},
+{d:"easy",q:"What do you call the distance straight across a circle, passing through its centre?",h:"It's twice the radius.",a:"diameter",c:["radius","circumference","chord"]},
+{d:"easy",q:"If the radius of a circle is 5, what is its diameter?",h:"Diameter is always double the radius.",a:"10"},
+{d:"medium",q:"A circle is divided into 8 equal slices, like a pizza. How many degrees is each slice?",h:"Divide the full circle's degrees by the number of slices.",a:"45"},
+{d:"medium",q:"What do you call a straight line that touches a circle at exactly one point?",h:"It grazes the circle without crossing into it.",a:"tangent",c:["radius","chord","secant"]},
+{d:"hard",q:"If the diameter of a circle is 14, approximately what is its circumference (using pi = 22/7)?",h:"Circumference = pi times the diameter.",a:"44"},
+{d:"hard",q:"Two circles overlap. At most how many points can they intersect at?",h:"Picture two overlapping rings \u2014 count where their edges cross.",a:"2"},
+{d:"easy",q:"What do you call a straight line segment that joins two points on a circle's edge?",h:"If it passes through the centre, it becomes the diameter.",a:"chord",c:["radius","tangent","arc"]},
+{d:"easy",q:"What do you call the outer boundary of a circle?",h:"It's the 'perimeter' of a circle, just with a different name.",a:"circumference",c:["diameter","radius","chord"]},
+{d:"easy",q:"If a circle's diameter is 20, what is its radius?",h:"Radius is always half the diameter.",a:"10"},
+{d:"medium",q:"A circle is divided into 6 equal slices. How many degrees is each slice?",h:"Divide 360 degrees by the number of slices.",a:"60"},
+{d:"medium",q:"What do you call a part of a circle's boundary, like a curved section of its edge?",h:"Think of it as a curved slice of the circumference.",a:"arc",c:["chord","tangent","sector"]},
+{d:"hard",q:"If the radius of a circle is 7, approximately what is its area (using pi = 22/7)?",h:"Area = pi times radius squared.",a:"154"},
+{d:"hard",q:"A circle is inscribed exactly inside a square with a side length of 10. What is the circle's diameter?",h:"The circle touches all four sides, so its diameter equals the square's side.",a:"10"}
+]},
+{t:"Maths Riddles",s:"maths-riddles",p:[
+{d:"easy",q:"I am a number. Double me and add 4, and you get 10. What number am I?",h:"Work backwards from 10: subtract 4, then halve.",a:"3"},
+{d:"easy",q:"I am an even number between 10 and 20. My digits add up to 3. What number am I?",h:"Try the even numbers in that range one by one.",a:"12"},
+{d:"easy",q:"Half of me is 8. What number am I?",h:"If half of me is 8, double it to find me.",a:"16"},
+{d:"easy",q:"I am a number. If you square me, you get 25. What number am I?",h:"Think about which number times itself gives 25.",a:"5"},
+{d:"easy",q:"I am the smallest prime number. What number am I?",h:"A prime number has exactly two factors: 1 and itself.",a:"2"},
+{d:"medium",q:"I am a number. Add 5 to me, then double the result, and you get 30. What number am I?",h:"Work backwards: halve 30 first, then subtract 5.",a:"10"},
+{d:"medium",q:"I am a three-digit number. All my digits are the same, and I am divisible by 3. What is the smallest number I could be?",h:"Try the smallest repeated-digit numbers, starting from 111.",a:"111"},
+{d:"hard",q:"I am a number less than 100. I am divisible by both 6 and 9, and I am the largest such number below 100. What number am I?",h:"Find the lowest common multiple of 6 and 9, then find the largest multiple of it under 100.",a:"90"},
+{d:"hard",q:"I am a number. If you multiply me by myself and then subtract me, you get 20. What number am I?",h:"Try small whole numbers: does 5 times 5 minus 5 work?",a:"5"},
+{d:"easy",q:"I am a number. Triple me and you get 21. What number am I?",h:"Divide 21 by 3.",a:"7"},
+{d:"easy",q:"I am a number. Take away 6 and I become 6. What number am I?",h:"Add 6 back to 6.",a:"12"},
+{d:"easy",q:"I am the only even prime number. What number am I?",h:"Every other even number can be divided by 2 and something else.",a:"2"},
+{d:"medium",q:"I am a number. If you add my digits together, you get 9, and I am a multiple of 9 less than 50. What number am I?",h:"Try multiples of 9 under 50: 9, 18, 27, 36, 45.",a:"45"},
+{d:"medium",q:"I am a number. Half of me, plus 3, equals 10. What number am I?",h:"Work backwards: subtract 3 from 10, then double it.",a:"14"},
+{d:"hard",q:"I am a two-digit number. I am one more than a multiple of 5, and one less than a multiple of 4. The smallest number I could be is?",h:"Try small two-digit numbers that fit both conditions.",a:"11"},
+{d:"hard",q:"I am a number. My square is 12 more than 4 times myself. What number am I?",h:"Try small numbers: does 6 times 6 equal 12 more than 4 times 6?",a:"6"}
+]},
+{t:"Hidden Letters",s:"hidden-letter-puzzles",p:[
+{d:"easy",q:"Find the hidden number: I need to buy a TENT before the trip.",h:"Look at the start of the word TENT.",a:"ten",c:["nine","two","six"]},
+{d:"easy",q:"Find the hidden colour: The REDACTED report was confusing to read.",h:"Look at the start of the word REDACTED.",a:"red",c:["blue","green","pink"]},
+{d:"easy",q:"Find the hidden colour: I bought a new BLUEPRINT for the house.",h:"Look at the start of the word BLUEPRINT.",a:"blue",c:["red","green","teal"]},
+{d:"easy",q:"Find the hidden colour: She wore a TANGERINE dress to the party.",h:"Look at the start of the word TANGERINE.",a:"tan",c:["tangerine orange","orange","gold"]},
+{d:"easy",q:"Find the hidden number: SEVENTY students attended the lecture.",h:"Look at the start of the word SEVENTY.",a:"seven",c:["six","eight","two"]},
+{d:"medium",q:"Find the hidden body part: The HEARTBREAK hotel was fully booked.",h:"Look at the start of the word HEARTBREAK.",a:"heart",c:["head","hand","hip"]},
+{d:"medium",q:"Find the hidden body part: I need to buy a new ARMCHAIR for the lounge.",h:"Look at the start of the word ARMCHAIR.",a:"arm",c:["leg","ear","eye"]},
+{d:"hard",q:"Find the hidden body part: The SHINBONE was clearly visible in the X-ray.",h:"Look at the start of the word SHINBONE.",a:"shin",c:["chin","chest","cheek"]},
+{d:"hard",q:"Find the hidden body part: The CHEEKY puppy stole a sock from the laundry.",h:"Look at the start of the word CHEEKY.",a:"cheek",c:["chest","chin","cheekbone"]},
+{d:"easy",q:"Find the hidden colour: The GREENHOUSE was full of growing vegetables.",h:"Look at the start of the word GREENHOUSE.",a:"green",c:["blue","red","yellow"]},
+{d:"easy",q:"Find the hidden number: The store had a SIXTY percent discount today.",h:"Look at the start of the word SIXTY.",a:"six",c:["five","nine","two"]},
+{d:"easy",q:"Find the hidden colour: She painted the fence a bright WHITEWASH colour.",h:"Look at the start of the word WHITEWASH.",a:"white",c:["black","grey","cream"]},
+{d:"medium",q:"Find the hidden body part: The HIPSTER cafe served excellent coffee.",h:"Look at the start of the word HIPSTER.",a:"hip",c:["leg","rib","toe"]},
+{d:"medium",q:"Find the hidden body part: The EARLIEST train leaves at dawn.",h:"Look at the start of the word EARLIEST.",a:"ear",c:["eye","nose","chin"]},
+{d:"hard",q:"Find the hidden body part: The company issued a SKINNY new logo design.",h:"Look at the start of the word SKINNY.",a:"skin",c:["shin","spine","scalp"]},
+{d:"hard",q:"Find the hidden body part: The HIPPOPOTAMUS wallowed happily in the mud.",h:"Look at the start of the word HIPPOPOTAMUS.",a:"hip",c:["rib","jaw","gum"]}
+]},
+{t:"Mental Ability",s:"mental-ability-questions-brain-test",p:[
+{d:"easy",q:"If A=1, B=2, C=3, what does D equal?",h:"Just keep counting up the alphabet.",a:"4"},
+{d:"easy",q:"What comes next in the pattern: Monday, Wednesday, Friday, __?",h:"Each day skips one day ahead.",a:"sunday",c:["saturday","thursday","tuesday"]},
+{d:"easy",q:"Which number is the odd one out: 2, 4, 6, 7, 8?",h:"Four of these numbers share something the fifth doesn't.",a:"7"},
+{d:"easy",q:"If a dozen equals 12, how many is half a dozen?",h:"Split 12 into two equal halves.",a:"6"},
+{d:"easy",q:"What is the next letter in the sequence: A, C, E, G, __?",h:"Each letter skips one letter ahead.",a:"i",c:["h","j","k"]},
+{d:"medium",q:"A clock shows 3:00 exactly. What angle, in degrees, do the hour and minute hands make?",h:"At 3:00 the hands form a perfect right angle.",a:"90"},
+{d:"medium",q:"If Monday is the 1st day of the week, which day is the 5th day?",h:"Count forward from Monday: 1 Mon, 2 Tue, 3 Wed...",a:"friday",c:["thursday","saturday","sunday"]},
+{d:"hard",q:"A is the mother of B. B is the mother of C. What is A to C?",h:"Think about the family tree across three generations.",a:"grandmother",c:["aunt","sister","mother"]},
+{d:"hard",q:"Look at this series: 2, 1, 1/2, 1/4, __. What number should come next?",h:"Each number is half of the one before it.",a:"1/8"},
+{d:"easy",q:"Which shape has the most sides: a triangle, a square, or a pentagon?",h:"Compare 3, 4 and 5 sides.",a:"pentagon",c:["triangle","square","they're equal"]},
+{d:"easy",q:"What comes next in the sequence: 1, 2, 4, 8, __?",h:"Each number is double the one before it.",a:"16"},
+{d:"easy",q:"If 3 pencils cost 30 cents, how much do 6 pencils cost, in cents?",h:"Double both the pencils and the price.",a:"60"},
+{d:"medium",q:"A is twice as old as B. If B is 8, how old is A?",h:"Multiply B's age by 2.",a:"16"},
+{d:"medium",q:"Which word does not belong: apple, orange, carrot, banana?",h:"Three of these are fruits.",a:"carrot",c:["apple","orange","banana"]},
+{d:"hard",q:"In a code, CAT is written as DBU (each letter shifted forward by 1). How is DOG written using the same code?",h:"Shift each letter of DOG forward by one place in the alphabet.",a:"eph",c:["dog","cnf","fqh"]},
+{d:"hard",q:"If 5 machines make 5 toys in 5 minutes, how many minutes would it take 100 machines to make 100 toys?",h:"Work out how long ONE machine takes to make ONE toy first.",a:"5"}
 ]}
 ];
 
@@ -820,6 +971,14 @@ function _pk(c,s){
   return[e[0],e[1],e[2],m[0],h[0]];
 }
 function _nr(s){return s.trim().toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ');}
+/* Display-only formatting: the answer/choice data is stored in lowercase for
+   easy matching, but reads oddly on screen. Capitalises the first letter of
+   the string and of any letter immediately following typical sentence-break
+   punctuation, without touching the underlying data used for comparisons. */
+function _cap(s){
+  if(!s)return s;
+  return s.replace(/(^|[.!?]\s+)([a-z])/g,function(m,pre,ch){return pre+ch.toUpperCase();});
+}
 function _fz(r,a){
   var x=_nr(r),c=_nr(a);
   if(x===c)return true;
@@ -854,20 +1013,19 @@ function _numDistractors(n,decimals){
   });
   return out;
 }
-/* Builds a 4-option multiple-choice set for a single puzzle, sourced so that
-   every question gets its own topically-consistent set of options instead
-   of one shared site-wide pool:
-     1) If the correct answer is a plain number, wrong options are plausible
-        nearby numbers (off-by-one, doubled, halved, etc.) generated just
-        for THIS question \u2014 so a "how many sides" puzzle never gets a
-        wildly unrelated numeric distractor.
-     2) Otherwise (and to top up numeric sets short on unique candidates),
-        wrong options are drawn from OTHER puzzles in the SAME category
-        only (catPool) \u2014 so a Riddles puzzle only ever gets riddle-style
-        wrong answers, a Chess puzzle only gets chess-style wrong answers,
-        etc. \u2014 never a mismatched answer from an unrelated category.
-     3) The full site-wide pool is touched only as a final fallback for the
-        rare case a category is too small to supply 3 unique distractors.
+/* Builds a 4-option multiple-choice set for a single puzzle. Options are
+   sourced in priority order so each question gets choices written FOR that
+   exact question wherever possible, instead of a shared pool:
+     1) p.c \u2014 hand-authored wrong answers written specifically for this
+        question (present on every non-purely-numeric puzzle). These are
+        always used first and are what most puzzles rely on.
+     2) If the correct answer starts with a number (optionally followed by
+        a unit, e.g. "3 hours", "7.5 degrees"), generate plausible nearby
+        numbers with the same suffix \u2014 created fresh for THIS question's
+        actual value, not borrowed from anywhere else.
+     3) Same-category puzzles' answers \u2014 only used as a safety net if a
+        puzzle is somehow missing authored choices and isn't numeric.
+     4) The full site-wide pool \u2014 final fallback, practically never reached.
    The seed keeps the same 4 options stable across re-renders of the same
    puzzle on the same day. */
 function _mcq(p,catPool,seed){
@@ -875,17 +1033,29 @@ function _mcq(p,catPool,seed){
   var wrong=[],used={};
   used[normCorrect]=1;
 
-  var trimmed=p.a.trim();
-  if(/^\d+(\.\d+)?$/.test(trimmed)){
-    var n=parseFloat(trimmed);
-    var decimals=trimmed.indexOf('.')!==-1?trimmed.split('.')[1].length:null;
-    var cands=_sh(_numDistractors(n,decimals),seed);
-    cands.forEach(function(c){
+  if(p.c&&p.c.length){
+    _sh(p.c,seed).forEach(function(c){
       if(wrong.length>=3)return;
       var nc=_nr(c);
       if(used[nc])return;
       used[nc]=1;wrong.push(c);
     });
+  }
+
+  if(wrong.length<3){
+    var m=p.a.trim().match(/^(\d+(?:\.\d+)?)(.*)$/);
+    if(m){
+      var n=parseFloat(m[1]);
+      var decimals=m[1].indexOf('.')!==-1?m[1].split('.')[1].length:null;
+      var suffix=m[2];
+      _sh(_numDistractors(n,decimals),seed+2).forEach(function(c){
+        if(wrong.length>=3)return;
+        var full=c+suffix;
+        var nc=_nr(full);
+        if(used[nc])return;
+        used[nc]=1;wrong.push(full);
+      });
+    }
   }
 
   if(wrong.length<3){
@@ -986,7 +1156,8 @@ function _boot(tid,_SK,_TK){
      different 3 tomorrow, since ds changes daily. Slicing to 3 keeps the
      tab bar to "3 tabs + Explore" no matter how large the pool grows. */
   var TABS_PER_DAY=3;
-  var ac=_sh(C,ds).slice(0,TABS_PER_DAY);
+  var eligibleC=C.filter(function(cat){return BLOCKED_CATEGORIES.indexOf(cat.t)===-1;});
+  var ac=_sh(eligibleC,ds).slice(0,TABS_PER_DAY);
   var EXPLORE_IDX=ac.length; /* Explore tab always sits right after the offline category tabs */
   var st;
   try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
@@ -1082,6 +1253,14 @@ function _boot(tid,_SK,_TK){
         +'<button class="fwpcb" id="'+px+'_cb">Copy code</button>'
       +'</div>'
     +'</div>'):'')
+    +((SHOW_GOOGLE_PLAY_PROMO||SHOW_APPLE_APP_PROMO)?(
+    '<div class="fwpapps">'
+      +'<div class="fwpapps-label">\uD83D\uDCF1 Get the Fun With Puzzles app</div>'
+      +'<div class="fwpapps-row">'
+        +(SHOW_GOOGLE_PLAY_PROMO?('<a class="fwpapp-badge" href="'+GOOGLE_PLAY_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic">\u25B6\uFE0F</span><span class="fwpapp-txt"><small>Get it on</small><b>Google Play</b></span></a>'):'')
+        +(SHOW_APPLE_APP_PROMO?('<a class="fwpapp-badge" href="'+APPLE_APP_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic">\uD83C\uDF4E</span><span class="fwpapp-txt"><small>Download on the</small><b>App Store</b></span></a>'):'')
+      +'</div>'
+    +'</div>'):'')
     +'<div class="fwpattr">Powered by <a href="'+B+'" target="_blank" rel="noopener">funwithpuzzles.com</a></div>'
     +'</div></div>';
 
@@ -1123,7 +1302,7 @@ function _boot(tid,_SK,_TK){
       var btn=document.createElement('button');
       btn.type='button';
       btn.className='fwpmcqbtn';
-      btn.textContent=choice;
+      btn.textContent=_cap(choice);
       var isCorrect=_nr(choice)===_nr(p.a);
       if(settled){
         btn.disabled=true;
@@ -1295,7 +1474,25 @@ function _boot(tid,_SK,_TK){
       /* NOT using the thumbnail's own width/height here \u2014 it's a square
          crop, so its aspect ratio does not represent the real picture. */
     }
-    return{title:title,url:pUrl,img:img,aspect:aspect};
+    /* Blogger's JSON feed lists each post's labels under entry.category as
+       [{term:"Label Name"}, ...]. Collected here so posts that only carry
+       housekeeping labels (see EXCLUDED_RANDOM_LABELS near the top of the
+       file) can be filtered out of Random Puzzles instead of showing a
+       non-puzzle page with no relevant image. */
+    var labels=[];
+    if(e.category){
+      for(var k=0;k<e.category.length;k++){
+        if(e.category[k]&&e.category[k].term)labels.push(e.category[k].term);
+      }
+    }
+    return{title:title,url:pUrl,img:img,aspect:aspect,labels:labels};
+  }
+  function _isExcludedPost(p){
+    if(!p.labels||!p.labels.length)return false;
+    for(var i=0;i<p.labels.length;i++){
+      if(EXCLUDED_RANDOM_LABELS.indexOf(p.labels[i])!==-1)return true;
+    }
+    return false;
   }
 
   /* preload the images for the current post set in the background so that
@@ -1343,7 +1540,7 @@ function _boot(tid,_SK,_TK){
         expLoading=false;
         var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
         var entries=(data&&data.feed&&data.feed.entry)||[];
-        var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
+        var posts=entries.map(_expParseEntry).filter(function(p){return p.url&&!_isExcludedPost(p);});
         if(posts.length===0){expPosts=[];_expRender();return;}
         expCache[cacheKey]=posts;
         expPosts=_rnd(posts).slice(0,WANT_COUNT);
@@ -1368,7 +1565,7 @@ function _boot(tid,_SK,_TK){
     function finalize(){
       expLoading=false;
       var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
-      var posts=results.filter(function(p){return p&&p.url;});
+      var posts=results.filter(function(p){return p&&p.url&&!_isExcludedPost(p);});
       if(posts.length===0){
         _expFail(labelObj,'Could not load puzzles. Please check your connection.');
         return;
@@ -1382,7 +1579,7 @@ function _boot(tid,_SK,_TK){
       _jsonp(url,function(data){
         remaining--;
         var entries=(data&&data.feed&&data.feed.entry)||[];
-        var posts=entries.map(_expParseEntry).filter(function(p){return p.url;});
+        var posts=entries.map(_expParseEntry).filter(function(p){return p.url&&!_isExcludedPost(p);});
         if(posts.length)results[idx]=posts[0];
         if(remaining===0)finalize();
       },function(){
@@ -1501,14 +1698,23 @@ function _boot(tid,_SK,_TK){
     }
     return B+'/p/daily-challenge.html';
   }
+  function _icon(bg,inner){
+    return '<svg width="22" height="22" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="'+bg+'"/>'+inner+'</svg>';
+  }
+  var ICON_WHATSAPP=_icon('#25D366','<path transform="translate(6,6) scale(0.032)" fill="#fff" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>');
+  var ICON_X=_icon('#000','<path transform="translate(5,5) scale(0.035)" fill="#fff" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>');
+  var ICON_FACEBOOK=_icon('#1877F2','<path transform="translate(8,4) scale(0.033)" fill="#fff" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>');
+  var ICON_TELEGRAM=_icon('#29B6F6','<path transform="translate(4,4) scale(0.039)" fill="#fff" d="M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z"/>');
+  var ICON_COPY=_icon('#6B7280','<g fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M11 17l6-6"/><path d="M13 8.5l1.8-1.8a3.2 3.2 0 014.5 4.5L17.5 13"/><path d="M15 19.5l-1.8 1.8a3.2 3.2 0 01-4.5-4.5L10.5 15"/></g>');
+  var ICON_SHARE=_icon('#6B7280','<g fill="#fff"><circle cx="9" cy="14" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="19" cy="21" r="2.4"/></g><g stroke="#fff" stroke-width="1.6"><line x1="11" y1="13" x2="17" y2="8.3"/><line x1="11" y1="15" x2="17" y2="19.7"/></g>');
   var SHARE_PLATFORMS=[
-    {id:'whatsapp',label:'\uD83D\uDCAC WhatsApp',open:function(txt,url){window.open('https://wa.me/?text='+encodeURIComponent(txt+'\n\n'+url),'_blank');}},
-    {id:'twitter',label:'\uD83D\uDC26 X / Twitter',open:function(txt,url){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(url),'_blank');}},
-    {id:'facebook',label:'\uD83D\uDCD8 Facebook',open:function(txt,url){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'&quote='+encodeURIComponent(txt),'_blank');}},
-    {id:'telegram',label:'\u2708\uFE0F Telegram',open:function(txt,url){window.open('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(txt),'_blank');}},
-    {id:'copy',label:'\uD83D\uDD17 Copy link',open:function(txt,url){
+    {id:'whatsapp',icon:ICON_WHATSAPP,label:'WhatsApp',open:function(txt,url){window.open('https://wa.me/?text='+encodeURIComponent(txt+'\n\n'+url),'_blank');}},
+    {id:'twitter',icon:ICON_X,label:'X / Twitter',open:function(txt,url){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(url),'_blank');}},
+    {id:'facebook',icon:ICON_FACEBOOK,label:'Facebook',open:function(txt,url){window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'&quote='+encodeURIComponent(txt),'_blank');}},
+    {id:'telegram',icon:ICON_TELEGRAM,label:'Telegram',open:function(txt,url){window.open('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(txt),'_blank');}},
+    {id:'copy',icon:ICON_COPY,label:'Copy link',open:function(txt,url){
       var full=txt+'\n\n'+url;
-      function done(){var b=smEl.querySelector('[data-p="copy"]');if(b){var old=b.textContent;b.textContent='\u2713 Copied!';setTimeout(function(){b.textContent=old;},1800);}}
+      function done(){var b=smEl.querySelector('[data-p="copy"] span');if(b){var old=b.textContent;b.textContent='Copied!';setTimeout(function(){b.textContent=old;},1800);}}
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(full).then(done).catch(function(){});}
       else{var ta=document.createElement('textarea');ta.value=full;ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
     }}
@@ -1517,7 +1723,8 @@ function _boot(tid,_SK,_TK){
     smEl.innerHTML='';
     SHARE_PLATFORMS.forEach(function(pl){
       var b=document.createElement('button');
-      b.type='button';b.setAttribute('data-p',pl.id);b.textContent=pl.label;
+      b.type='button';b.setAttribute('data-p',pl.id);
+      b.innerHTML=pl.icon+'<span>'+pl.label+'</span>';
       b.onclick=function(e){
         e.stopPropagation();
         pl.open(_shareText(),_shareUrl());
@@ -1527,7 +1734,8 @@ function _boot(tid,_SK,_TK){
     });
     if(navigator.share){
       var nb=document.createElement('button');
-      nb.type='button';nb.textContent='\uD83D\uDCE4 More apps...';
+      nb.type='button';
+      nb.innerHTML=ICON_SHARE+'<span>More apps...</span>';
       nb.onclick=function(e){
         e.stopPropagation();
         smEl.style.display='none';
