@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.1.2 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.1.3 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -28,16 +28,30 @@ var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';   /* e.g. https://apps.app
    live website, not this offline dataset). */
 var BLOCKED_CATEGORIES=[];
 
-/* Labels that exist on the live site for housekeeping/administrative posts
-   rather than actual puzzles (event announcements, video posts, index
-   pages, championship recaps, etc). Posts carrying ONLY these labels won't
-   have a relevant puzzle image, so they're filtered out of the Explore
-   tab's Random Puzzles feed (which otherwise pulls from every label on the
-   site). Edit this list freely to match your site's label names exactly. */
+/* Labels that exist on the live site for pure housekeeping/administrative
+   posts rather than actual puzzle content (video posts, index pages,
+   championship recaps, syndicated third-party puzzles, etc). Posts
+   carrying ANY of these labels are always filtered out of the Explore
+   tab's Random Puzzles feed, since they won't have a relevant puzzle image
+   or content. Edit this list freely to match your site's label names
+   exactly. */
 var EXCLUDED_RANDOM_LABELS=[
-  'Puzzle and Sudoku Events','Brain Teasers Videos','Administrative Posts',
-  'Conceptis Puzzles','Images','Puzzle Index Pages','Sudoku Championships',
-  'Puzzle Championships','Puzzle Sites','Puzzle Tutorials','Logic Puzzles Printable'
+  'Brain Teasers Videos','Administrative Posts','Conceptis Puzzles','Images',
+  'Puzzle Index Pages','Sudoku Championships','Puzzle Championships','Puzzle Sites'
+];
+
+/* Labels for posts that ARE real, worthwhile content but don't fit the
+   usual "puzzle with a published answer" format \u2014 e.g. posts with no
+   answer yet, tutorials, printables, events, or visual illusions where
+   "View Answer" wouldn't make sense. These stay visible everywhere (Random
+   Puzzles and their own category) but the Explore card's call-to-action
+   reads "Explore This" for them instead of "View Answer", which is a more
+   accurate (and honest) prompt than promising an answer that isn't there.
+   Add or remove label names freely; matching is case/whitespace-insensitive. */
+var MISSING_ANSWER_LABELS=[
+  'Brain Teasers: Missing Answers','Puzzle and Sudoku Events',
+  'Puzzle Tutorials','Logic Puzzles Printable','Optical Illusions',
+  'Missing Vowels Quiz'
 ];
 
 /* \u2500\u2500 Explore labels: display name, exact Blogger label, hub page URL \u2500\u2500
@@ -114,7 +128,13 @@ var LABELS=[
   {d:'\ud83c\udfc6 Best Puzzles',              l:'Best Brain Teasers',                         h:'p/popular-puzzles.html'}
 ];
 
-/* \u2500\u2500 CSS \u2500\u2500 */
+/* Every real puzzle-category label from LABELS above, normalised for
+   comparison. Used as a safety net in _isExcludedPost: a post is only ever
+   treated as non-puzzle housekeeping content if it carries an excluded
+   label AND none of its OTHER labels match a real category here. This means
+   a legitimate puzzle post can never be hidden just because it also happens
+   to carry a secondary/incidental tag that's on the excluded list. */
+var MISSING_ANSWER_LABELS_NORM=MISSING_ANSWER_LABELS.map(function(l){return l.trim().toLowerCase();});
 if(!document.getElementById('fwpv6css')){
   var _cs=document.createElement('style');
   _cs.id='fwpv6css';
@@ -263,6 +283,7 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpac{font-size:10px;color:#9ca3af;text-decoration:none;white-space:nowrap;flex:0 0 auto;}'
 +'.fwpac:hover{color:#374151;}'
 +'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;flex:0 0 auto;}'
++'.fwpsh svg{flex-shrink:0;}'
 +'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
 /* share menu popup */
 +'.fwpsharemenu{position:absolute;bottom:46px;right:14px;background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.16);padding:6px;display:none;flex-direction:column;gap:2px;z-index:20;min-width:170px;}'
@@ -1242,7 +1263,7 @@ function _boot(tid,_SK,_TK){
     +'<div class="fwpfoot"><div class="fwpfl">'
       +'<a class="fwpmore" id="'+px+'_more" href="'+B+'/p/index.html" target="_blank" rel="noopener">More puzzles</a>'
       +'<a class="fwpac" href="'+B+'/p/index.html" target="_blank" rel="noopener">All categories</a>'
-    +'</div><button class="fwpsh" id="'+px+'_sh">\u2191 Share</button>'
+    +'</div><button class="fwpsh" id="'+px+'_sh"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg> Share</button>'
     +'<div class="fwpsharemenu" id="'+px+'_sharemenu"></div>'
     +'</div>'
     +(SHOW_ADD_TO_SITE?(
@@ -1410,13 +1431,14 @@ function _boot(tid,_SK,_TK){
     var imgHtml=p.img
       ?'<div class="fwpexp-imgwrap"'+wrapStyle+'><img class="fwpexp-img" src="'+p.img+'" alt="'+p.title.replace(/[<>"]/g,'')+'" onerror="this.parentNode.innerHTML=\'<div class=fwpexp-imgph><img src='+LG+' /></div>\'"/></div>'
       :'<div class="fwpexp-imgph"><img src="'+LG+'"/></div>';
+    var ctaText=p.hasAnswer?'View Answer':'Explore This';
     g('expcard').innerHTML=
       '<a class="fwpexp-card" href="'+p.url+'" target="_blank" rel="noopener">'
         +imgHtml
         +'<div class="fwpexp-cbody">'
           +'<div class="fwpexp-cat">'+expLabelObj.d+'</div>'
           +'<div class="fwpexp-title">'+p.title+'</div>'
-          +'<div class="fwpexp-solve">Solve this puzzle \u2192 <span>\uD83D\uDCA1</span></div>'
+          +'<div class="fwpexp-solve">'+ctaText+' \u2192 <span>\uD83D\uDCA1</span></div>'
         +'</div>'
       +'</a>';
     /* dots */
@@ -1485,12 +1507,26 @@ function _boot(tid,_SK,_TK){
         if(e.category[k]&&e.category[k].term)labels.push(e.category[k].term);
       }
     }
-    return{title:title,url:pUrl,img:img,aspect:aspect,labels:labels};
+    var hasAnswer=true;
+    for(var lk=0;lk<labels.length;lk++){
+      if(MISSING_ANSWER_LABELS_NORM.indexOf(labels[lk].trim().toLowerCase())!==-1){hasAnswer=false;break;}
+    }
+    return{title:title,url:pUrl,img:img,aspect:aspect,labels:labels,hasAnswer:hasAnswer};
   }
+  var EXCLUDED_RANDOM_LABELS_NORM=EXCLUDED_RANDOM_LABELS.map(function(l){return l.trim().toLowerCase();});
+  /* Strict match: if a post carries ANY label from EXCLUDED_RANDOM_LABELS,
+     it's excluded from Random Puzzles, full stop \u2014 regardless of what
+     other labels it also has. This list is now reserved for labels that
+     are structurally never real puzzle content (index/listing pages,
+     admin notices, championship recaps, videos, syndicated content), so
+     there's no legitimate case where a match here should be overridden.
+     (The genuinely ambiguous labels \u2014 missing-answer posts, tutorials,
+     printables, events, illusions \u2014 live in MISSING_ANSWER_LABELS instead,
+     which changes the card's call-to-action rather than hiding the post.) */
   function _isExcludedPost(p){
     if(!p.labels||!p.labels.length)return false;
     for(var i=0;i<p.labels.length;i++){
-      if(EXCLUDED_RANDOM_LABELS.indexOf(p.labels[i])!==-1)return true;
+      if(EXCLUDED_RANDOM_LABELS_NORM.indexOf(p.labels[i].trim().toLowerCase())!==-1)return true;
     }
     return false;
   }
@@ -1533,6 +1569,14 @@ function _boot(tid,_SK,_TK){
      its own slice of the timeline. */
   var WANT_COUNT=5;
   function _expFetchStratified(labelObj,total,cacheKey){
+    /* EXCLUDED_RANDOM_LABELS is only meant to keep non-puzzle housekeeping
+       posts out of "Random Puzzles" (the whole-site feed with no label
+       filter). When a specific real category is selected, that label
+       filter from Blogger already guarantees relevance \u2014 a post shouldn't
+       be hidden from ITS OWN category just because it also happens to
+       carry an unrelated secondary label. */
+    var isRandomFeed=(labelObj.l===null);
+    function keep(p){return p.url&&(!isRandomFeed||!_isExcludedPost(p));}
     if(total<=WANT_COUNT){
       /* Small category: nothing to stratify, just grab everything available. */
       var url=_feedUrl(labelObj,'&max-results='+total);
@@ -1540,7 +1584,7 @@ function _boot(tid,_SK,_TK){
         expLoading=false;
         var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
         var entries=(data&&data.feed&&data.feed.entry)||[];
-        var posts=entries.map(_expParseEntry).filter(function(p){return p.url&&!_isExcludedPost(p);});
+        var posts=entries.map(_expParseEntry).filter(keep);
         if(posts.length===0){expPosts=[];_expRender();return;}
         expCache[cacheKey]=posts;
         expPosts=_rnd(posts).slice(0,WANT_COUNT);
@@ -1551,21 +1595,19 @@ function _boot(tid,_SK,_TK){
       return;
     }
 
-    var segSize=Math.floor(total/WANT_COUNT);
-    var starts=[];
-    for(var i=0;i<WANT_COUNT;i++){
-      var segStart=i*segSize+1;
-      var segEnd=(i===WANT_COUNT-1)?total:((i+1)*segSize);
-      var span=Math.max(1,segEnd-segStart+1);
-      starts.push(segStart+Math.floor(Math.random()*span));
-    }
+    /* Each segment fetches a small WINDOW of posts (not just one) and picks
+       a random valid one from within it, so a single excluded pick doesn't
+       leave that slot empty. On top of that, if the whole batch still comes
+       up short of WANT_COUNT (a whole window landing on excluded content is
+       rare but possible), a top-up pass fetches additional random windows
+       to fill the remaining slots, up to a couple of rounds \u2014 this is what
+       makes the final count consistently hit 5 instead of wandering. */
+    var SEGMENT_WINDOW=4;
+    var MAX_TOPUP_ROUNDS=2;
 
-    var results=new Array(WANT_COUNT).fill(null);
-    var remaining=WANT_COUNT;
-    function finalize(){
+    function finish(posts){
       expLoading=false;
       var ref=g('expref');if(ref){ref.disabled=false;ref.textContent='\u21BB Refresh';}
-      var posts=results.filter(function(p){return p&&p.url&&!_isExcludedPost(p);});
       if(posts.length===0){
         _expFail(labelObj,'Could not load puzzles. Please check your connection.');
         return;
@@ -1574,17 +1616,55 @@ function _boot(tid,_SK,_TK){
       expPosts=posts;
       expIdx=0;_expRender();_expPreload();
     }
-    starts.forEach(function(start,idx){
-      var url=_feedUrl(labelObj,'&max-results=1&start-index='+start);
+
+    function fetchRandomWindow(cb){
+      var pick=1+Math.floor(Math.random()*total);
+      var win=Math.max(1,Math.min(SEGMENT_WINDOW,total-pick+1));
+      var url=_feedUrl(labelObj,'&max-results='+win+'&start-index='+pick);
+      _jsonp(url,function(data){
+        var entries=(data&&data.feed&&data.feed.entry)||[];
+        var posts=entries.map(_expParseEntry).filter(keep);
+        cb(posts.length?posts[Math.floor(Math.random()*posts.length)]:null);
+      },function(){cb(null);});
+    }
+
+    function topUp(collected,round){
+      var needed=WANT_COUNT-collected.length;
+      if(needed<=0||round>MAX_TOPUP_ROUNDS){finish(collected);return;}
+      var seen={};collected.forEach(function(p){seen[p.url]=1;});
+      var pending=needed,newly=[];
+      for(var i=0;i<needed;i++){
+        fetchRandomWindow(function(p){
+          pending--;
+          if(p&&!seen[p.url]){seen[p.url]=1;newly.push(p);}
+          if(pending===0)topUp(collected.concat(newly),round+1);
+        });
+      }
+    }
+
+    var segSize=Math.floor(total/WANT_COUNT);
+    var starts=[];
+    for(var i=0;i<WANT_COUNT;i++){
+      var segStart=i*segSize+1;
+      var segEnd=(i===WANT_COUNT-1)?total:((i+1)*segSize);
+      var span=Math.max(1,segEnd-segStart+1);
+      var pick=segStart+Math.floor(Math.random()*span);
+      var win=Math.max(1,Math.min(SEGMENT_WINDOW,total-pick+1));
+      starts.push({start:pick,win:win});
+    }
+    var results=new Array(WANT_COUNT).fill(null);
+    var remaining=WANT_COUNT;
+    starts.forEach(function(seg,idx){
+      var url=_feedUrl(labelObj,'&max-results='+seg.win+'&start-index='+seg.start);
       _jsonp(url,function(data){
         remaining--;
         var entries=(data&&data.feed&&data.feed.entry)||[];
-        var posts=entries.map(_expParseEntry).filter(function(p){return p.url&&!_isExcludedPost(p);});
-        if(posts.length)results[idx]=posts[0];
-        if(remaining===0)finalize();
+        var posts=entries.map(_expParseEntry).filter(keep);
+        if(posts.length)results[idx]=posts[Math.floor(Math.random()*posts.length)];
+        if(remaining===0)topUp(results.filter(Boolean),1);
       },function(){
         remaining--;
-        if(remaining===0)finalize();
+        if(remaining===0)topUp(results.filter(Boolean),1);
       });
     });
   }
