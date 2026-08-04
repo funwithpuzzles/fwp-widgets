@@ -1,4 +1,3 @@
-<script>
 /* FWP Daily Challenge Widget f1.2.1 | funwithpuzzles.com */
 (function(){
 'use strict';
