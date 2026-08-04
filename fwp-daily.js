@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.1.3 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.2.0 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -982,7 +982,23 @@ var C=[
 
 /* \u2500\u2500 Helpers \u2500\u2500 */
 function _td(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-function _sh(a,s){var r=a.slice(),x=(s||1)&0x7fffffff,i,j,t;for(i=r.length-1;i>0;i--){x=(x*1664525+1013904223)&0x7fffffff;j=x%(i+1);t=r[i];r[i]=r[j];r[j]=t;}return r;}
+/* Seeded PRNG (Mulberry32) \u2014 given the same seed it always produces the
+   same sequence (required so every visitor sees the same daily picks), but
+   with proper bit-mixing/avalanche behaviour unlike a plain LCG. This
+   matters a lot here because seeds are small, sequential, date-derived
+   integers (today's seed is yesterday's + 1) \u2014 a weak generator can stay
+   badly correlated across such nearby seeds, which is what caused certain
+   categories/puzzles to show up far more often than others. */
+function _mulberry32(seed){
+  var s=seed>>>0;
+  return function(){
+    s=(s+0x6D2B79F5)|0;
+    var t=Math.imul(s^(s>>>15),1|s);
+    t=(t+Math.imul(t^(t>>>7),61|t))^t;
+    return ((t^(t>>>14))>>>0)/4294967296;
+  };
+}
+function _sh(a,s){var r=a.slice(),rand=_mulberry32(s||1),i,j,t;for(i=r.length-1;i>0;i--){j=Math.floor(rand()*(i+1));t=r[i];r[i]=r[j];r[j]=t;}return r;}
 function _rnd(a){var r=a.slice(),i,j,t;for(i=r.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=r[i];r[i]=r[j];r[j]=t;}return r;}
 function _ds(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
 function _pk(c,s){
@@ -1178,7 +1194,18 @@ function _boot(tid,_SK,_TK){
      tab bar to "3 tabs + Explore" no matter how large the pool grows. */
   var TABS_PER_DAY=3;
   var eligibleC=C.filter(function(cat){return BLOCKED_CATEGORIES.indexOf(cat.t)===-1;});
-  var ac=_sh(eligibleC,ds).slice(0,TABS_PER_DAY);
+  /* Guarantee the 3 tabs never exactly repeat yesterday's set: compute what
+     WOULD have been picked yesterday (same deterministic algorithm, just
+     with yesterday's date as the seed) and exclude those categories from
+     today's candidate pool before shuffling. Falls back to the full pool
+     if too few categories would be left to pick from (e.g. very small
+     BLOCKED_CATEGORIES-trimmed pools), so this never breaks the widget. */
+  var _yd=new Date();_yd.setDate(_yd.getDate()-1);
+  var ydDs=_yd.getFullYear()*10000+(_yd.getMonth()+1)*100+_yd.getDate();
+  var yesterdayTitles=_sh(eligibleC,ydDs).slice(0,TABS_PER_DAY).map(function(c){return c.t;});
+  var todayPool=eligibleC.filter(function(cat){return yesterdayTitles.indexOf(cat.t)===-1;});
+  if(todayPool.length<TABS_PER_DAY)todayPool=eligibleC;
+  var ac=_sh(todayPool,ds).slice(0,TABS_PER_DAY);
   var EXPLORE_IDX=ac.length; /* Explore tab always sits right after the offline category tabs */
   var st;
   try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
