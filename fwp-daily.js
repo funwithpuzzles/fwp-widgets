@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.2.1 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.2.3 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -155,7 +155,7 @@ if(!document.getElementById('fwpv6css')){
 /* date bar */
 +'.fwpbar{background:#13253a;padding:5px 14px;display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}'
 +'.fwpbd{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}'
-+'.fwpbt{font-size:9px;color:rgba(255,255,255,.55);white-space:nowrap;flex-shrink:0;}'
++'.fwpbt{font-size:11px;color:#fff;font-weight:800;white-space:nowrap;flex-shrink:0;background:rgba(255,255,255,.18);padding:3px 9px;border-radius:20px;letter-spacing:.2px;}'
 /* progress */
 +'.fwppr{height:3px;background:#e5e7eb;}'
 +'.fwppf{height:3px;background:#0A0AFF;width:0%;transition:width .4s ease;}'
@@ -691,11 +691,11 @@ var C=[
 {d:"easy",q:"Odd one out:\nRose, Lotus, Tulip, Oak",h:"Three are flowers. One is not.",a:"oak",c:["rose","lotus","tulip"]},
 {d:"easy",q:"Odd one out:\nCow, Horse, Hen, Tiger",h:"Three are domestic. One is wild.",a:"tiger",c:["cow","horse","hen"]},
 {d:"medium",q:"Odd one out:\nPiano, Guitar, Violin, Trumpet, Flute",h:"Four need air or strings. One is different.",a:"piano",c:["guitar","violin","trumpet"]},
-{d:"medium",q:"Odd one out:\n3, 5, 7, 9, 11",h:"All are odd but look at which are prime.",a:"9"},
+{d:"medium",q:"Odd one out:\n3, 5, 7, 9, 11",h:"All are odd but look at which are prime.",a:"9",c:["3","5","11"]},
 {d:"medium",q:"Odd one out:\nNile, Amazon, Thames, Sahara",h:"Three are rivers. One is not.",a:"sahara",c:["nile","amazon","thames"]},
-{d:"medium",q:"Odd one out:\n2, 3, 5, 7, 9, 11",h:"One is not prime.",a:"9"},
+{d:"medium",q:"Odd one out:\n2, 3, 5, 7, 9, 11",h:"One is not prime.",a:"9",c:["2","5","11"]},
 {d:"hard",q:"Odd one out:\nMercury, Venus, Earth, Pluto, Mars",h:"Think about their official planetary status.",a:"pluto",c:["mercury","venus","mars"]},
-{d:"hard",q:"Odd one out:\n121, 144, 169, 196, 225, 250",h:"Five are perfect squares. One is not.",a:"250"},
+{d:"hard",q:"Odd one out:\n121, 144, 169, 196, 225, 250",h:"Five are perfect squares. One is not.",a:"250",c:["121","169","225"]},
 {d:"hard",q:"Odd one out:\nNovember, April, June, September, February",h:"Think about the number of days in each month.",a:"february",c:["april","june","september"]},
 {d:"hard",q:"Odd one out:\nCow, Buffalo, Camel, Horse, Calf",h:"Think about the stage of life.",a:"calf",c:["cow","buffalo","camel"]},
 {d:"easy",q:"Odd one out: Square, Rectangle, Triangle, Circle",h:"Three of these have straight sides.",a:"circle",c:["square","rectangle","triangle"]},
@@ -769,7 +769,7 @@ var C=[
 {d:"medium",q:"If today is Friday, what day will it be in 10 days?",h:"10 days is exactly one week plus 3 more days.",a:"monday",c:["sunday","tuesday","wednesday"]},
 {d:"hard",q:"A clock reads 12:00 exactly. What is the angle between the hour and minute hands?",h:"Both hands are pointing in exactly the same direction.",a:"0"}
 ]},
-{t:"Kids",s:"easy-puzzles",p:[
+{t:"Easy",s:"easy-puzzles",p:[
 {d:"easy",q:"What has a face and two hands but no arms or legs?",h:"You look at it to know the time.",a:"clock",c:["watch","calendar","mirror"]},
 {d:"easy",q:"What is black when you buy it, red when you use it, grey when you throw it away?",h:"You use it to write on a board.",a:"charcoal",c:["chalk","crayon","pencil lead"]},
 {d:"easy",q:"What animal has a trunk but never packs for a holiday?",h:"The largest land animal.",a:"elephant",c:["giraffe","rhino","hippo"]},
@@ -1102,7 +1102,7 @@ var C=[
 {t:"Mental Ability",s:"mental-ability-questions-brain-test",p:[
 {d:"easy",q:"If A=1, B=2, C=3, what does D equal?",h:"Just keep counting up the alphabet.",a:"4"},
 {d:"easy",q:"What comes next in the pattern: Monday, Wednesday, Friday, __?",h:"Each day skips one day ahead.",a:"sunday",c:["saturday","thursday","tuesday"]},
-{d:"easy",q:"Which number is the odd one out: 2, 4, 6, 7, 8?",h:"Four of these numbers share something the fifth doesn't.",a:"7"},
+{d:"easy",q:"Which number is the odd one out: 2, 4, 6, 7, 8?",h:"Four of these numbers share something the fifth doesn't.",a:"7",c:["2","4","8"]},
 {d:"easy",q:"If a dozen equals 12, how many is half a dozen?",h:"Split 12 into two equal halves.",a:"6"},
 {d:"easy",q:"What is the next letter in the sequence: A, C, E, G, __?",h:"Each letter skips one letter ahead.",a:"i",c:["h","j","k"]},
 {d:"medium",q:"A clock shows 3:00 exactly. What angle, in degrees, do the hour and minute hands make?",h:"At 3:00 the hands form a perfect right angle.",a:"90"},
@@ -1125,6 +1125,7 @@ var C=[
 
 /* \u2500\u2500 Helpers \u2500\u2500 */
 function _td(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function _epochDay(d){return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);}
 /* Seeded PRNG (Mulberry32) \u2014 given the same seed it always produces the
    same sequence (required so every visitor sees the same daily picks), but
    with proper bit-mixing/avalanche behaviour unlike a plain LCG. This
@@ -1144,11 +1145,21 @@ function _mulberry32(seed){
 function _sh(a,s){var r=a.slice(),rand=_mulberry32(s||1),i,j,t;for(i=r.length-1;i>0;i--){j=Math.floor(rand()*(i+1));t=r[i];r[i]=r[j];r[j]=t;}return r;}
 function _rnd(a){var r=a.slice(),i,j,t;for(i=r.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=r[i];r[i]=r[j];r[j]=t;}return r;}
 function _ds(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
-function _pk(c,s){
-  var e=_sh(c.p.filter(function(x){return x.d==='easy';}),s);
-  var m=_sh(c.p.filter(function(x){return x.d==='medium';}),s+7);
-  var h=_sh(c.p.filter(function(x){return x.d==='hard';}),s+13);
-  return[e[0],e[1],e[2],m[0],h[0]];
+function _pk(c,catStableSeed,appearanceIndex){
+  function tierSlice(name,width,seedOffset){
+    var pool=c.p.filter(function(x){return x.d===name;});
+    var n=pool.length;
+    if(n===0)return[];
+    var deck=_sh(pool,catStableSeed+seedOffset);
+    var start=(appearanceIndex*width)%n;
+    var out=[];
+    for(var k=0;k<width;k++)out.push(deck[(start+k)%n]);
+    return out;
+  }
+  var e=tierSlice('easy',3,0);
+  var m=tierSlice('medium',1,1009);
+  var h=tierSlice('hard',1,2003);
+  return e.concat(m,h);
 }
 function _nr(s){return s.trim().toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ');}
 /* Display-only formatting: the answer/choice data is stored in lowercase for
@@ -1337,18 +1348,50 @@ function _boot(tid,_SK,_TK){
      tab bar to "3 tabs + Explore" no matter how large the pool grows. */
   var TABS_PER_DAY=3;
   var eligibleC=C.filter(function(cat){return BLOCKED_CATEGORIES.indexOf(cat.t)===-1;});
-  /* Guarantee the 3 tabs never exactly repeat yesterday's set: compute what
-     WOULD have been picked yesterday (same deterministic algorithm, just
-     with yesterday's date as the seed) and exclude those categories from
-     today's candidate pool before shuffling. Falls back to the full pool
-     if too few categories would be left to pick from (e.g. very small
-     BLOCKED_CATEGORIES-trimmed pools), so this never breaks the widget. */
-  var _yd=new Date();_yd.setDate(_yd.getDate()-1);
-  var ydDs=_yd.getFullYear()*10000+(_yd.getMonth()+1)*100+_yd.getDate();
-  var yesterdayTitles=_sh(eligibleC,ydDs).slice(0,TABS_PER_DAY).map(function(c){return c.t;});
-  var todayPool=eligibleC.filter(function(cat){return yesterdayTitles.indexOf(cat.t)===-1;});
-  if(todayPool.length<TABS_PER_DAY)todayPool=eligibleC;
-  var ac=_sh(todayPool,ds).slice(0,TABS_PER_DAY);
+  /* Categories rotate through ONE FIXED shuffle of the eligible pool,
+     computed with a constant seed (never reshuffled per day or per cycle),
+     sliced sequentially TABS_PER_DAY at a time as the days advance. This is
+     the simplest construction that's correct by definition: since it's a
+     single permutation with no duplicate entries, no two different slices
+     of it can ever contain the same category \u2014 so every category is
+     guaranteed to appear exactly once per full pass through the deck
+     (12 days for the default 36 categories), with literally no possibility
+     of a repeat until the deck fully wraps around and starts over.
+     (Two earlier approaches were tried and both had bugs: reshuffling
+     freshly every day only checked against the immediately previous day,
+     which drifted from reality since "yesterday" itself depended on an
+     exclusion chain going back indefinitely; reshuffling once per cycle
+     then patching the day-0-of-a-new-cycle seam against the previous
+     cycle's last day pulled from a DIFFERENT shuffle than the rest of that
+     cycle, which could duplicate a category the main deck had already
+     reserved for a later day. A single fixed deck has neither problem.)
+     If you ever want to force a fresh rotation order (e.g. after a big
+     content update), just change MASTER_DECK_SEED to any other number. */
+  var MASTER_DECK_SEED=1;
+  var poolSize=eligibleC.length;
+  var daysPerCycle=Math.max(1,Math.ceil(poolSize/TABS_PER_DAY));
+  var masterDeck=_sh(eligibleC,MASTER_DECK_SEED);
+  var todayEpoch=_epochDay(new Date());
+  var cycleIndex=Math.floor(todayEpoch/daysPerCycle);
+  var dayInCycle=todayEpoch%daysPerCycle;
+  var ac=masterDeck.slice(dayInCycle*TABS_PER_DAY,dayInCycle*TABS_PER_DAY+TABS_PER_DAY);
+  /* Only relevant if BLOCKED_CATEGORIES trims the pool to a non-multiple of
+     TABS_PER_DAY, leaving the deck's final slice short \u2014 top up by
+     wrapping to the start of the SAME fixed deck rather than ever showing
+     fewer than 3 tabs. */
+  if(ac.length<TABS_PER_DAY){
+    var haveTitles=ac.map(function(cc){return cc.t;});
+    for(var _ti=0;_ti<masterDeck.length&&ac.length<TABS_PER_DAY;_ti++){
+      if(haveTitles.indexOf(masterDeck[_ti].t)===-1)ac.push(masterDeck[_ti]);
+    }
+  }
+  /* Puzzle selection within a category uses a fixed per-tier shuffle (see
+     _pk) sliced by how many times this category has appeared before \u2014
+     which, thanks to the fixed tab deck above, is simply cycleIndex, since
+     each category appears exactly once per cycle. catSeed just needs to be
+     a stable number per category so different categories don't all use an
+     identical shuffle order. */
+  function _catStableSeed(cat){return C.indexOf(cat)*97+11;}
   var EXPLORE_IDX=ac.length; /* Explore tab always sits right after the offline category tabs */
   var st;
   try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
@@ -1535,7 +1578,7 @@ function _boot(tid,_SK,_TK){
     });
     var tot=cp.length*ac.length,dn=0;
     for(var t=0;t<ac.length;t++){
-      var ps=_pk(ac[t],ds*31+t);
+      var ps=_pk(ac[t],_catStableSeed(ac[t]),cycleIndex);
       for(var pi=0;pi<ps.length;pi++){var kk=k(t,pi);if(st.ans[kk]!==undefined||st.rev[kk])dn++;}
     }
     g('ban').style.display=(dn>=tot)?'block':'none';
@@ -1544,7 +1587,7 @@ function _boot(tid,_SK,_TK){
   function _prog(){
     var tot=cp.length*ac.length,dn=0;
     for(var t=0;t<ac.length;t++){
-      var ps=_pk(ac[t],ds*31+t);
+      var ps=_pk(ac[t],_catStableSeed(ac[t]),cycleIndex);
       for(var pi=0;pi<ps.length;pi++){var kk=k(t,pi);if(st.ans[kk]!==undefined||st.rev[kk])dn++;}
     }
     g('prog').style.width=Math.round((dn/tot)*100)+'%';
@@ -1572,7 +1615,7 @@ function _boot(tid,_SK,_TK){
     }else{
       g('offline').style.display='block';
       g('exp').style.display='none';
-      cp=_pk(ac[n],ds*31+n);
+      cp=_pk(ac[n],_catStableSeed(ac[n]),cycleIndex);
       rend();
     }
   }
@@ -2031,7 +2074,7 @@ function _boot(tid,_SK,_TK){
   }
 
   /* \u2500\u2500 Boot \u2500\u2500 */
-  cp=_pk(ac[st.tab],ds*31+st.tab);
+  cp=_pk(ac[st.tab],_catStableSeed(ac[st.tab]),cycleIndex);
   rend();
 
   /* Warm the Explore tab in the background during idle time so that if the
@@ -2049,17 +2092,38 @@ function _boot(tid,_SK,_TK){
      Fix: periodically re-check today's date string against the one this
      boot was computed with, and if it has changed, tear down and rebuild
      the whole widget in place by re-running _boot \u2014 picking up the new
-     day's categories/puzzles automatically. Checked both on a timer (catches
-     it within a minute even if the tab stays in the background) and
-     immediately whenever the tab becomes visible again (catches it right
-     away for the common case of a tab left open overnight and revisited
-     the next morning). */
-  var _dateWatcherId=setInterval(_checkForDateChange,60000);
+     day's categories/puzzles automatically.
+     Checked via several independent triggers so this is robust both in
+     regular browser tabs and inside mobile app WebViews (Cordova/Capacitor/
+     React Native WebView wrappers don't always route their "app resumed"
+     signal through the standard Page Visibility API the same way a plain
+     browser tab does):
+       - a 30-minute timer, as a background catch-all for the rare case a
+         tab stays continuously foregrounded and active right through
+         midnight without ever losing/regaining focus (mobile OSes often
+         throttle/suspend timers while actually backgrounded anyway, so
+         this is a best-effort net rather than a guarantee while hidden \u2014
+         the visibility/focus/pageshow triggers below do the real work for
+         the common "reopen the app the next day" case, firing instantly
+         rather than waiting on this timer at all)
+       - 'visibilitychange' \u2014 the standard signal, supported by both
+         Android WebView and iOS WKWebView since they're Chromium/WebKit
+         based, fires as soon as the app/tab is foregrounded again
+       - 'focus' on window \u2014 an older, even more widely supported signal
+         that many hybrid app shells still fire on resume even when they
+         don't fully implement Page Visibility
+       - 'pageshow' on window \u2014 fires on navigation/back-forward-cache
+         restores, another common resume path in embedded WebViews */
+  var _dateWatcherId=setInterval(_checkForDateChange,1800000);
   document.addEventListener('visibilitychange',_onVisibilityChange);
+  window.addEventListener('focus',_checkForDateChange);
+  window.addEventListener('pageshow',_checkForDateChange);
   function _checkForDateChange(){
     if(_td()!==td){
       clearInterval(_dateWatcherId);
       document.removeEventListener('visibilitychange',_onVisibilityChange);
+      window.removeEventListener('focus',_checkForDateChange);
+      window.removeEventListener('pageshow',_checkForDateChange);
       _boot(tid,_SK,_TK);
     }
   }
