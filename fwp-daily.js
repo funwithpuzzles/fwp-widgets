@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.2.4 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.2.7 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -33,6 +33,27 @@ var SOCIAL_LINKS = [
   { id: 'x',         url: 'https://x.com/gamespicnic' },
   { id: 'facebook',  url: 'https://www.facebook.com/gamespicnic' }
 ];
+
+/* The tab buttons use short names ("Mistake", "Logic") since 3 of them plus
+   the Explore tab all have to fit in one row. The centre label above the
+   puzzle counter has more breathing room, so it shows a fuller, more
+   descriptive name instead (e.g. "Mistake Puzzles", "Logic Puzzles"). Add
+   an entry here for any new category you create \u2014 categories without one
+   just fall back to their short tab name. */
+var CATEGORY_FULL_NAMES = {
+  'Riddles':'Riddles','Tricky':'Tricky Riddles','What Am I':'What Am I Riddles',
+  'Funny':'Funny Riddles','Mystery':'Mystery Riddles','Maths':'Maths Puzzles',
+  'Missing #':'Missing Number Puzzles','Series':'Number Series Puzzles','Logic':'Logic Puzzles',
+  'Crack Code':'Crack the Code Puzzles','Chess':'Chess Puzzles','Sudoku':'Sudoku Puzzles',
+  'Lateral':'Lateral Thinking Puzzles','Matchstick':'Matchstick Puzzles','Rebus':'Rebus Puzzles',
+  'GK':'GK Puzzles','Odd One':'Odd One Out Puzzles','Mistake':'Mistake Puzzles',
+  'English':'English Puzzles','Quick':'Quick Puzzles','Easy':'Easy Puzzles',
+  'Pyramid':'Pyramid Puzzles','Shapes':'Shape Puzzles','Spatial':'Spatial Reasoning Puzzles',
+  'Interview':'Interview Questions','Water Tank':'Water Tank Puzzles','Number Logic':'Number Logic Puzzles',
+  'Missing Vowels':'Missing Vowels Quiz','Hidden Animals':'Hidden Animal Puzzles','Emoji':'Emoji Puzzles',
+  'Reasoning':'Logical Reasoning Puzzles','Triangle':'Triangle Puzzles','Circle':'Circle Reasoning Puzzles',
+  'Maths Riddles':'Maths Riddles','Hidden Letters':'Hidden Letter Puzzles','Mental Ability':'Mental Ability Questions'
+};
 
 /* Categories to hide from the offline tabs \u2014 e.g. while you're improving a
    category's puzzles. Add the exact category title (the "t" value on that
@@ -185,8 +206,10 @@ if(!document.getElementById('fwpv6css')){
 +'@media (max-width:360px){.fwptab{font-size:9px;padding:6px 3px;letter-spacing:-.2px;}}'
 /* offline body */
 +'.fwpbody{padding:13px 14px;touch-action:pan-y;}'
-+'.fwpcatname{font-size:13px;font-weight:800;color:#0A0AFF;margin-bottom:10px;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
-+'.fwptop{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}'
++'.fwptop{display:flex;align-items:center;gap:8px;margin-bottom:11px;}'
++'.fwpctr{flex:0 0 auto;}'
++'.fwpcatname{flex:1;min-width:0;text-align:center;font-size:12px;font-weight:800;color:#0A0AFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
++'.fwpnavs{flex:0 0 auto;}'
 +'.fwpctr{font-size:10px;color:#9ca3af;font-weight:500;}'
 +'.fwpnavs{display:flex;gap:8px;}'
 +'.fwpnav{width:34px;height:34px;border-radius:50%;border:none;background:#0A0AFF;color:#fff;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;box-shadow:0 2px 6px rgba(10,10,255,.35);}'
@@ -293,12 +316,11 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpexp-dot.on{background:#7c3aed;transform:scale(1.2);}'
 +'.fwpexp-dot:hover{transform:scale(1.3);}'
 /* footer */
-+'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:8px;flex-wrap:nowrap;position:relative;}'
-+'.fwpfl{display:flex;gap:10px;align-items:center;flex:1 1 auto;min-width:0;overflow:hidden;}'
-+'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto;}'
++'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:10px;flex-wrap:nowrap;position:relative;}'
++'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto;}'
++'.fwpac{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto;text-align:center;}'
 +'.fwpmore:hover{text-decoration:underline;}'
-+'.fwpac{font-size:10px;color:#9ca3af;text-decoration:none;white-space:nowrap;flex:0 0 auto;}'
-+'.fwpac:hover{color:#374151;}'
++'.fwpac:hover{text-decoration:underline;}'
 +'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;flex:0 0 auto;}'
 +'.fwpsh svg{flex-shrink:0;}'
 +'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
@@ -1493,8 +1515,8 @@ function _boot(tid,_SK,_TK){
     +'<div class="fwptabs" id="'+px+'_tabs" role="tablist"></div>'
     /* offline section */
     +'<div class="fwpbody" id="'+px+'_offline">'
-      +'<div class="fwpcatname" id="'+px+'_catname"></div>'
       +'<div class="fwptop"><span class="fwpctr" id="'+px+'_ctr"></span>'
+        +'<span class="fwpcatname" id="'+px+'_catname"></span>'
         +'<div class="fwpnavs"><button class="fwpnav" id="'+px+'_prev" aria-label="Previous puzzle">\u2039</button><button class="fwpnav" id="'+px+'_next" aria-label="Next puzzle">\u203a</button></div>'
       +'</div>'
       +'<div class="fwpbdg easy" id="'+px+'_diff"></div>'
@@ -1521,10 +1543,10 @@ function _boot(tid,_SK,_TK){
       +'<div class="fwpexp-dots" id="'+px+'_expdots"></div>'
     +'</div>'
     /* footer */
-    +'<div class="fwpfoot"><div class="fwpfl">'
+    +'<div class="fwpfoot">'
       +'<a class="fwpmore" id="'+px+'_more" href="'+B+'/p/index.html" target="_blank" rel="noopener">More puzzles</a>'
       +'<a class="fwpac" href="'+B+'/p/index.html" target="_blank" rel="noopener">All categories</a>'
-    +'</div><button class="fwpsh" id="'+px+'_sh"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg> Share</button>'
+      +'<button class="fwpsh" id="'+px+'_sh"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg> Share</button>'
     +'<div class="fwpsharemenu" id="'+px+'_sharemenu"></div>'
     +'</div>'
     +(SHOW_ADD_TO_SITE?(
@@ -1563,7 +1585,7 @@ function _boot(tid,_SK,_TK){
   /* \u2500\u2500 Offline render \u2500\u2500 */
   function rend(){
     var p=cp[st.puzz],kk=k(st.tab,st.puzz),ans=st.ans[kk],rev=st.rev[kk];
-    g('catname').textContent='\uD83D\uDCC2 '+ac[st.tab].t;
+    g('catname').textContent='\uD83D\uDCC2 '+(CATEGORY_FULL_NAMES[ac[st.tab].t]||ac[st.tab].t);
     g('q').textContent=p.q;
     g('hbox').textContent=p.h;
     g('hbox').style.display='none';
@@ -2055,7 +2077,7 @@ function _boot(tid,_SK,_TK){
     var SOCIAL_LABELS={pinterest:'Pinterest',youtube:'YouTube',instagram:'Instagram',x:'X',facebook:'Facebook'};
     var socialEl=g('social');
     if(socialEl){
-      var socialHtml='<div class="fwpsocial-label">\uD83D\uDCE3 Follow us for daily puzzle fun</div><div class="fwpsocial-row">';
+      var socialHtml='<div class="fwpsocial-label">\uD83E\uDDE9 Join our puzzle-loving community</div><div class="fwpsocial-row">';
       SOCIAL_LINKS.forEach(function(link){
         var icon=SOCIAL_ICONS[link.id];
         if(!icon)return; /* unknown id, skip rather than break */
