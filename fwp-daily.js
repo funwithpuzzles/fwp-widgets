@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.2.3 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.2.4 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -18,6 +18,21 @@ var SHOW_GOOGLE_PLAY_PROMO = false;
 var SHOW_APPLE_APP_PROMO = false;
 var GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.funwithpuzzles.dailychallenges';
 var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';   /* e.g. https://apps.apple.com/app/id0000000000 */
+
+/* Controls the "Follow us" social media row near the bottom of the widget.
+   Set to false to hide the whole section \u2014 nothing else needs to change,
+   the row simply won't render. Edit SOCIAL_LINKS to add, remove, or update
+   any account; each entry just needs a url (the icon/label are matched by
+   the 'id' field below, which must be one of: pinterest, youtube,
+   instagram, x, facebook). */
+var SHOW_FOLLOW_SOCIAL = true;
+var SOCIAL_LINKS = [
+  { id: 'pinterest', url: 'https://pinterest.com/gamespicnic' },
+  { id: 'youtube',   url: 'https://www.youtube.com/c/FunWithPuzzles?sub_confirmation=1' },
+  { id: 'instagram', url: 'https://www.instagram.com/gamespicnic' },
+  { id: 'x',         url: 'https://x.com/gamespicnic' },
+  { id: 'facebook',  url: 'https://www.facebook.com/gamespicnic' }
+];
 
 /* Categories to hide from the offline tabs \u2014 e.g. while you're improving a
    category's puzzles. Add the exact category title (the "t" value on that
@@ -170,6 +185,7 @@ if(!document.getElementById('fwpv6css')){
 +'@media (max-width:360px){.fwptab{font-size:9px;padding:6px 3px;letter-spacing:-.2px;}}'
 /* offline body */
 +'.fwpbody{padding:13px 14px;touch-action:pan-y;}'
++'.fwpcatname{font-size:13px;font-weight:800;color:#0A0AFF;margin-bottom:10px;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
 +'.fwptop{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}'
 +'.fwpctr{font-size:10px;color:#9ca3af;font-weight:500;}'
 +'.fwpnavs{display:flex;gap:8px;}'
@@ -312,6 +328,13 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpapp-txt{display:flex;flex-direction:column;line-height:1.2;text-align:left;}'
 +'.fwpapp-txt small{font-size:8px;color:#d1d5db;text-transform:uppercase;letter-spacing:.4px;}'
 +'.fwpapp-txt b{font-size:12.5px;font-weight:700;color:#fff;}'
+/* social follow row */
++'.fwpsocial{border-top:2px dashed #c7d2fe;padding:12px 14px;background:#f8f9ff;text-align:center;}'
++'.fwpsocial-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:10px;}'
++'.fwpsocial-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}'
++'.fwpsocial-btn{display:inline-flex;align-items:center;justify-content:center;transition:transform .15s;}'
++'.fwpsocial-btn:hover{transform:scale(1.1);}'
++'.fwpsocial-btn svg{display:block;}'
 +'.fwpattr{font-size:10px;color:#9ca3af;text-align:center;padding:5px 0 8px;}'
 +'.fwpattr a{color:#0A0AFF;text-decoration:none;}'
 +'.fwpattr a:hover{text-decoration:underline;}';
@@ -606,7 +629,7 @@ var C=[
 {d:"medium",q:"A man dead in a field, unopened package beside him, no marks, no one around. How?",h:"What was the package supposed to do?",a:"parachute failed",c:["he had a heart attack","he was pushed","lightning struck him"]},
 {d:"medium",q:"You are in a boat on a lake. You drop an anchor overboard. Does the lake level rise or fall?",h:"Think about weight displacement.",a:"falls",c:["rises","stays the same","overflows"]},
 {d:"medium",q:"A man is pushing his car. He stops at a hotel and says he is broke. What is he doing?",h:"Think about a board game.",a:"playing monopoly",c:["playing chess","out of fuel","waiting for a tow"]},
-{d:"hard",q:"3 switches outside control 3 bulbs in a windowless room. Enter only once. How do you identify each?",h:"Switches do more than light bulbs. Think heat.",a:"turn one on wait turn off turn another on then enter",c:["flip all switches at once","enter and guess randomly","turn them on one at a time while inside"]},
+{d:"hard",q:"3 switches outside control 3 bulbs in a windowless room. Enter only once. How do you identify each?",h:"Turning a switch on and off before entering leaves a physical clue behind, not just a visual one.",a:"the heat of a bulb reveals which switch was recently on",c:["only the light pattern matters","count the bulbs by brightness","the bulb positions give it away"]},
 {d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
 {d:"hard",q:"A house has 4 sides all facing south. A bear walks by. What colour is the bear?",h:"Think about where all 4 sides can face south.",a:"white",c:["black","brown","it could be any colour"]},
 {d:"hard",q:"How can you throw a ball so it goes a short distance, comes to a complete stop, and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up",c:["throw it against a wall","throw it at an angle","roll it instead"]},
@@ -862,13 +885,13 @@ var C=[
 {d:"easy",q:"How many golf balls can fit in a school bus?",h:"Estimate volume of both then divide.",a:"about 500000",c:["about 5000","about 50000","about 5 million"]},
 {d:"easy",q:"How do you weigh an elephant without a scale?",h:"Think about water displacement.",a:"use a boat and mark the waterline",c:["guess based on its size","use a giant scale","measure its footprints"]},
 {d:"easy",q:"A 4x4x4 cube painted outside is cut into 1x1x1 cubes. How many have no paint?",h:"Think about the inner cubes.",a:"8"},
-{d:"easy",q:"You have 3L and 5L jugs. How do you measure exactly 4L?",h:"Fill 5, pour into 3, dump, repeat.",a:"fill 5 pour into 3 leaving 2 fill 3 from 5 gives 4",c:["fill 3 twice","fill 5 and pour out 1","pour both together"]},
+{d:"easy",q:"You have a 3L jug and a 5L jug, no markings. How do you measure exactly 4L?",h:"Fill the 5L jug, use it to top up the 3L jug, then work with what is left over.",a:"fill 5l, pour into 3l, empty 3l, pour the leftover 2l into 3l, refill 5l, top off 3l",c:["fill 3l twice and combine into the 5l jug","fill 5l and estimate pouring out 1l","fill 3l, pour into 5l, refill 3l, pour into 5l again"]},
 {d:"easy",q:"How many times do the hands of a clock overlap in 12 hours?",h:"They overlap approximately every 65.45 minutes.",a:"11"},
 {d:"easy",q:"If a plane crashes exactly on the border between the USA and Canada, where are the survivors buried?",h:"Read the question very literally \u2014 think about the word \"survivors\".",a:"survivors are not buried",c:["in the usa","in canada","half in each country"]},
-{d:"easy",q:"How would you move Mount Fuji?",h:"Think creatively \u2014 this is a judgement test.",a:"move the reference point or tunnel through it",c:["physically push it","melt it down","ship it piece by piece"]},
+{d:"easy",q:"A standard 8x8 chessboard has two opposite corner squares removed, leaving 62 squares. Using dominoes that each cover exactly 2 adjacent squares, can the board be fully covered?",h:"Opposite corners are always the same colour on a chessboard \u2014 think about what that means for pairing them up.",a:"no",c:["yes","only with 30 dominoes","only if the board is rotated"]},
 {d:"medium",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings",c:["three weighings","one weighing","four weighings"]},
 {d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200",c:["about 20","about 2000","about 20000"]},
-{d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Think about heat from a bulb.",a:"leave one on wait turn off turn another on then enter check heat",c:["flip all switches at once","enter and guess randomly","turn them on one at a time while inside"]},
+{d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Turning a switch on and off before entering leaves a physical clue behind, not just a visual one.",a:"the heat of a bulb reveals which switch was recently on",c:["only the light pattern matters","count the bulbs by brightness","the bulb positions give it away"]},
 {d:"medium",q:"You have 100 lockers all open. You toggle every 2nd, then every 3rd, etc. Which are open at the end?",h:"Only lockers with an odd number of factors stay open.",a:"perfect square numbered lockers",c:["even numbered lockers","odd numbered lockers","prime numbered lockers"]},
 {d:"hard",q:"How many times do the hands of a clock overlap in 24 hours?",h:"They overlap approximately every 65.45 minutes.",a:"22"},
 {d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
@@ -1356,41 +1379,65 @@ function _boot(tid,_SK,_TK){
      of it can ever contain the same category \u2014 so every category is
      guaranteed to appear exactly once per full pass through the deck
      (12 days for the default 36 categories), with literally no possibility
-     of a repeat until the deck fully wraps around and starts over.
-     (Two earlier approaches were tried and both had bugs: reshuffling
-     freshly every day only checked against the immediately previous day,
-     which drifted from reality since "yesterday" itself depended on an
-     exclusion chain going back indefinitely; reshuffling once per cycle
-     then patching the day-0-of-a-new-cycle seam against the previous
-     cycle's last day pulled from a DIFFERENT shuffle than the rest of that
-     cycle, which could duplicate a category the main deck had already
-     reserved for a later day. A single fixed deck has neither problem.)
-     If you ever want to force a fresh rotation order (e.g. after a big
-     content update), just change MASTER_DECK_SEED to any other number. */
-  var MASTER_DECK_SEED=1;
+     of a repeat until the deck fully wraps around and starts over. The
+     deck itself is regenerated fresh every cycle (a new shuffle every ~12
+     days) rather than being one fixed order forever, so which 3 categories
+     land together \u2014 and their order \u2014 keeps varying long-term instead of
+     settling into an identical repeating pattern.
+     (Two earlier approaches were tried and had bugs: reshuffling freshly
+     every day only checked against the immediately previous day, which
+     drifted from reality since "yesterday" itself depended on an exclusion
+     chain going back indefinitely; an early attempt at reshuffling once
+     per cycle patched the day-0 seam by pulling a replacement from a
+     SEPARATE independent shuffle, which could duplicate a category the
+     main deck had already reserved for a later day in that same cycle.
+     The fix below avoids both: it reorders elements WITHIN the one
+     permutation already built for this cycle \u2014 never adds or removes
+     anything \u2014 so "every category exactly once per cycle" holds no matter
+     what the fix does, and it's restricted to the middle of the deck
+     (never the deck's own last day), so each cycle's last-day content
+     stays fixed and safe for the NEXT cycle to check against without
+     needing to know about any fix that happened before it.) */
   var poolSize=eligibleC.length;
   var daysPerCycle=Math.max(1,Math.ceil(poolSize/TABS_PER_DAY));
-  var masterDeck=_sh(eligibleC,MASTER_DECK_SEED);
   var todayEpoch=_epochDay(new Date());
   var cycleIndex=Math.floor(todayEpoch/daysPerCycle);
   var dayInCycle=todayEpoch%daysPerCycle;
-  var ac=masterDeck.slice(dayInCycle*TABS_PER_DAY,dayInCycle*TABS_PER_DAY+TABS_PER_DAY);
+  function _cycleDeck(cycleIdx){
+    var perm=_sh(eligibleC,cycleIdx+1);
+    if(cycleIdx>0&&perm.length>=3*TABS_PER_DAY){
+      var prevPerm=_sh(eligibleC,cycleIdx); /* previous cycle's OWN base shuffle; its last-day slice is never touched by this fix, so this is always safe to read directly */
+      var prevLastTitles=prevPerm.slice(prevPerm.length-TABS_PER_DAY).map(function(cc){return cc.t;});
+      for(var slot=0;slot<TABS_PER_DAY;slot++){
+        if(prevLastTitles.indexOf(perm[slot].t)!==-1){
+          for(var k=TABS_PER_DAY;k<perm.length-TABS_PER_DAY;k++){
+            if(prevLastTitles.indexOf(perm[k].t)===-1){
+              var tmp=perm[slot];perm[slot]=perm[k];perm[k]=tmp;
+              break;
+            }
+          }
+        }
+      }
+    }
+    return perm;
+  }
+  var deck=_cycleDeck(cycleIndex);
+  var ac=deck.slice(dayInCycle*TABS_PER_DAY,dayInCycle*TABS_PER_DAY+TABS_PER_DAY);
   /* Only relevant if BLOCKED_CATEGORIES trims the pool to a non-multiple of
      TABS_PER_DAY, leaving the deck's final slice short \u2014 top up by
-     wrapping to the start of the SAME fixed deck rather than ever showing
-     fewer than 3 tabs. */
+     wrapping to the start of the SAME cycle's deck rather than ever
+     showing fewer than 3 tabs. */
   if(ac.length<TABS_PER_DAY){
     var haveTitles=ac.map(function(cc){return cc.t;});
-    for(var _ti=0;_ti<masterDeck.length&&ac.length<TABS_PER_DAY;_ti++){
-      if(haveTitles.indexOf(masterDeck[_ti].t)===-1)ac.push(masterDeck[_ti]);
+    for(var _ti=0;_ti<deck.length&&ac.length<TABS_PER_DAY;_ti++){
+      if(haveTitles.indexOf(deck[_ti].t)===-1)ac.push(deck[_ti]);
     }
   }
   /* Puzzle selection within a category uses a fixed per-tier shuffle (see
      _pk) sliced by how many times this category has appeared before \u2014
-     which, thanks to the fixed tab deck above, is simply cycleIndex, since
-     each category appears exactly once per cycle. catSeed just needs to be
-     a stable number per category so different categories don't all use an
-     identical shuffle order. */
+     which, since each category appears exactly once per cycle, is simply
+     cycleIndex. catSeed just needs to be a stable number per category so
+     different categories don't all use an identical shuffle order. */
   function _catStableSeed(cat){return C.indexOf(cat)*97+11;}
   var EXPLORE_IDX=ac.length; /* Explore tab always sits right after the offline category tabs */
   var st;
@@ -1446,6 +1493,7 @@ function _boot(tid,_SK,_TK){
     +'<div class="fwptabs" id="'+px+'_tabs" role="tablist"></div>'
     /* offline section */
     +'<div class="fwpbody" id="'+px+'_offline">'
+      +'<div class="fwpcatname" id="'+px+'_catname"></div>'
       +'<div class="fwptop"><span class="fwpctr" id="'+px+'_ctr"></span>'
         +'<div class="fwpnavs"><button class="fwpnav" id="'+px+'_prev" aria-label="Previous puzzle">\u2039</button><button class="fwpnav" id="'+px+'_next" aria-label="Next puzzle">\u203a</button></div>'
       +'</div>'
@@ -1495,6 +1543,7 @@ function _boot(tid,_SK,_TK){
         +(SHOW_APPLE_APP_PROMO?('<a class="fwpapp-badge" href="'+APPLE_APP_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic">\uD83C\uDF4E</span><span class="fwpapp-txt"><small>Download on the</small><b>App Store</b></span></a>'):'')
       +'</div>'
     +'</div>'):'')
+    +(SHOW_FOLLOW_SOCIAL?('<div class="fwpsocial" id="'+px+'_social"></div>'):'')
     +'<div class="fwpattr">Powered by <a href="'+B+'" target="_blank" rel="noopener">funwithpuzzles.com</a></div>'
     +'</div></div>';
 
@@ -1514,6 +1563,7 @@ function _boot(tid,_SK,_TK){
   /* \u2500\u2500 Offline render \u2500\u2500 */
   function rend(){
     var p=cp[st.puzz],kk=k(st.tab,st.puzz),ans=st.ans[kk],rev=st.rev[kk];
+    g('catname').textContent='\uD83D\uDCC2 '+ac[st.tab].t;
     g('q').textContent=p.q;
     g('hbox').textContent=p.h;
     g('hbox').style.display='none';
@@ -1997,6 +2047,25 @@ function _boot(tid,_SK,_TK){
   var ICON_WHATSAPP=_icon('#25D366','<path transform="translate(6,6) scale(0.032)" fill="#fff" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>');
   var ICON_X=_icon('#000','<path transform="translate(5,5) scale(0.035)" fill="#fff" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>');
   var ICON_FACEBOOK=_icon('#1877F2','<path transform="translate(8,4) scale(0.033)" fill="#fff" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>');
+  var ICON_PINTEREST=_icon('#E60023','<path transform="translate(4,4) scale(0.039)" fill="#fff" d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-107 0-163.9 71.8-163.9 150.1 0 36.4 19.4 81.7 50.3 96.1 4.7 2.2 7.2 1.2 8.3-3.3 .8-3.4 5-20.3 6.9-28.1 .6-2.5 .3-4.7-1.7-7.1-10.1-12.5-18.3-35.3-18.3-56.6 0-54.7 41.4-107.6 112-107.6 60.9 0 103.6 41.5 103.6 100.9 0 67.1-33.9 113.6-78 113.6-24.3 0-42.6-20.1-36.7-44.8 7-29.5 20.5-61.3 20.5-82.6 0-19-10.2-34.9-31.4-34.9-24.9 0-44.9 25.8-44.9 60.2 0 22 7.4 36.8 7.4 36.8s-24.5 103.8-29 123.2c-5 21.4-3 51.6-.9 71.2C65.4 397.4 8 330.5 8 250 8 113 119 8 256 8s248 105 248 248"/>');
+  var ICON_YOUTUBE=_icon('#FF0000','<path transform="translate(3,6) scale(0.033)" fill="#fff" d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z"/>');
+  var ICON_INSTAGRAM=_icon('#E1306C','<path transform="translate(4,4) scale(0.039)" fill="#fff" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>');
+  if(SHOW_FOLLOW_SOCIAL){
+    var SOCIAL_ICONS={pinterest:ICON_PINTEREST,youtube:ICON_YOUTUBE,instagram:ICON_INSTAGRAM,x:ICON_X,facebook:ICON_FACEBOOK};
+    var SOCIAL_LABELS={pinterest:'Pinterest',youtube:'YouTube',instagram:'Instagram',x:'X',facebook:'Facebook'};
+    var socialEl=g('social');
+    if(socialEl){
+      var socialHtml='<div class="fwpsocial-label">\uD83D\uDCE3 Follow us for daily puzzle fun</div><div class="fwpsocial-row">';
+      SOCIAL_LINKS.forEach(function(link){
+        var icon=SOCIAL_ICONS[link.id];
+        if(!icon)return; /* unknown id, skip rather than break */
+        var label=SOCIAL_LABELS[link.id]||link.id;
+        socialHtml+='<a class="fwpsocial-btn" href="'+link.url+'" target="_blank" rel="noopener" aria-label="Follow us on '+label+'">'+icon+'</a>';
+      });
+      socialHtml+='</div>';
+      socialEl.innerHTML=socialHtml;
+    }
+  }
   var ICON_TELEGRAM=_icon('#29B6F6','<path transform="translate(4,4) scale(0.039)" fill="#fff" d="M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z"/>');
   var ICON_COPY=_icon('#6B7280','<g fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M11 17l6-6"/><path d="M13 8.5l1.8-1.8a3.2 3.2 0 014.5 4.5L17.5 13"/><path d="M15 19.5l-1.8 1.8a3.2 3.2 0 01-4.5-4.5L10.5 15"/></g>');
   var ICON_SHARE=_icon('#6B7280','<g fill="#fff"><circle cx="9" cy="14" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="19" cy="21" r="2.4"/></g><g stroke="#fff" stroke-width="1.6"><line x1="11" y1="13" x2="17" y2="8.3"/><line x1="11" y1="15" x2="17" y2="19.7"/></g>');
