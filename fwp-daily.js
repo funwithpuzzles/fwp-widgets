@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.2.7 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.2.9 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -52,7 +52,9 @@ var CATEGORY_FULL_NAMES = {
   'Interview':'Interview Questions','Water Tank':'Water Tank Puzzles','Number Logic':'Number Logic Puzzles',
   'Missing Vowels':'Missing Vowels Quiz','Hidden Animals':'Hidden Animal Puzzles','Emoji':'Emoji Puzzles',
   'Reasoning':'Logical Reasoning Puzzles','Triangle':'Triangle Puzzles','Circle':'Circle Reasoning Puzzles',
-  'Maths Riddles':'Maths Riddles','Hidden Letters':'Hidden Letter Puzzles','Mental Ability':'Mental Ability Questions'
+  'Maths Riddles':'Maths Riddles','Hidden Letters':'Hidden Letter Puzzles','Mental Ability':'Mental Ability Questions',
+  'Arithmetic':'Arithmetic Puzzles','Algebra':'Algebra Puzzles','Percentage':'Percentage Puzzles',
+  'Analogy':'Analogy Puzzles','Vocabulary':'Vocabulary Puzzles','Probability':'Probability Puzzles'
 };
 
 /* Categories to hide from the offline tabs \u2014 e.g. while you're improving a
@@ -162,7 +164,11 @@ var LABELS=[
   {d:'\ud83e\udde0 Mental Ability',            l:'Mental Ability Questions',                   h:'p/mental-ability-questions-brain-test.html'},
   {d:'\ud83c\udd7f\ufe0f Parking Puzzles',           l:'Parking Puzzles',                            h:'p/parking-pattern-puzzles.html'},
   {d:'\ud83d\udd22 Number Logic',              l:'Number Logic Puzzles',                       h:'p/number-logic-puzzles.html'},
-  {d:'\ud83c\udfc6 Best Puzzles',              l:'Best Brain Teasers',                         h:'p/popular-puzzles.html'}
+  {d:'\ud83c\udfc6 Best Puzzles',              l:'Best Brain Teasers',                         h:'p/popular-puzzles.html'},
+  {d:'\u2795 Arithmetic Puzzles',        l:'Maths Puzzles: Arithmetic',                  h:'p/arithmetic-maths-puzzles.html'},
+  {d:'\ud83e\uddee Algebra Puzzles',           l:'Maths Puzzles: Algebra',                     h:'p/algebra-math-puzzles.html'},
+  {d:'\u2b50 Guess the Celebrity',       l:'Guess the Celebrity',                        h:'p/guess-celebrity.html'},
+  {d:'\u2753 Number Question Game',      l:'Number Question Game',                       h:'p/number-question-game.html'}
 ];
 
 /* Every real puzzle-category label from LABELS above, normalised for
@@ -317,8 +323,8 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpexp-dot:hover{transform:scale(1.3);}'
 /* footer */
 +'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:10px;flex-wrap:nowrap;position:relative;}'
-+'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto;}'
-+'.fwpac{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto;text-align:center;}'
++'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:46%;flex:0 1 auto;}'
++'.fwpac{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;flex:0 0 auto;}'
 +'.fwpmore:hover{text-decoration:underline;}'
 +'.fwpac:hover{text-decoration:underline;}'
 +'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;flex:0 0 auto;}'
@@ -1165,6 +1171,138 @@ var C=[
 {d:"easy",q:"If a triangle has 3 sides, how many sides do 2 triangles have in total?",h:"Multiply 3 sides by 2 triangles.",a:"6"},
 {d:"medium",q:"A is the brother of B. B is the sister of C. What is A to C?",h:"Think about A's gender in relation to C.",a:"brother",c:["sister","cousin","uncle"]},
 {d:"hard",q:"If you rearrange the letters 'CIFAIPC', you get the name of a(n) ______.",h:"Think of a large body of water.",a:"ocean",c:["continent","country","sea"]}
+]},
+{t:"Arithmetic",s:"arithmetic-maths-puzzles",p:[
+{d:"easy",q:"6 + 2 x 3 = ?",h:"Multiply before you add.",a:"12"},
+{d:"easy",q:"10 - 4 / 2 = ?",h:"Divide before you subtract.",a:"8"},
+{d:"easy",q:"(3 + 2) x 4 = ?",h:"Solve the brackets first.",a:"20"},
+{d:"easy",q:"8 / 2 + 3 = ?",h:"Divide before you add.",a:"7"},
+{d:"easy",q:"5 x (2 + 3) = ?",h:"Solve the brackets first.",a:"25"},
+{d:"easy",q:"12 - 2 x 3 = ?",h:"Multiply before you subtract.",a:"6"},
+{d:"easy",q:"9 + 3 x 3 = ?",h:"Multiply before you add.",a:"18"},
+{d:"easy",q:"20 / 4 - 2 = ?",h:"Divide before you subtract.",a:"3"},
+{d:"easy",q:"(6 - 2) x 5 = ?",h:"Solve the brackets first.",a:"20"},
+{d:"easy",q:"15 - 10 / 2 = ?",h:"Divide before you subtract.",a:"10"},
+{d:"medium",q:"2 + 3 x (4 - 1) = ?",h:"Brackets first, then multiply, then add.",a:"11"},
+{d:"medium",q:"(8 - 3) x (2 + 2) = ?",h:"Solve both brackets first, then multiply.",a:"20"},
+{d:"medium",q:"18 / (3 + 3) x 2 = ?",h:"Solve the brackets first, then work left to right.",a:"6"},
+{d:"medium",q:"5 + 6 x 2 - 4 = ?",h:"Multiply first, then add and subtract left to right.",a:"13"},
+{d:"medium",q:"(10 - 4) / 2 + 5 = ?",h:"Brackets first, then divide, then add.",a:"8"},
+{d:"hard",q:"2 x (3 + 4) - 5 x 2 = ?",h:"Solve the brackets and both multiplications first, then subtract.",a:"4"},
+{d:"hard",q:"(6 + 4) / 2 x (8 - 3) = ?",h:"Solve both brackets first, then work left to right.",a:"25"},
+{d:"hard",q:"40 / (2 + 3) x (7 - 4) = ?",h:"Solve both brackets first, then work left to right.",a:"24"},
+{d:"hard",q:"(9 - 3) x 2 + (10 / 2) = ?",h:"Solve both brackets first, then multiply and add.",a:"17"},
+{d:"hard",q:"50 - (3 + 2) x (10 - 4) = ?",h:"Solve both brackets first, then multiply, then subtract.",a:"20"}
+]},
+{t:"Algebra",s:"algebra-math-puzzles",p:[
+{d:"easy",q:"If x + 5 = 12, what is x?",h:"Subtract 5 from both sides.",a:"7"},
+{d:"easy",q:"If x - 3 = 10, what is x?",h:"Add 3 to both sides.",a:"13"},
+{d:"easy",q:"If 2x = 16, what is x?",h:"Divide both sides by 2.",a:"8"},
+{d:"easy",q:"If x / 4 = 5, what is x?",h:"Multiply both sides by 4.",a:"20"},
+{d:"easy",q:"If 3x = 21, what is x?",h:"Divide both sides by 3.",a:"7"},
+{d:"easy",q:"If x + 9 = 20, what is x?",h:"Subtract 9 from both sides.",a:"11"},
+{d:"easy",q:"If 5x = 45, what is x?",h:"Divide both sides by 5.",a:"9"},
+{d:"easy",q:"If x - 8 = 2, what is x?",h:"Add 8 to both sides.",a:"10"},
+{d:"easy",q:"If x / 3 = 6, what is x?",h:"Multiply both sides by 3.",a:"18"},
+{d:"easy",q:"If 4x = 36, what is x?",h:"Divide both sides by 4.",a:"9"},
+{d:"medium",q:"If 2x + 3 = 11, what is x?",h:"Subtract 3 first, then divide by 2.",a:"4"},
+{d:"medium",q:"If 3x - 4 = 14, what is x?",h:"Add 4 first, then divide by 3.",a:"6"},
+{d:"medium",q:"If x/2 + 3 = 8, what is x?",h:"Subtract 3 first, then multiply by 2.",a:"10"},
+{d:"medium",q:"If 5x - 5 = 20, what is x?",h:"Add 5 first, then divide by 5.",a:"5"},
+{d:"medium",q:"If 2(x + 3) = 16, what is x?",h:"Divide both sides by 2 first, then subtract 3.",a:"5"},
+{d:"hard",q:"If 3x + 2 = 2x + 9, what is x?",h:"Move the x terms to one side and numbers to the other.",a:"7"},
+{d:"hard",q:"If 4x - 3 = 2x + 7, what is x?",h:"Move the x terms to one side and numbers to the other.",a:"5"},
+{d:"hard",q:"If x/3 + x/6 = 3, what is x?",h:"Combine the fractions into a single term first.",a:"6"},
+{d:"hard",q:"If 2(x - 1) = x + 4, what is x?",h:"Expand the brackets first, then collect like terms.",a:"6"},
+{d:"hard",q:"If 5x - 2(x+1) = 13, what is x?",h:"Expand the brackets first, then collect like terms.",a:"5"}
+]},
+{t:"Percentage",s:"maths-puzzles",p:[
+{d:"easy",q:"What is 10% of 200?",h:"10% means dividing by 10.",a:"20"},
+{d:"easy",q:"What is 50% of 80?",h:"50% is simply half.",a:"40"},
+{d:"easy",q:"What is 25% of 60?",h:"25% is a quarter.",a:"15"},
+{d:"easy",q:"What is 20% of 150?",h:"Find 10% first, then double it.",a:"30"},
+{d:"easy",q:"What is 5% of 100?",h:"5% of 100 is straightforward.",a:"5"},
+{d:"easy",q:"What is 75% of 40?",h:"75% is three-quarters.",a:"30"},
+{d:"easy",q:"What is 100% of 45?",h:"100% is the whole amount.",a:"45"},
+{d:"easy",q:"What is 10% of 90?",h:"10% means dividing by 10.",a:"9"},
+{d:"easy",q:"What is 50% of 36?",h:"50% is simply half.",a:"18"},
+{d:"easy",q:"What is 30% of 200?",h:"Find 10% first, then multiply by 3.",a:"60"},
+{d:"medium",q:"A shirt costs $50. It is discounted by 20%. What is the sale price?",h:"Find 20% of $50, then subtract it.",a:"40"},
+{d:"medium",q:"A number increases from 40 to 50. What is the percentage increase?",h:"Divide the increase by the original number.",a:"25"},
+{d:"medium",q:"If 15% of a number is 30, what is the number?",h:"Divide 30 by 0.15.",a:"200"},
+{d:"medium",q:"A price rises from $80 to $100. What is the percentage increase?",h:"Divide the increase by the original price.",a:"25"},
+{d:"medium",q:"60 is what percent of 240?",h:"Divide 60 by 240, then convert to a percentage.",a:"25"},
+{d:"hard",q:"A laptop costs $1000. It is discounted by 15%, then a further 10% off the new price. What is the final price?",h:"Apply the discounts one after another, not added together.",a:"765"},
+{d:"hard",q:"A number is increased by 20% and then decreased by 20%. What is the net percentage change?",h:"Applying equal opposite percentages does not cancel out exactly.",a:"4 percent decrease",c:["no change","4 percent increase","20 percent decrease"]},
+{d:"hard",q:"A shop marks up a product by 25% then offers a 20% discount on the marked-up price. What is the net percentage change from the original price?",h:"Work through both steps using a sample value like 100.",a:"no change",c:["5 percent increase","5 percent decrease","10 percent increase"]},
+{d:"hard",q:"If the price of an item is reduced by 25%, by what percentage must the new price be increased to return to the original price?",h:"The percentage increase needed is more than 25 percent.",a:"33.33 percent",c:["25 percent","20 percent","30 percent"]},
+{d:"hard",q:"A number is 40% of another number. The second number is what percent of the first?",h:"Think about the reciprocal relationship.",a:"250 percent",c:["40 percent","60 percent","150 percent"]}
+]},
+{t:"Analogy",s:"mental-ability-questions-brain-test",p:[
+{d:"easy",q:"Hand is to Glove as Foot is to ___?",h:"Think about footwear.",a:"shoe",c:["sock","boot","sandal"]},
+{d:"easy",q:"Cat is to Kitten as Dog is to ___?",h:"Think about a baby dog.",a:"puppy",c:["cub","calf","chick"]},
+{d:"easy",q:"Sun is to Day as Moon is to ___?",h:"Think about when the moon is most visible.",a:"night",c:["star","dark","evening"]},
+{d:"easy",q:"Bird is to Nest as Bee is to ___?",h:"Think about where bees live.",a:"hive",c:["web","den","burrow"]},
+{d:"easy",q:"Pen is to Write as Knife is to ___?",h:"Think about what a knife is used for.",a:"cut",c:["draw","carve","stab"]},
+{d:"easy",q:"Fish is to Water as Bird is to ___?",h:"Think about where each creature lives.",a:"air",c:["sky","tree","nest"]},
+{d:"easy",q:"Book is to Read as Song is to ___?",h:"Think about what you do with a song.",a:"sing",c:["listen","hear","play"]},
+{d:"easy",q:"Hot is to Cold as Day is to ___?",h:"Think about the opposite of day.",a:"night",c:["dark","evening","morning"]},
+{d:"easy",q:"Doctor is to Hospital as Teacher is to ___?",h:"Think about where a teacher works.",a:"school",c:["classroom","office","library"]},
+{d:"easy",q:"Eye is to See as Ear is to ___?",h:"Think about what an ear is used for.",a:"hear",c:["listen","sound","speak"]},
+{d:"medium",q:"King is to Queen as Prince is to ___?",h:"Think about the female equivalent of a prince.",a:"princess",c:["duchess","empress","lady"]},
+{d:"medium",q:"Author is to Book as Composer is to ___?",h:"Think about what a composer creates.",a:"music",c:["song","instrument","orchestra"]},
+{d:"medium",q:"Thermometer is to Temperature as Scale is to ___?",h:"Think about what a scale measures.",a:"weight",c:["height","size","mass"]},
+{d:"medium",q:"Tadpole is to Frog as Caterpillar is to ___?",h:"Think about what a caterpillar becomes.",a:"butterfly",c:["moth","cocoon","larva"]},
+{d:"medium",q:"Ocean is to Wave as Desert is to ___?",h:"Think about a distinctive desert landform.",a:"sand dune",c:["cactus","oasis","mirage"]},
+{d:"hard",q:"Painter is to Canvas as Sculptor is to ___?",h:"Think about what a sculptor carves.",a:"stone",c:["clay","chisel","marble slab"]},
+{d:"hard",q:"Optimist is to Hopeful as Pessimist is to ___?",h:"Think about the pessimist's typical outlook.",a:"gloomy",c:["cheerful","neutral","excited"]},
+{d:"hard",q:"Herbivore is to Plants as Carnivore is to ___?",h:"Think about what a carnivore eats.",a:"meat",c:["insects","fish","grain"]},
+{d:"hard",q:"Sonnet is to Poem as Symphony is to ___?",h:"Think about the broader category a symphony belongs to.",a:"music",c:["opera","song","concerto"]},
+{d:"hard",q:"Frugal is to Spender as Timid is to ___?",h:"Think about the opposite personality type.",a:"bold person",c:["shy person","quiet person","brave leader"]}
+]},
+{t:"Vocabulary",s:"english-word-riddles",p:[
+{d:"easy",q:"What is a synonym for 'happy'?",h:"Think of another word that means glad or pleased.",a:"joyful",c:["sad","angry","tired"]},
+{d:"easy",q:"What is a synonym for 'big'?",h:"Think of another word for sizeable.",a:"large",c:["small","tiny","short"]},
+{d:"easy",q:"What is an antonym for 'hot'?",h:"Think of the opposite temperature.",a:"cold",c:["warm","mild","cool"]},
+{d:"easy",q:"What is an antonym for 'fast'?",h:"Think of the opposite of quick.",a:"slow",c:["quick","rapid","swift"]},
+{d:"easy",q:"What is a synonym for 'smart'?",h:"Think of another word for clever.",a:"intelligent",c:["foolish","lazy","careless"]},
+{d:"easy",q:"What is an antonym for 'happy'?",h:"Think of the opposite feeling.",a:"sad",c:["joyful","glad","cheerful"]},
+{d:"easy",q:"What is a synonym for 'small'?",h:"Think of another word for little.",a:"tiny",c:["huge","large","giant"]},
+{d:"easy",q:"What is an antonym for 'up'?",h:"Think of the opposite direction.",a:"down",c:["above","high","top"]},
+{d:"easy",q:"What is a synonym for 'begin'?",h:"Think of another word for start.",a:"start",c:["end","finish","stop"]},
+{d:"easy",q:"What is an antonym for 'day'?",h:"Think of the opposite time of day.",a:"night",c:["morning","noon","dawn"]},
+{d:"medium",q:"What is a synonym for 'brave'?",h:"Think of another word for courageous.",a:"courageous",c:["cowardly","fearful","timid"]},
+{d:"medium",q:"What is an antonym for 'generous'?",h:"Think of someone unwilling to share.",a:"stingy",c:["kind","giving","charitable"]},
+{d:"medium",q:"What is a synonym for 'furious'?",h:"Think of another word for extremely angry.",a:"enraged",c:["calm","content","pleased"]},
+{d:"medium",q:"What is an antonym for 'transparent'?",h:"Think of something you cannot see through.",a:"opaque",c:["clear","see-through","visible"]},
+{d:"medium",q:"What is a synonym for 'huge'?",h:"Think of another word for very large.",a:"enormous",c:["tiny","small","minor"]},
+{d:"hard",q:"What is a synonym for 'meticulous'?",h:"Think of another word for very careful and precise.",a:"careful",c:["careless","sloppy","hasty"]},
+{d:"hard",q:"What is an antonym for 'benevolent'?",h:"Think of the opposite of kind-hearted.",a:"malicious",c:["kind","generous","caring"]},
+{d:"hard",q:"What is a synonym for 'ubiquitous'?",h:"Think of another word meaning found everywhere.",a:"widespread",c:["rare","scarce","limited"]},
+{d:"hard",q:"What is an antonym for 'candid'?",h:"Think of the opposite of honest and direct.",a:"deceptive",c:["honest","frank","open"]},
+{d:"hard",q:"What is a synonym for 'ephemeral'?",h:"Think of another word meaning lasting only a short time.",a:"short-lived",c:["permanent","lasting","eternal"]}
+]},
+{t:"Probability",s:"maths-puzzles",p:[
+{d:"easy",q:"You flip a coin once. What is the probability of getting heads?",h:"There are 2 equally likely outcomes.",a:"1/2",c:["1/3","1/4","1/6"]},
+{d:"easy",q:"You roll a standard six-sided die. What is the probability of rolling a 4?",h:"There are 6 equally likely outcomes.",a:"1/6",c:["1/2","1/3","1/4"]},
+{d:"easy",q:"A bag has 5 red balls and 5 blue balls. What is the probability of picking a red ball?",h:"Half the balls are red.",a:"1/2",c:["1/3","1/4","1/5"]},
+{d:"easy",q:"You flip a coin. What is the probability of getting tails?",h:"There are 2 equally likely outcomes.",a:"1/2",c:["1/3","1/4","1/6"]},
+{d:"easy",q:"A deck has 52 cards. What is the probability of drawing the Ace of Spades?",h:"There is only one Ace of Spades in the whole deck.",a:"1/52",c:["1/13","1/26","1/4"]},
+{d:"easy",q:"You roll a die. What is the probability of rolling an even number?",h:"Half of the 6 outcomes are even.",a:"1/2",c:["1/3","1/6","2/3"]},
+{d:"easy",q:"A bag has 4 green balls and no other colours. What is the probability of picking a green ball?",h:"Every ball in the bag is green.",a:"1",c:["0","1/2","1/4"]},
+{d:"easy",q:"A bag has only 3 yellow balls. What is the probability of picking a red ball?",h:"There are no red balls in the bag at all.",a:"0",c:["1","1/2","1/3"]},
+{d:"easy",q:"You roll a die. What is the probability of rolling a number greater than 6?",h:"A standard die only goes up to 6.",a:"0",c:["1","1/6","1/2"]},
+{d:"easy",q:"A spinner is split into 4 equal sections numbered 1 to 4. What is the probability of landing on 2?",h:"There are 4 equally likely sections.",a:"1/4",c:["1/2","1/3","3/4"]},
+{d:"medium",q:"You flip two coins. What is the probability both land on heads?",h:"Multiply the probability of each individual flip.",a:"1/4",c:["1/2","1/3","3/4"]},
+{d:"medium",q:"A bag has 3 red and 2 blue balls. What is the probability of picking a blue ball?",h:"There are 5 balls in total.",a:"2/5",c:["3/5","1/2","1/5"]},
+{d:"medium",q:"You roll two dice. What is the probability both show a 6?",h:"Multiply the probability of each individual roll.",a:"1/36",c:["1/6","1/12","1/18"]},
+{d:"medium",q:"A deck has 52 cards. What is the probability of drawing a heart?",h:"A quarter of the deck is hearts.",a:"1/4",c:["1/2","1/13","1/3"]},
+{d:"medium",q:"A bag has 6 balls: 2 red, 2 blue, 2 green. What is the probability of NOT picking red?",h:"Count the balls that are not red, out of the total.",a:"2/3",c:["1/3","1/2","3/4"]},
+{d:"hard",q:"You roll a die twice. What is the probability of getting a 6 on at least one of the rolls?",h:"It's easier to first find the probability of getting NO sixes at all.",a:"11/36",c:["1/6","1/3","1/2"]},
+{d:"hard",q:"A bag has 5 red and 3 blue balls. Two balls are picked without replacement. What is the probability both are red?",h:"After the first red ball is removed, only 4 red balls remain out of 7 total.",a:"5/14",c:["5/8","4/7","1/2"]},
+{d:"hard",q:"Three coins are flipped. What is the probability of getting exactly two heads?",h:"There are 8 total equally likely outcomes; count how many have exactly two heads.",a:"3/8",c:["1/8","1/4","1/2"]},
+{d:"hard",q:"A card is drawn from a standard deck. What is the probability it is a King or a Queen?",h:"Add the probabilities since a card cannot be both.",a:"2/13",c:["1/13","4/13","1/26"]},
+{d:"hard",q:"A box has 4 white and 6 black balls. Two balls are drawn without replacement. What is the probability both are black?",h:"After the first black ball is removed, only 5 black balls remain out of 9 total.",a:"1/3",c:["1/2","3/5","2/5"]}
 ]}
 ];
 
@@ -1585,7 +1723,7 @@ function _boot(tid,_SK,_TK){
   /* \u2500\u2500 Offline render \u2500\u2500 */
   function rend(){
     var p=cp[st.puzz],kk=k(st.tab,st.puzz),ans=st.ans[kk],rev=st.rev[kk];
-    g('catname').textContent='\uD83D\uDCC2 '+(CATEGORY_FULL_NAMES[ac[st.tab].t]||ac[st.tab].t);
+    g('catname').textContent=CATEGORY_FULL_NAMES[ac[st.tab].t]||ac[st.tab].t;
     g('q').textContent=p.q;
     g('hbox').textContent=p.h;
     g('hbox').style.display='none';
@@ -1594,7 +1732,7 @@ function _boot(tid,_SK,_TK){
     var di=g('diff');
     di.className='fwpbdg '+p.d;
     di.textContent=p.d==='easy'?'\uD83D\uDFE2 Easy':p.d==='medium'?'\uD83D\uDFE1 Medium':'\uD83D\uDD34 Hard';
-    g('ctr').textContent='Puzzle '+(st.puzz+1)+' of '+cp.length;
+    g('ctr').textContent='Puzzle '+(st.tab*cp.length+st.puzz+1)+' of '+(ac.length*cp.length);
     var mo=g('more');
     mo.href=B+'/p/'+ac[st.tab].s+'.html';
     mo.textContent='More '+ac[st.tab].t+' puzzles';
@@ -2014,8 +2152,23 @@ function _boot(tid,_SK,_TK){
   te.appendChild(expBtn);
 
   /* \u2500\u2500 Wire offline events \u2500\u2500 */
-  g('prev').onclick=function(){st.puzz=(st.puzz-1+cp.length)%cp.length;sv();rend();};
-  g('next').onclick=function(){st.puzz=(st.puzz+1)%cp.length;sv();rend();};
+  g('prev').onclick=function(){
+    if(st.puzz>0){
+      st.puzz--;sv();rend();
+    }else{
+      var prevTab=(st.tab-1+ac.length)%ac.length;
+      _sw(prevTab);
+      st.puzz=cp.length-1;sv();rend();
+    }
+  };
+  g('next').onclick=function(){
+    if(st.puzz<cp.length-1){
+      st.puzz++;sv();rend();
+    }else{
+      var nextTab=(st.tab+1)%ac.length;
+      _sw(nextTab);
+    }
+  };
   g('hbtn').onclick=function(){ho=!ho;g('hbox').style.display=ho?'block':'none';this.textContent=ho?'\uD83D\uDE48 Hide hint':'\uD83D\uDCA1 Show hint';};
   g('rev').onclick=function(){
     var kk=k(st.tab,st.puzz);
