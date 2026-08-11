@@ -1,4 +1,4 @@
-/* FWP Daily Challenge Widget f1.2.9 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.3.0 | funwithpuzzles.com */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -54,7 +54,9 @@ var CATEGORY_FULL_NAMES = {
   'Reasoning':'Logical Reasoning Puzzles','Triangle':'Triangle Puzzles','Circle':'Circle Reasoning Puzzles',
   'Maths Riddles':'Maths Riddles','Hidden Letters':'Hidden Letter Puzzles','Mental Ability':'Mental Ability Questions',
   'Arithmetic':'Arithmetic Puzzles','Algebra':'Algebra Puzzles','Percentage':'Percentage Puzzles',
-  'Analogy':'Analogy Puzzles','Vocabulary':'Vocabulary Puzzles','Probability':'Probability Puzzles'
+  'Analogy':'Analogy Puzzles','Vocabulary':'Vocabulary Puzzles','Probability':'Probability Puzzles',
+  'Square':'Square Reasoning Puzzles','Ratio':'Ratio & Proportion Puzzles',
+  'Roman Numerals':'Roman Numeral Puzzles','Time & Calendar':'Time & Calendar Puzzles'
 };
 
 /* Categories to hide from the offline tabs \u2014 e.g. while you're improving a
@@ -214,18 +216,23 @@ if(!document.getElementById('fwpv6css')){
 +'.fwpbody{padding:13px 14px;touch-action:pan-y;}'
 +'.fwptop{display:flex;align-items:center;gap:8px;margin-bottom:11px;}'
 +'.fwpctr{flex:0 0 auto;}'
-+'.fwpcatname{flex:1;min-width:0;text-align:center;font-size:12px;font-weight:800;color:#0A0AFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
++'.fwpcatname{flex:1;min-width:0;text-align:center;font-size:12px;font-weight:800;color:#0A0AFF;white-space:normal;line-height:1.3;padding:0 4px;}'
 +'.fwpnavs{flex:0 0 auto;}'
 +'.fwpctr{font-size:10px;color:#9ca3af;font-weight:500;}'
 +'.fwpnavs{display:flex;gap:8px;}'
 +'.fwpnav{width:34px;height:34px;border-radius:50%;border:none;background:#0A0AFF;color:#fff;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;box-shadow:0 2px 6px rgba(10,10,255,.35);}'
 +'.fwpnav:hover{background:#2222ff;transform:scale(1.08);}'
 +'.fwpnav:active{transform:scale(.94);}'
-+'.fwpbdg{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:30px;margin-bottom:9px;}'
++'.fwpqcard{position:relative;border-radius:12px;padding:14px 16px 2px;margin-bottom:2px;overflow:hidden;border:1.5px solid #e5e7eb;background:#fafafa;transition:background .2s,border-color .2s;}'
++'.fwpqcard.easy{background:linear-gradient(135deg,#EAF3DE 0%,#f7fbf2 65%);border-color:#c8e2ae;}'
++'.fwpqcard.medium{background:linear-gradient(135deg,#FAEEDA 0%,#fdf8ef 65%);border-color:#f0d9a8;}'
++'.fwpqcard.hard{background:linear-gradient(135deg,#FCEBEB 0%,#fdf5f5 65%);border-color:#f0b8b8;}'
++'.fwpqcard-deco{position:absolute;right:-10px;top:-16px;font-size:64px;opacity:.13;transform:rotate(10deg);pointer-events:none;line-height:1;}'
++'.fwpbdg{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:30px;margin-bottom:9px;position:relative;}'
 +'.fwpbdg.easy{background:#EAF3DE;color:#27500A;}'
 +'.fwpbdg.medium{background:#FAEEDA;color:#633806;}'
 +'.fwpbdg.hard{background:#FCEBEB;color:#791F1F;}'
-+'.fwpq{font-size:13px;line-height:1.75;color:#111827;white-space:pre-line;min-height:44px;margin-bottom:10px;word-break:break-word;}'
++'.fwpq{font-size:13px;line-height:1.75;color:#111827;white-space:pre-line;min-height:44px;margin-bottom:12px;word-break:break-word;position:relative;}'
 +'.fwphbtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;display:inline-flex;align-items:center;gap:4px;padding:0;font-family:inherit;font-weight:600;}'
 +'.fwphbtn:hover{text-decoration:underline;}'
 +'.fwphbox{background:#eef2ff;border-left:3px solid #0A0AFF;border-radius:0 7px 7px 0;padding:8px 11px;font-size:12px;color:#1e1b4b;line-height:1.6;margin-top:7px;margin-bottom:9px;display:none;word-break:break-word;}'
@@ -592,7 +599,7 @@ var C=[
 {d:"medium",q:"Caesar cipher shift 3: decode SXCCOH",h:"Shift each letter back 3 places.",a:"puzzle",c:["riddle","secret","cipher"]},
 {d:"medium",q:"What pattern: 1, 11, 121, 1331, 14641?",h:"Think about Pascal triangle.",a:"powers of 11",c:["pascal's rows","binomial sums","fibonacci steps"]},
 {d:"hard",q:"A says B is lying. B says C is lying. C says A and B are both lying. Who tells the truth?",h:"Test each possibility. Only one is consistent.",a:"c",c:["a","b","none of them"]},
-{d:"hard",q:"What is the next number: 1, 11, 21, 1211, 111221, __?",h:"Read each number aloud to describe the previous.",a:"312211"},
+{d:"hard",q:"Using a Caesar cipher with a shift of 4, what does 'KEVHIR' decode to?",h:"Shift each letter back by 4.",a:"garden",c:["forest","meadow","valley"]},
 {d:"hard",q:"Using digits 1, 2, 3, 4 each exactly once with + - x, make 10.",h:"Try 1+2+3+4.",a:"1+2+3+4"},
 {d:"hard",q:"A book has 500 pages. How many times does the digit 1 appear?",h:"Count pages: 1, 10-19, 100-199 ...",a:"200"},
 {d:"easy",q:"If A=1, B=2, C=3 ... what does 4-15-7 spell?",h:"D=4, O=15, G=7.",a:"dog",c:["cat","fox","pig"]},
@@ -653,7 +660,7 @@ var C=[
 {d:"easy",q:"A rooster laid an egg on a roof peak. Which way does it roll?",h:"Roosters do not lay eggs.",a:"roosters dont lay eggs",c:["it rolls left","it rolls right","it stays on the roof"]},
 {d:"easy",q:"How do you make the number 7 even?",h:"Think about removing a letter.",a:"remove the s",c:["add a zero","flip it upside down","cross out the top"]},
 {d:"easy",q:"A girl fell off a 20-foot ladder but was not hurt. How?",h:"Think about which rung she was on.",a:"she fell from the first rung",c:["she landed on a mattress","she wasn't on the ladder","the ladder was padded"]},
-{d:"medium",q:"A woman shoots her husband then holds him underwater. They go to dinner an hour later. How?",h:"What profession shoots people harmlessly?",a:"photographer",c:["doctor","hunter","lifeguard"]},
+{d:"medium",q:"A man is found hanging from the ceiling of a locked room, with no chair or furniture nearby to stand on, only a puddle of water on the floor. How did he do it?",h:"Think about what could have supported him that has since disappeared.",a:"he stood on a block of ice that melted",c:["he used a ladder someone removed","he levitated","the puddle is unrelated"]},
 {d:"medium",q:"A man dead in a field, unopened package beside him, no marks, no one around. How?",h:"What was the package supposed to do?",a:"parachute failed",c:["he had a heart attack","he was pushed","lightning struck him"]},
 {d:"medium",q:"You are in a boat on a lake. You drop an anchor overboard. Does the lake level rise or fall?",h:"Think about weight displacement.",a:"falls",c:["rises","stays the same","overflows"]},
 {d:"medium",q:"A man is pushing his car. He stops at a hotel and says he is broke. What is he doing?",h:"Think about a board game.",a:"playing monopoly",c:["playing chess","out of fuel","waiting for a tow"]},
@@ -800,8 +807,8 @@ var C=[
 ]},
 {t:"Quick",s:"quick-puzzles-brain-teasers-and-riddles",p:[
 {d:"easy",q:"David's mother has 4 children: April, May, June, and who?",h:"Re-read the question. Who is mentioned first?",a:"david",c:["april","may","june"]},
-{d:"easy",q:"What has 13 hearts but no other organs?",h:"You use it to play card games.",a:"deck of cards",c:["calendar","chess set","dice set"]},
-{d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet",c:["heavier","invisible","purple"]},
+{d:"easy",q:"What has one head, one foot, and four legs?",h:"Think about something you sleep on.",a:"a bed",c:["a table","a chair","a horse"]},
+{d:"easy",q:"If you multiply this number by any other number, the answer is always the same. What number is it?",h:"Think about what happens when you multiply anything by this number.",a:"0"},
 {d:"easy",q:"What can you hold in your right hand but not in your left?",h:"Think about which hand is which.",a:"your left hand",c:["your right hand","your other hand","both hands"]},
 {d:"easy",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella",c:["raincoat","boots","hat"]},
 {d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin",c:["dice","button","key"]},
@@ -813,7 +820,7 @@ var C=[
 {d:"medium",q:"If a doctor gives you 3 pills and tells you to take one every 30 minutes, how long until they are all gone?",h:"Count carefully from when you take the first.",a:"1 hour"},
 {d:"hard",q:"You have a candle, a match, and a gas lamp. Which do you light first?",h:"You need one thing before you can light anything.",a:"the match",c:["the candle","the gas lamp","all at once"]},
 {d:"hard",q:"If 5 cats catch 5 mice in 5 minutes, how many cats catch 100 mice in 100 minutes?",h:"Work out the rate per cat.",a:"5"},
-{d:"hard",q:"What is the next number: 1, 11, 21, 1211, 111221, __?",h:"Read each number aloud to describe the previous one.",a:"312211"},
+{d:"hard",q:"If you write out the numbers from 1 to 100, how many times does the digit 7 appear in total?",h:"Count how many times 7 appears in the units place, then in the tens place, separately.",a:"20"},
 {d:"hard",q:"A clock shows 3:15. What is the exact angle between the hour and minute hands?",h:"The hour hand moves too. It is not at exactly 3.",a:"7.5 degrees"},
 {d:"easy",q:"How many minutes are in 2 hours?",h:"There are 60 minutes in each hour.",a:"120"},
 {d:"easy",q:"What is the day immediately before Wednesday?",h:"Count backwards one day from Wednesday.",a:"tuesday",c:["monday","thursday","sunday"]},
@@ -825,16 +832,16 @@ var C=[
 {d:"easy",q:"What is black when you buy it, red when you use it, grey when you throw it away?",h:"You use it to write on a board.",a:"charcoal",c:["chalk","crayon","pencil lead"]},
 {d:"easy",q:"What animal has a trunk but never packs for a holiday?",h:"The largest land animal.",a:"elephant",c:["giraffe","rhino","hippo"]},
 {d:"easy",q:"What gets bigger the more you take away from it?",h:"Think about digging.",a:"hole",c:["tunnel","pit","gap"]},
-{d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin",c:["dice","button","key"]},
+{d:"easy",q:"What kind of coat is always wet when you put it on?",h:"Think about something you apply with a brush.",a:"a coat of paint",c:["a raincoat","a fur coat","a coat of arms"]},
 {d:"easy",q:"What stays in a corner but travels all over the world?",h:"You put me on an envelope.",a:"stamp",c:["coin","map","photo"]},
 {d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one \u2014 not the Sphinx riddle.",a:"table",c:["chair","stool","bench"]},
 {d:"easy",q:"What has a lot of keys but cannot open any door?",h:"You use it to play music.",a:"piano",c:["guitar","keyboard","organ"]},
-{d:"medium",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them",c:["only february","only april","only 4 months"]},
-{d:"medium",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella",c:["raincoat","boots","hat"]},
+{d:"medium",q:"A man looks at a portrait and says: 'Brothers and sisters I have none, but this man's father is my father's son.' Whose picture is he looking at?",h:"Think about 'my father's son' when the man has no siblings.",a:"his own son",c:["his father","himself","his brother"]},
+{d:"medium",q:"What kind of room has no doors or windows?",h:"Think about the word split into two smaller words.",a:"a mushroom",c:["a bedroom","a bathroom","a classroom"]},
 {d:"medium",q:"A man has 10 horses and 9 stables. One horse in each stable \u2014 possible?",h:"Re-read: does it say one horse PER stable?",a:"no 10 horses only 9 stables",c:["yes with room to spare","only if two share","no it's impossible either way"]},
 {d:"medium",q:"What can you keep after giving it to someone?",h:"Think about something intangible.",a:"your word",c:["your money","your time","your name"]},
 {d:"hard",q:"The word CANDY can be spelled using just 2 letters. How?",h:"C and Y \u2014 CandY.",a:"C and Y",c:["c and d","a and y","c and n"]},
-{d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of: one, two, three ...",a:"N",c:["m","t","e"]},
+{d:"hard",q:"What is the sum of all whole numbers from 1 to 10?",h:"Pair the smallest with the largest: 1+10, 2+9, 3+8...",a:"55"},
 {d:"hard",q:"A farmer has 5 haystacks in one field and 4 in another. He combines them. How many haystacks?",h:"What happens when you combine haystacks?",a:"1"},
 {d:"hard",q:"What is special about the number 8,549,176,320?",h:"Think about what it contains.",a:"contains all digits 0-9 each once",c:["is a perfect square","is divisible by 9","is a palindrome"]},
 {d:"easy",q:"What do bees make?",h:"It's sweet and golden.",a:"honey",c:["milk","butter","syrup"]},
@@ -870,9 +877,9 @@ var C=[
 {d:"easy",q:"How many lines make a triangle?",h:"A triangle has 3 sides.",a:"3"},
 {d:"easy",q:"How many triangles are in a Star of David?",h:"Count all sizes including overlapping ones.",a:"8"},
 {d:"easy",q:"How many rectangles are in a 1x3 grid of squares?",h:"Count all rectangles including the squares themselves.",a:"6"},
-{d:"easy",q:"How many sides does a hexagon have?",h:"Think about the prefix hex.",a:"6"},
-{d:"easy",q:"How many sides does an octagon have?",h:"Think about the prefix oct.",a:"8"},
-{d:"easy",q:"How many diagonals does a square have?",h:"Draw it and count.",a:"2"},
+{d:"easy",q:"How many sides does a nonagon have?",h:"Think about the prefix 'nona', meaning nine.",a:"9"},
+{d:"easy",q:"How many sides does a decagon have?",h:"Think about the prefix 'deca', meaning ten.",a:"10"},
+{d:"easy",q:"How many sides does a heptagon have?",h:"Think about the prefix 'hepta', meaning seven.",a:"7"},
 {d:"medium",q:"How many squares of ALL sizes are in a 3x3 grid?",h:"Count 1x1, 2x2, and 3x3 separately.",a:"14"},
 {d:"medium",q:"How many rectangles are in a 3x2 grid?",h:"Use: (r+1)r/2 x (c+1)c/2.",a:"18"},
 {d:"medium",q:"How many triangles in a hexagon divided into 6 triangles from centre?",h:"Count all sizes: 1, 2, 3, 4, 5, 6 unit triangles.",a:"18"},
@@ -917,13 +924,13 @@ var C=[
 {d:"easy",q:"How many times do the hands of a clock overlap in 12 hours?",h:"They overlap approximately every 65.45 minutes.",a:"11"},
 {d:"easy",q:"If a plane crashes exactly on the border between the USA and Canada, where are the survivors buried?",h:"Read the question very literally \u2014 think about the word \"survivors\".",a:"survivors are not buried",c:["in the usa","in canada","half in each country"]},
 {d:"easy",q:"A standard 8x8 chessboard has two opposite corner squares removed, leaving 62 squares. Using dominoes that each cover exactly 2 adjacent squares, can the board be fully covered?",h:"Opposite corners are always the same colour on a chessboard \u2014 think about what that means for pairing them up.",a:"no",c:["yes","only with 30 dominoes","only if the board is rotated"]},
-{d:"medium",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings",c:["three weighings","one weighing","four weighings"]},
+{d:"medium",q:"You have 100 closed doors. On pass 1 you toggle every door. On pass 2, every 2nd door. On pass 3, every 3rd door, and so on up to pass 100. After all 100 passes, how many doors are open?",h:"A door ends up open only if it gets toggled an odd number of times \u2014 think about which door numbers have an odd number of factors.",a:"10"},
 {d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200",c:["about 20","about 2000","about 20000"]},
 {d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Turning a switch on and off before entering leaves a physical clue behind, not just a visual one.",a:"the heat of a bulb reveals which switch was recently on",c:["only the light pattern matters","count the bulbs by brightness","the bulb positions give it away"]},
 {d:"medium",q:"You have 100 lockers all open. You toggle every 2nd, then every 3rd, etc. Which are open at the end?",h:"Only lockers with an odd number of factors stay open.",a:"perfect square numbered lockers",c:["even numbered lockers","odd numbered lockers","prime numbered lockers"]},
 {d:"hard",q:"How many times do the hands of a clock overlap in 24 hours?",h:"They overlap approximately every 65.45 minutes.",a:"22"},
-{d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
-{d:"hard",q:"If 5 cats catch 5 mice in 5 minutes, how many cats catch 100 mice in 100 minutes?",h:"Work out the rate per cat.",a:"5"},
+{d:"hard",q:"A snail climbs up a 20-foot wall. Each day it climbs 4 feet, but slides back 3 feet at night. How many days does it take to reach the top?",h:"On the final day it reaches the top before sliding back \u2014 it does not slide on the day it escapes.",a:"17 days"},
+{d:"hard",q:"A rope ladder hangs over the side of a ship. Its rungs are 1 foot apart, with 10 rungs above the water. The tide rises 6 inches per hour. After 4 hours, how many rungs are above the water?",h:"Think about what happens to the ship (and the ladder attached to it) as the tide rises.",a:"10",c:["8","6","0"]},
 {d:"hard",q:"You are shrunk to penny-height and put in a blender. What do you do?",h:"Think about the physics and your tiny weight.",a:"jump out as blades spin slowly at first",c:["hold onto the blade","hide under the base","stay perfectly still"]},
 {d:"easy",q:"If you flip a fair coin 3 times, how many total possible outcomes are there?",h:"Each flip doubles the number of possible outcomes.",a:"8"},
 {d:"easy",q:"A company has 3 machines that together produce 300 units in 6 hours. How many units would 1 machine alone produce in 6 hours?",h:"Find out how much one machine contributes.",a:"100"},
@@ -1038,7 +1045,7 @@ var C=[
 {d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf55\ud83c\udf89",h:"Think about a celebration with a favourite food.",a:"pizza party",c:["fun food","party time","dinner party"]},
 {d:"easy",q:"What phrase do these emoji spell out?\n\ud83d\udc1d\ud83d\udcda",h:"Think about a school competition with tricky words.",a:"spelling bee",c:["busy bee","book worm","honey bee"]},
 {d:"medium",q:"What phrase do these emoji spell out?\n\ud83e\uddca\ud83d\udc51",h:"Think of a cold, royal character from an animated film.",a:"ice king",c:["cool ruler","frozen crown","ice queen"]},
-{d:"hard",q:"What phrase do these emoji spell out?\n\ud83c\udf2a\ufe0f\ud83c\udfe0\ud83d\udca8",h:"Think of a famous phrase about a storm sweeping through a home.",a:"gone with the wind",c:["tornado warning","house destroyed","windy day"]}
+{d:"hard",q:"What phrase do these emoji spell out?\n\ud83c\udf43\ud83d\udca8\ud83c\udfac",h:"Think of a famous phrase about a storm sweeping through a home.",a:"gone with the wind",c:["tornado warning","house destroyed","windy day"]}
 ]},
 {t:"Reasoning",s:"logical-reasoning-puzzles",p:[
 {d:"easy",q:"If all cats are animals, and Tom is a cat, what can we conclude about Tom?",h:"Apply the general rule directly to Tom.",a:"tom is an animal",c:["tom is a dog","we cannot tell","tom is not an animal"]},
@@ -1072,12 +1079,12 @@ var C=[
 {d:"medium",q:"A triangle has sides of length 3, 4 and 5. What type of triangle is it, based on its angles?",h:"This is the most famous set of triangle side lengths in maths.",a:"right triangle",c:["scalene triangle","obtuse triangle","equilateral triangle"]},
 {d:"hard",q:"A triangle's two angles measure 50 degrees and 60 degrees. What is the third angle, in degrees?",h:"All three angles must add up to 180.",a:"70"},
 {d:"hard",q:"How many triangles of all sizes can you count in a large triangle divided into 9 smaller equal triangles (3 rows)?",h:"Count every size: the 9 smallest, then the medium ones, then the whole triangle.",a:"13"},
-{d:"easy",q:"In an isosceles triangle, how many sides are equal in length?",h:"'Isosceles' means two sides match.",a:"2"},
+{d:"easy",q:"In a right triangle, how many angles are exactly 90 degrees?",h:"That's the angle that gives a right triangle its name.",a:"1"},
 {d:"easy",q:"A scalene triangle has how many equal sides?",h:"'Scalene' means every side is a different length.",a:"0"},
 {d:"easy",q:"If two angles of a triangle are each 45 degrees, what is the third angle, in degrees?",h:"All three angles add up to 180.",a:"90"},
-{d:"medium",q:"An equilateral triangle has three equal angles. How many degrees is each angle?",h:"Split 180 degrees evenly three ways.",a:"60"},
+{d:"medium",q:"A triangle has two angles of 45 degrees each. What type of triangle is it, based on its angles?",h:"The third angle must be 180 minus the two given angles.",a:"right triangle",c:["obtuse triangle","acute triangle","equilateral triangle"]},
 {d:"medium",q:"A triangle has a base of 10 and a height of 6. What is its area?",h:"Area of a triangle = half of base times height.",a:"30"},
-{d:"hard",q:"A right triangle has legs of length 6 and 8. What is the length of its hypotenuse?",h:"Use the Pythagorean theorem: 6 squared plus 8 squared.",a:"10"},
+{d:"hard",q:"A right triangle has legs of length 9 and 12. What is the length of its hypotenuse?",h:"Use the Pythagorean theorem: 9 squared plus 12 squared.",a:"15"},
 {d:"hard",q:"How many small triangles, of the smallest size only, make up a large triangle divided into 9 equal smaller triangles (3 rows)?",h:"This is simply the count of the smallest pieces, not every size.",a:"9"},
 {d:"easy",q:"In an isosceles triangle, how many sides are equal in length?",h:"'Isosceles' means two sides match.",a:"2"},
 {d:"easy",q:"A scalene triangle has how many sides of equal length?",h:"'Scalene' means every side is a different length.",a:"0"},
@@ -1303,6 +1310,94 @@ var C=[
 {d:"hard",q:"Three coins are flipped. What is the probability of getting exactly two heads?",h:"There are 8 total equally likely outcomes; count how many have exactly two heads.",a:"3/8",c:["1/8","1/4","1/2"]},
 {d:"hard",q:"A card is drawn from a standard deck. What is the probability it is a King or a Queen?",h:"Add the probabilities since a card cannot be both.",a:"2/13",c:["1/13","4/13","1/26"]},
 {d:"hard",q:"A box has 4 white and 6 black balls. Two balls are drawn without replacement. What is the probability both are black?",h:"After the first black ball is removed, only 5 black balls remain out of 9 total.",a:"1/3",c:["1/2","3/5","2/5"]}
+]},
+{t:"Square",s:"square-reasoning-puzzles",p:[
+{d:"easy",q:"How many sides does a square have?",h:"Count the edges of a square.",a:"4"},
+{d:"easy",q:"How many right angles does a square have?",h:"Every corner of a square is the same type of angle.",a:"4"},
+{d:"easy",q:"If a square has a side length of 5, what is its perimeter?",h:"Add up all four equal sides.",a:"20"},
+{d:"easy",q:"If a square has a side length of 4, what is its area?",h:"Area of a square is side times side.",a:"16"},
+{d:"easy",q:"How many diagonals does a square have?",h:"Count the lines connecting opposite corners.",a:"2"},
+{d:"easy",q:"Are all four sides of a square always equal in length?",h:"This is the defining feature of a square.",a:"yes",c:["no","only two","only opposite sides"]},
+{d:"easy",q:"If a square has a perimeter of 24, what is the length of each side?",h:"Divide the perimeter by 4.",a:"6"},
+{d:"easy",q:"If a square has an area of 25, what is the length of each side?",h:"Think about which number multiplied by itself gives 25.",a:"5"},
+{d:"easy",q:"How many vertices (corners) does a square have?",h:"Count the corners of a square.",a:"4"},
+{d:"easy",q:"Is every square also a rectangle?",h:"A rectangle just needs four right angles, regardless of equal sides.",a:"yes",c:["no","only some squares","only large squares"]},
+{d:"medium",q:"A square's area is 49. What is its perimeter?",h:"Find the side length first, then multiply by 4.",a:"28"},
+{d:"medium",q:"A square and a rectangle have the same perimeter of 20. If the rectangle's length is 7, what is its width?",h:"Use the fact that length plus width equals half the perimeter.",a:"3"},
+{d:"medium",q:"If the side of a square is doubled, by what factor does its area increase?",h:"Area depends on side length squared.",a:"4"},
+{d:"medium",q:"A square has an area of 64. What is the length of its diagonal, rounded to the nearest whole number (diagonal is about 1.41 times the side)?",h:"First find the side length, then multiply by 1.41.",a:"11"},
+{d:"medium",q:"A square's perimeter is 36. What is its area?",h:"Find the side length first, then square it.",a:"81"},
+{d:"hard",q:"A square is inscribed inside a circle of radius 5, so its diagonal equals the circle's diameter. What is the approximate area of the square (diagonal squared divided by 2)?",h:"The diagonal is twice the radius; area of a square equals half of the diagonal squared.",a:"50"},
+{d:"hard",q:"A square has a diagonal of 8. Using area equals diagonal squared divided by 2, what is its area?",h:"Square the diagonal, then divide by 2.",a:"32"},
+{d:"hard",q:"The area of a square is numerically equal to its perimeter. What is the length of one side?",h:"Set side squared equal to 4 times the side, then solve.",a:"4"},
+{d:"hard",q:"A square is cut into 4 equal smaller squares. If the original square has a side of 10, what is the side length of each smaller square?",h:"Each smaller square fits along half of the original side.",a:"5"},
+{d:"hard",q:"A square garden has an area of 144 square metres. What is the cost to fence all four sides at $5 per metre?",h:"Find the perimeter first, then multiply by the cost per metre.",a:"240"}
+]},
+{t:"Ratio",s:"maths-puzzles",p:[
+{d:"easy",q:"If 3 apples cost $6, how much would 12 apples cost at the same rate?",h:"Find the price of one apple first.",a:"24"},
+{d:"easy",q:"Express the ratio 8:4 in its simplest form.",h:"Divide both numbers by their highest common factor.",a:"2:1",c:["4:1","1:2","8:4"]},
+{d:"easy",q:"If a recipe needs 2 cups of flour for every 3 cups of sugar, how many cups of flour are needed for 9 cups of sugar?",h:"Find how many times bigger 9 is than 3, then scale the flour the same way.",a:"6"},
+{d:"easy",q:"Simplify the ratio 10:5.",h:"Divide both numbers by their highest common factor.",a:"2:1",c:["10:1","5:1","1:2"]},
+{d:"easy",q:"If the ratio of boys to girls in a class is 3:2, and there are 12 boys, how many girls are there?",h:"Find how many times bigger 12 is than 3, then scale the girls the same way.",a:"8"},
+{d:"easy",q:"A map has a scale of 1:100. If a distance on the map is 5 cm, what is the real distance in cm?",h:"Multiply the map distance by 100.",a:"500"},
+{d:"easy",q:"If 5 pens cost $10, how much do 8 pens cost at the same rate?",h:"Find the price of one pen first.",a:"16"},
+{d:"easy",q:"Simplify the ratio 6:9.",h:"Divide both numbers by their highest common factor.",a:"2:3",c:["3:2","6:9","1:3"]},
+{d:"easy",q:"If the ratio of cats to dogs is 4:1, and there are 5 dogs, how many cats are there?",h:"Find how many times bigger 5 is than 1, then scale the cats the same way.",a:"20"},
+{d:"easy",q:"If 2 workers can build a wall in 6 days, how many days would it take 1 worker at the same rate?",h:"Fewer workers means more days, in direct proportion.",a:"12"},
+{d:"medium",q:"A sum of $60 is divided between two people in the ratio 2:3. What is the smaller share?",h:"Split the total into 5 equal parts first.",a:"24"},
+{d:"medium",q:"If 4 workers can complete a job in 9 days, how many days would 6 workers take at the same rate?",h:"Find the total worker-days needed, then divide by the new number of workers.",a:"6"},
+{d:"medium",q:"A recipe serving 4 people needs 200g of rice. How much rice is needed to serve 10 people?",h:"Find the rice needed per person first.",a:"500"},
+{d:"medium",q:"The ratio of red to blue marbles in a bag is 5:3. If there are 24 marbles in total, how many are red?",h:"Split the total into 8 equal parts first.",a:"15"},
+{d:"medium",q:"If a car travels 150 km in 3 hours, how far will it travel in 5 hours at the same speed?",h:"Find the distance covered per hour first.",a:"250"},
+{d:"hard",q:"Three numbers are in the ratio 2:3:5. If their sum is 100, what is the largest number?",h:"Split the total into 10 equal parts first.",a:"50"},
+{d:"hard",q:"A sum of money is divided among A, B, and C in the ratio 3:4:5. If C receives $20 more than A, what is the total sum?",h:"Each part is worth $10, since C has 2 more parts than A.",a:"120"},
+{d:"hard",q:"If 8 machines can produce 480 units in 6 hours, how many units can 5 machines produce in 8 hours at the same rate?",h:"First find the production rate of a single machine per hour.",a:"400"},
+{d:"hard",q:"Two numbers are in the ratio 4:7. If 6 is subtracted from each, the new ratio becomes 1:2. Find the larger original number.",h:"Set up an equation using the new ratio after subtracting 6 from each.",a:"42"},
+{d:"hard",q:"A alone can do a job in 12 days, B alone in 18 days. If they work together, in how many days will they complete the job?",h:"Add their individual work rates: 1/12 plus 1/18.",a:"7.2 days"}
+]},
+{t:"Roman Numerals",s:"maths-puzzles",p:[
+{d:"easy",q:"What is the Roman numeral for 5?",h:"It looks like a checkmark or a V shape.",a:"v",c:["x","i","l"]},
+{d:"easy",q:"What is the Roman numeral for 10?",h:"It looks like an X shape.",a:"x",c:["v","l","c"]},
+{d:"easy",q:"What is the Roman numeral for 1?",h:"It is a single vertical stroke.",a:"i",c:["v","x","l"]},
+{d:"easy",q:"What number does the Roman numeral 'X' represent?",h:"It's one of the most recognisable Roman numerals.",a:"10"},
+{d:"easy",q:"What number does the Roman numeral 'V' represent?",h:"It looks like a checkmark shape.",a:"5"},
+{d:"easy",q:"What is the Roman numeral for 50?",h:"It looks like an upside-down V with a flat top.",a:"l",c:["c","d","x"]},
+{d:"easy",q:"What number does the Roman numeral 'L' represent?",h:"It sits between X and C in value.",a:"50"},
+{d:"easy",q:"What is the Roman numeral for 100?",h:"It looks like a C shape, matching 'centum', Latin for hundred.",a:"c",c:["d","m","l"]},
+{d:"easy",q:"What number does the Roman numeral 'C' represent?",h:"Think of the word 'century'.",a:"100"},
+{d:"easy",q:"What is the Roman numeral for 1000?",h:"Think of the word 'millennium'.",a:"m",c:["d","c","l"]},
+{d:"medium",q:"What number does the Roman numeral 'IV' represent?",h:"One less than 5, written by placing I before V.",a:"4"},
+{d:"medium",q:"What number does the Roman numeral 'IX' represent?",h:"One less than 10, written by placing I before X.",a:"9"},
+{d:"medium",q:"What is the Roman numeral for 20?",h:"Simply write the symbol for 10 twice.",a:"xx"},
+{d:"medium",q:"What number does the Roman numeral 'XL' represent?",h:"Ten less than 50, written by placing X before L.",a:"40"},
+{d:"medium",q:"What number does the Roman numeral 'XC' represent?",h:"Ten less than 100, written by placing X before C.",a:"90"},
+{d:"hard",q:"What number does the Roman numeral 'MCMXCIV' represent?",h:"Break it down: M=1000, CM=900, XC=90, IV=4.",a:"1994"},
+{d:"hard",q:"What is the Roman numeral for 49?",h:"Think about XL for 40, then add the ones for 9.",a:"xlix",c:["xxxxix","xlvix","ixl"]},
+{d:"hard",q:"What number does the Roman numeral 'LVIII' represent?",h:"L=50, V=5, III=3.",a:"58"},
+{d:"hard",q:"What is the Roman numeral for 2024?",h:"Break it into 2000 plus 24.",a:"mmxxiv",c:["mmxxvi","mmxiv","mmxxiiii"]},
+{d:"hard",q:"What number does the Roman numeral 'CDXLIV' represent?",h:"CD=400, XL=40, IV=4.",a:"444"}
+]},
+{t:"Time & Calendar",s:"maths-puzzles",p:[
+{d:"easy",q:"How many days are there in a week?",h:"Monday through Sunday.",a:"7"},
+{d:"easy",q:"How many hours are there in a day?",h:"Think about a full clock cycle, twice over.",a:"24"},
+{d:"easy",q:"How many minutes are there in an hour?",h:"A standard clock face has this many minute marks.",a:"60"},
+{d:"easy",q:"How many months are there in a year?",h:"Think of the months from January to December.",a:"12"},
+{d:"easy",q:"How many seconds are there in a minute?",h:"Same as the number of minutes in an hour.",a:"60"},
+{d:"easy",q:"What day comes right after Monday?",h:"Count forward one day from Monday.",a:"tuesday",c:["wednesday","sunday","friday"]},
+{d:"easy",q:"What day comes right before Sunday?",h:"Count backward one day from Sunday.",a:"saturday",c:["friday","monday","thursday"]},
+{d:"easy",q:"How many weeks are there, approximately, in a year?",h:"Divide 365 days by 7.",a:"52"},
+{d:"easy",q:"What is the last month of the year?",h:"It comes right after November.",a:"december",c:["november","january","october"]},
+{d:"easy",q:"What is the first month of the year?",h:"It comes right before February.",a:"january",c:["december","february","march"]},
+{d:"medium",q:"If today is Wednesday, what day will it be in 8 days?",h:"8 days is one week plus 1 more day.",a:"thursday",c:["friday","wednesday","tuesday"]},
+{d:"medium",q:"How many days are there in exactly 3 weeks?",h:"Multiply the number of weeks by 7.",a:"21"},
+{d:"medium",q:"If a movie starts at 7:45 PM and lasts 2 hours and 30 minutes, what time does it end?",h:"Add the hours first, then the minutes.",a:"10:15 pm",c:["10:15 am","9:45 pm","10:45 pm"]},
+{d:"medium",q:"How many days are there in a normal (non-leap) year?",h:"One more than 364.",a:"365"},
+{d:"medium",q:"A clock shows 6:00. What is the angle between the hour and minute hands?",h:"At 6:00 the two hands point in exactly opposite directions.",a:"180"},
+{d:"hard",q:"A clock shows 9:00 exactly. What is the angle between the hour and minute hands?",h:"The hour hand sits exactly a quarter of the way around the clock from the minute hand.",a:"90"},
+{d:"hard",q:"If today is January 31st, what date will it be exactly 2 weeks later?",h:"Add 14 days, remembering January has 31 days before crossing into February.",a:"february 14",c:["february 13","february 15","january 45"]},
+{d:"hard",q:"A clock is exactly 15 minutes fast. If it currently shows 2:15, what is the actual correct time?",h:"Subtract 15 minutes from what the clock shows.",a:"2:00",c:["2:30","1:45","2:15"]},
+{d:"hard",q:"If it is currently 11:40 PM, what time will it be in 50 minutes?",h:"50 minutes will cross over midnight into the next day.",a:"12:30 am",c:["12:30 pm","11:90 pm","1:30 am"]},
+{d:"hard",q:"A year is a leap year if it is divisible by 4, except for century years, which must be divisible by 400. Is the year 1900 a leap year?",h:"1900 is a century year \u2014 check whether it is divisible by 400.",a:"no",c:["yes","only in some countries","only every other century"]}
 ]}
 ];
 
@@ -1657,8 +1752,10 @@ function _boot(tid,_SK,_TK){
         +'<span class="fwpcatname" id="'+px+'_catname"></span>'
         +'<div class="fwpnavs"><button class="fwpnav" id="'+px+'_prev" aria-label="Previous puzzle">\u2039</button><button class="fwpnav" id="'+px+'_next" aria-label="Next puzzle">\u203a</button></div>'
       +'</div>'
-      +'<div class="fwpbdg easy" id="'+px+'_diff"></div>'
-      +'<p class="fwpq" id="'+px+'_q"></p>'
+      +'<div class="fwpqcard" id="'+px+'_qcard"><span class="fwpqcard-deco">\uD83E\uDDE9</span>'
+        +'<div class="fwpbdg easy" id="'+px+'_diff"></div>'
+        +'<p class="fwpq" id="'+px+'_q"></p>'
+      +'</div>'
       +'<button class="fwphbtn" id="'+px+'_hbtn">\uD83D\uDCA1 Show hint</button>'
       +'<div class="fwphbox" id="'+px+'_hbox"></div>'
       +'<div class="fwpmcq" id="'+px+'_mcq"></div>'
@@ -1731,6 +1828,7 @@ function _boot(tid,_SK,_TK){
     ho=false;
     var di=g('diff');
     di.className='fwpbdg '+p.d;
+    g('qcard').className='fwpqcard '+p.d;
     di.textContent=p.d==='easy'?'\uD83D\uDFE2 Easy':p.d==='medium'?'\uD83D\uDFE1 Medium':'\uD83D\uDD34 Hard';
     g('ctr').textContent='Puzzle '+(st.tab*cp.length+st.puzz+1)+' of '+(ac.length*cp.length);
     var mo=g('more');
