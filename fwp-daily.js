@@ -1,4 +1,9 @@
-/* FWP Daily Challenge Widget f1.3.0 | funwithpuzzles.com */
+/* FWP Daily Challenge Widget f1.3.1 | funwithpuzzles.com
+   Changelog f1.3.1: fixed several incorrect/inconsistent puzzle answers,
+   removed cross-category duplicate riddles (replaced with fresh puzzles),
+   clarified pyramid-puzzle wording, enlarged emoji puzzle text, and
+   changed Hidden Animal puzzles so only "easy" tier keeps the ALL-CAPS
+   hidden word while "medium"/"hard" tiers use normal sentence case. */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -6,25 +11,13 @@ var LG='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDi4jf-HGfN5
 var SK='fwpv6s',TK='fwpv6t';
 var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.net/gh/funwithpuzzles/fwp-widgets@latest/fwp-daily.js"><\/scr'+'ipt>';
 
-/* Controls whether the "Add this widget to your website" promo section
-   renders at the bottom of the widget. Set to false to hide it entirely. */
 var SHOW_ADD_TO_SITE = true;
 
-/* Controls the "Get the app" promo badges near the bottom of the widget.
-   Each store has its own on/off flag so you can launch Android and iOS on
-   different dates. Drop the real store URLs in once the apps are live \u2014
-   until then these are inert placeholders. */
 var SHOW_GOOGLE_PLAY_PROMO = false;
 var SHOW_APPLE_APP_PROMO = false;
 var GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.funwithpuzzles.dailychallenges';
-var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';   /* e.g. https://apps.apple.com/app/id0000000000 */
+var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';
 
-/* Controls the "Follow us" social media row near the bottom of the widget.
-   Set to false to hide the whole section \u2014 nothing else needs to change,
-   the row simply won't render. Edit SOCIAL_LINKS to add, remove, or update
-   any account; each entry just needs a url (the icon/label are matched by
-   the 'id' field below, which must be one of: pinterest, youtube,
-   instagram, x, facebook). */
 var SHOW_FOLLOW_SOCIAL = true;
 var SOCIAL_LINKS = [
   { id: 'pinterest', url: 'https://pinterest.com/gamespicnic' },
@@ -34,12 +27,6 @@ var SOCIAL_LINKS = [
   { id: 'facebook',  url: 'https://www.facebook.com/gamespicnic' }
 ];
 
-/* The tab buttons use short names ("Mistake", "Logic") since 3 of them plus
-   the Explore tab all have to fit in one row. The centre label above the
-   puzzle counter has more breathing room, so it shows a fuller, more
-   descriptive name instead (e.g. "Mistake Puzzles", "Logic Puzzles"). Add
-   an entry here for any new category you create \u2014 categories without one
-   just fall back to their short tab name. */
 var CATEGORY_FULL_NAMES = {
   'Riddles':'Riddles','Tricky':'Tricky Riddles','What Am I':'What Am I Riddles',
   'Funny':'Funny Riddles','Mystery':'Mystery Riddles','Maths':'Maths Puzzles',
@@ -59,45 +46,18 @@ var CATEGORY_FULL_NAMES = {
   'Roman Numerals':'Roman Numeral Puzzles','Time & Calendar':'Time & Calendar Puzzles'
 };
 
-/* Categories to hide from the offline tabs \u2014 e.g. while you're improving a
-   category's puzzles. Add the exact category title (the "t" value on that
-   category in the C array further down, e.g. "Riddles", "Matchstick", "GK")
-   and it will never be picked as one of the day's 3 offline tabs. Safe to
-   edit freely; it only affects which categories are eligible, not the data
-   itself, and it has no effect on the Explore tab (which pulls from the
-   live website, not this offline dataset). */
 var BLOCKED_CATEGORIES=[];
 
-/* Labels that exist on the live site for pure housekeeping/administrative
-   posts rather than actual puzzle content (video posts, index pages,
-   championship recaps, syndicated third-party puzzles, etc). Posts
-   carrying ANY of these labels are always filtered out of the Explore
-   tab's Random Puzzles feed, since they won't have a relevant puzzle image
-   or content. Edit this list freely to match your site's label names
-   exactly. */
 var EXCLUDED_RANDOM_LABELS=[
   'Brain Teasers Videos','Administrative Posts','Images',
   'Puzzle Index Pages','Sudoku Championships','Puzzle Championships','Puzzle Sites'
 ];
 
-/* Labels for posts that ARE real, worthwhile content but don't fit the
-   usual "puzzle with a published answer" format \u2014 e.g. posts with no
-   answer yet, tutorials, printables, events, syndicated puzzles, or visual
-   illusions where "View Answer" wouldn't make sense. These stay visible
-   everywhere (Random Puzzles and their own category) but the Explore
-   card's call-to-action reads "Explore This" for them instead of "View
-   Answer", which is a more accurate (and honest) prompt than promising an
-   answer that isn't there. Add or remove label names freely; matching is
-   case/whitespace-insensitive. */
 var MISSING_ANSWER_LABELS=[
   'Brain Teasers: Missing Answers','Puzzle and Sudoku Events',
   'Puzzle Tutorials','Logic Puzzles Printable','Optical Illusions',
   'Missing Vowels Quiz','Conceptis Puzzles','Brain Puzzles'
 ];
-
-/* \u2500\u2500 Explore labels: display name, exact Blogger label, hub page URL \u2500\u2500
-   All label names verified from lebel-hubpage-mapping.txt
-   Hub pages used for Browse More link and error fallback. */
 var LABELS=[
   /* Difficulty */
   {d:'\ud83d\udfe2 Easy Puzzles',              l:'Brain Teasers for Kids',                     h:'p/easy-puzzles.html'},
@@ -173,219 +133,7 @@ var LABELS=[
   {d:'\u2753 Number Question Game',      l:'Number Question Game',                       h:'p/number-question-game.html'}
 ];
 
-/* Every real puzzle-category label from LABELS above, normalised for
-   comparison. Used as a safety net in _isExcludedPost: a post is only ever
-   treated as non-puzzle housekeeping content if it carries an excluded
-   label AND none of its OTHER labels match a real category here. This means
-   a legitimate puzzle post can never be hidden just because it also happens
-   to carry a secondary/incidental tag that's on the excluded list. */
 var MISSING_ANSWER_LABELS_NORM=MISSING_ANSWER_LABELS.map(function(l){return l.trim().toLowerCase();});
-if(!document.getElementById('fwpv6css')){
-  var _cs=document.createElement('style');
-  _cs.id='fwpv6css';
-  _cs.textContent=
-'.fwpw{display:block !important;width:100%;max-width:560px;margin:0 auto;font-family:Roboto,Arial,sans-serif;font-size:13px;color:#111;line-height:1.4;}'
-+'.fwpw *{box-sizing:border-box;}'
-+'.fwpc{background:#fff;border-radius:14px;overflow:hidden;border:2.5px solid #0A0AFF;box-shadow:0 3px 16px rgba(10,10,255,.13);}'
-/* HEAD */
-+'.fwph{background:#0A0AFF;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;}'
-+'.fwphl{display:flex;align-items:center;gap:9px;flex:1 1 0;min-width:0;overflow:hidden;}'
-+'.fwplogo{width:36px;height:36px;min-width:36px;max-width:36px;border-radius:7px;object-fit:contain;background:rgba(255,255,255,.12);padding:2px;border:1.5px solid rgba(255,255,255,.3);flex-shrink:0;display:block;}'
-+'.fwptxt{min-width:0;flex:1;overflow:hidden;}'
-+'.fwpbrand{font-size:9px;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:2px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
-+'.fwptitle{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
-+'.fwpsk{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.32);border-radius:30px;padding:4px 10px;color:#fff;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}'
-+'.fwpskn{font-size:13px;font-weight:800;}'
-/* date bar */
-+'.fwpbar{background:#13253a;padding:5px 14px;display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}'
-+'.fwpbd{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}'
-+'.fwpbt{font-size:11px;color:#fff;font-weight:800;white-space:nowrap;flex-shrink:0;background:rgba(255,255,255,.18);padding:3px 9px;border-radius:20px;letter-spacing:.2px;}'
-/* progress */
-+'.fwppr{height:3px;background:#e5e7eb;}'
-+'.fwppf{height:3px;background:#0A0AFF;width:0%;transition:width .4s ease;}'
-/* tabs */
-+'.fwptabs{display:flex;padding:9px 10px 0;background:#f4f5ff;border-bottom:2px solid #0A0AFF;gap:4px;}'
-+'.fwptab{flex:1 1 0;min-width:0;padding:6px 6px;font-size:10.5px;font-weight:700;color:#6b7280;background:#fff;border:1.5px solid #d1d5db;border-bottom:2px solid #d1d5db;border-radius:7px 7px 0 0;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:inherit;transition:all .15s;margin-bottom:-2px;position:relative;}'
-+'.fwptab.on{color:#0A0AFF;border-color:#0A0AFF;border-bottom-color:#f4f5ff;background:#f4f5ff;z-index:1;}'
-+'.fwptab:hover:not(.on){color:#374151;border-color:#a5b4fc;background:#eef1ff;}'
-+'.fwptab.exptab{color:#7c3aed;}'
-+'.fwptab.exptab.on{color:#7c3aed;border-color:#7c3aed;border-bottom-color:#f4f5ff;}'
-+'.fwptab.exptab:hover:not(.on){color:#6d28d9;border-color:#c4b5fd;background:#f5f3ff;}'
-+'@media (max-width:360px){.fwptab{font-size:9px;padding:6px 3px;letter-spacing:-.2px;}}'
-/* offline body */
-+'.fwpbody{padding:13px 14px;touch-action:pan-y;}'
-+'.fwptop{display:flex;align-items:center;gap:8px;margin-bottom:11px;}'
-+'.fwpctr{flex:0 0 auto;}'
-+'.fwpcatname{flex:1;min-width:0;text-align:center;font-size:12px;font-weight:800;color:#0A0AFF;white-space:normal;line-height:1.3;padding:0 4px;}'
-+'.fwpnavs{flex:0 0 auto;}'
-+'.fwpctr{font-size:10px;color:#9ca3af;font-weight:500;}'
-+'.fwpnavs{display:flex;gap:8px;}'
-+'.fwpnav{width:34px;height:34px;border-radius:50%;border:none;background:#0A0AFF;color:#fff;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;box-shadow:0 2px 6px rgba(10,10,255,.35);}'
-+'.fwpnav:hover{background:#2222ff;transform:scale(1.08);}'
-+'.fwpnav:active{transform:scale(.94);}'
-+'.fwpqcard{position:relative;border-radius:12px;padding:14px 16px 2px;margin-bottom:2px;overflow:hidden;border:1.5px solid #e5e7eb;background:#fafafa;transition:background .2s,border-color .2s;}'
-+'.fwpqcard.easy{background:linear-gradient(135deg,#EAF3DE 0%,#f7fbf2 65%);border-color:#c8e2ae;}'
-+'.fwpqcard.medium{background:linear-gradient(135deg,#FAEEDA 0%,#fdf8ef 65%);border-color:#f0d9a8;}'
-+'.fwpqcard.hard{background:linear-gradient(135deg,#FCEBEB 0%,#fdf5f5 65%);border-color:#f0b8b8;}'
-+'.fwpqcard-deco{position:absolute;right:-10px;top:-16px;font-size:64px;opacity:.13;transform:rotate(10deg);pointer-events:none;line-height:1;}'
-+'.fwpbdg{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:30px;margin-bottom:9px;position:relative;}'
-+'.fwpbdg.easy{background:#EAF3DE;color:#27500A;}'
-+'.fwpbdg.medium{background:#FAEEDA;color:#633806;}'
-+'.fwpbdg.hard{background:#FCEBEB;color:#791F1F;}'
-+'.fwpq{font-size:13px;line-height:1.75;color:#111827;white-space:pre-line;min-height:44px;margin-bottom:12px;word-break:break-word;position:relative;}'
-+'.fwphbtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;display:inline-flex;align-items:center;gap:4px;padding:0;font-family:inherit;font-weight:600;}'
-+'.fwphbtn:hover{text-decoration:underline;}'
-+'.fwphbox{background:#eef2ff;border-left:3px solid #0A0AFF;border-radius:0 7px 7px 0;padding:8px 11px;font-size:12px;color:#1e1b4b;line-height:1.6;margin-top:7px;margin-bottom:9px;display:none;word-break:break-word;}'
-+'.fwpirow{display:flex;gap:6px;margin-top:11px;}'
-+'.fwpinp{flex:1;min-width:0;height:40px;border:1.5px solid #e5e7eb;border-radius:8px;padding:0 11px;font-size:13px;color:#111827;background:#fff;outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s;}'
-+'.fwpinp:focus{border-color:#0A0AFF;box-shadow:0 0 0 3px rgba(10,10,255,.1);}'
-+'.fwpinp:disabled{background:#f9fafb;color:#6b7280;}'
-+'.fwpchk{height:40px;padding:0 14px;background:#0A0AFF;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}'
-+'.fwpchk:hover{background:#2222ff;}'
-/* multiple-choice answers */
-+'.fwpmcq{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px;align-items:stretch;}'
-+'@media (max-width:400px){.fwpmcq{grid-template-columns:1fr;}}'
-+'.fwpmcqbtn{text-align:left;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:9px;background:#fff;font-size:12px;line-height:1.4;color:#111827;cursor:pointer;font-family:inherit;transition:all .15s;white-space:normal;word-break:break-word;overflow-wrap:anywhere;height:auto;}'
-+'.fwpmcqbtn:hover:not(:disabled){border-color:#0A0AFF;background:#eef1ff;}'
-+'.fwpmcqbtn:disabled{cursor:default;}'
-+'.fwpmcqbtn.correct{background:#EAF3DE;border-color:#16a34a;color:#166534;font-weight:700;}'
-+'.fwpmcqbtn.wrong{background:#FCEBEB;border-color:#dc2626;color:#991b1b;}'
-+'.fwpres{font-size:12px;padding:8px 11px;border-radius:8px;line-height:1.5;margin-top:9px;display:none;word-break:break-word;}'
-+'.fwpres.ok{background:#EAF3DE;color:#166534;display:block;}'
-+'.fwpres.no{background:#FCEBEB;color:#991b1b;display:block;}'
-+'.fwprev{margin-top:9px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:7px 11px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;display:none;width:100%;text-align:left;transition:background .15s;}'
-+'.fwprev:hover{background:#f9fafb;}'
-+'.fwpdots{display:flex;gap:7px;justify-content:center;margin-top:13px;}'
-+'.fwpdot{width:9px;height:9px;border-radius:50%;background:#e5e7eb;cursor:pointer;border:none;transition:all .2s;flex-shrink:0;padding:0;}'
-+'.fwpdot:hover{transform:scale(1.3);}'
-+'.fwpdot.on{background:#0A0AFF;transform:scale(1.2);}'
-+'.fwpdot.done{background:#16a34a;}'
-+'.fwpdot.wrong{background:#dc2626;}'
-+'.fwpban{display:none;background:linear-gradient(135deg,#0A0AFF,#13253a);border-radius:10px;padding:12px 14px;margin-top:11px;text-align:center;color:#fff;}'
-+'.fwpban p{font-size:13px;font-weight:700;margin-bottom:4px;color:#fff;}'
-+'.fwpban small{font-size:11px;color:rgba(255,255,255,.75);}'
-/* \u2500\u2500 EXPLORE TAB \u2500\u2500 */
-+'.fwpexp{display:none;padding:13px 14px;}'
-+'.fwpexp-toprow{display:flex;align-items:center;gap:7px;margin-bottom:11px;}'
-+'.fwpexp-sel{flex:1;min-width:0;height:36px;border:1.5px solid #d1d5db;border-radius:8px;padding:0 10px;font-size:11.5px;color:#374151;background:#fff;outline:none;font-family:inherit;cursor:pointer;transition:border-color .15s;}'
-+'.fwpexp-sel:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.1);}'
-+'.fwpexp-ref{height:36px;padding:0 11px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}'
-+'.fwpexp-ref:hover{background:#6d28d9;}'
-+'.fwpexp-ref:disabled{background:#a78bfa;cursor:not-allowed;}'
-/* nav row \u2014 fixed height prevents layout shift */
-+'.fwpexp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;min-height:34px;}'
-+'.fwpexp-ctr{font-size:10px;color:#9ca3af;font-weight:500;}'
-+'.fwpexp-navs{display:flex;gap:8px;}'
-+'.fwpexp-nb{width:34px;height:34px;border-radius:50%;border:none;background:#7c3aed;color:#fff;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;box-shadow:0 2px 6px rgba(124,58,237,.35);}'
-+'.fwpexp-nb:hover{background:#6d28d9;transform:scale(1.08);}'
-+'.fwpexp-nb:active{transform:scale(.94);}'
-/* card container \u2014 FIXED HEIGHT prevents layout shift */
-+'.fwpw .fwpexp-wrap{position:relative;touch-action:pan-y;}'
-/* card */
-+'.fwpw .fwpexp-card{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;cursor:pointer;transition:box-shadow .2s,transform .2s;text-decoration:none;display:block;background:#fff;}'
-+'.fwpw .fwpexp-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px);}'
-/* IMAGE FIX (v3 \u2014 no cropping, minimal layout shift):
-   - width:100%, height:auto lets each image render at its own natural aspect
-     ratio, so the whole picture is always visible (nothing gets cropped).
-   - When the source <img> tag includes width/height attributes (Blogger's
-     native uploader usually adds these), _imgWithDims() reads them and the
-     card sets an inline CSS aspect-ratio on the wrapper BEFORE the image
-     starts downloading \u2014 so the box is already the correct height up front
-     instead of jumping once the image loads. Falls back to min-height:220px
-     when dimensions aren't available (some shift in that case only).
-   - max-height:420px caps how tall the card can grow for unusually tall/
-     portrait images \u2014 in that rare case the image renders slightly narrower
-     than full width (via object-fit:contain, centred) rather than forcing the
-     card to a huge height. Typical wide/landscape puzzle images render at
-     full width with no cap kicking in at all.
-   - background:#f8f9ff shows briefly behind the image while it loads */
-+'.fwpw .fwpexp-imgwrap{width:100% !important;max-width:none !important;max-height:420px;position:relative;background:#f8f9ff;overflow:hidden;text-align:center;line-height:0;}'
-+'.fwpw .fwpexp-img{display:block !important;position:static !important;width:100% !important;height:auto !important;max-width:100% !important;max-height:420px !important;object-fit:contain !important;object-position:center;margin:0 auto !important;transition:transform .3s;}'
-+'.fwpw .fwpexp-card:hover .fwpexp-img{transform:scale(1.02);}'
-+'.fwpw .fwpexp-imgph{position:static !important;width:100% !important;height:220px !important;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
-+'.fwpw .fwpexp-imgph img{width:52px;height:52px;opacity:.35;object-fit:contain;}'
-/* card body */
-+'.fwpexp-cbody{padding:11px 13px 13px;}'
-+'.fwpexp-cat{display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:20px;background:#f5f3ff;color:#7c3aed;margin-bottom:7px;}'
-+'.fwpexp-title{font-size:13px;font-weight:700;color:#111827;line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}'
-+'.fwpexp-solve{display:flex;align-items:center;justify-content:space-between;background:#7c3aed;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;font-weight:700;}'
-+'.fwpexp-solve span{font-size:15px;}'
-/* skeleton \u2014 same structure as card so no layout shift */
-+'.fwpexp-skel{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;background:#fff;}'
-+'.fwpexp-skel-img{width:100%;padding-top:56.25%;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
-+'.fwpexp-skel-body{padding:11px 13px 13px;}'
-+'.fwpexp-skel-tag{height:16px;width:90px;border-radius:8px;margin-bottom:10px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
-+'.fwpexp-skel-l{height:13px;border-radius:6px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;margin-bottom:7px;}'
-+'.fwpexp-skel-btn{height:36px;border-radius:8px;margin-top:10px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
-+'@keyframes fwpsh{0%{background-position:200% 0}100%{background-position:-200% 0}}'
-/* error */
-+'.fwpexp-err{text-align:center;padding:30px 14px;color:#6b7280;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}'
-+'.fwpexp-err p{font-size:13px;margin:0;}'
-+'.fwpexp-err a{color:#7c3aed;font-weight:700;font-size:12px;text-decoration:none;}'
-+'.fwpexp-err a:hover{text-decoration:underline;}'
-/* explore dots */
-+'.fwpexp-dots{display:flex;gap:7px;justify-content:center;margin-top:11px;min-height:16px;}'
-+'.fwpexp-dot{width:9px;height:9px;border-radius:50%;background:#e5e7eb;cursor:pointer;border:none;transition:all .2s;flex-shrink:0;padding:0;}'
-+'.fwpexp-dot.on{background:#7c3aed;transform:scale(1.2);}'
-+'.fwpexp-dot:hover{transform:scale(1.3);}'
-/* footer */
-+'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:10px;flex-wrap:nowrap;position:relative;}'
-+'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:46%;flex:0 1 auto;}'
-+'.fwpac{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;flex:0 0 auto;}'
-+'.fwpmore:hover{text-decoration:underline;}'
-+'.fwpac:hover{text-decoration:underline;}'
-+'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;flex:0 0 auto;}'
-+'.fwpsh svg{flex-shrink:0;}'
-+'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
-/* share menu popup */
-+'.fwpsharemenu{position:absolute;bottom:46px;right:14px;background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.16);padding:6px;display:none;flex-direction:column;gap:2px;z-index:20;min-width:170px;}'
-+'.fwpsharemenu button{background:none;border:none;text-align:left;padding:7px 9px;font-size:12px;color:#111827;cursor:pointer;border-radius:6px;font-family:inherit;display:flex;align-items:center;gap:9px;width:100%;}'
-+'.fwpsharemenu button svg{flex-shrink:0;}'
-+'.fwpsharemenu button span{font-weight:600;}'
-+'.fwpsharemenu button:hover{background:#f4f5ff;}'
-/* add to site */
-+'.fwpadd{border-top:2px dashed #c7d2fe;padding:9px 14px;background:#f0f2ff;}'
-+'.fwpabtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;font-family:inherit;font-weight:700;display:flex;align-items:center;gap:5px;padding:0;width:100%;text-align:left;}'
-+'.fwpabtn:hover{text-decoration:underline;}'
-+'.fwpebox{margin-top:10px;display:none;}'
-+'.fwpebox p{font-size:11px;color:#374151;margin-bottom:8px;line-height:1.55;}'
-+'.fwpec{display:block;background:#1e293b;color:#7dd3fc;font-family:monospace;font-size:10.5px;padding:10px 12px;border-radius:8px;white-space:pre;overflow-x:auto;line-height:1.7;border:1px solid #334155;}'
-+'.fwpcb{margin-top:7px;background:#0A0AFF;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}'
-+'.fwpcb:hover{background:#2222ff;}'
-+'.fwpcb.copied{background:#16a34a;}'
-/* app store promo badges */
-+'.fwpapps{border-top:2px dashed #c7d2fe;padding:12px 14px;background:#f8f9ff;text-align:center;}'
-+'.fwpapps-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:9px;}'
-+'.fwpapps-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}'
-+'.fwpapp-badge{display:flex;align-items:center;gap:7px;background:#111827;color:#fff;border-radius:8px;padding:7px 13px;text-decoration:none;transition:opacity .15s,transform .15s;}'
-+'.fwpapp-badge:hover{opacity:.85;transform:translateY(-1px);}'
-+'.fwpapp-ic{font-size:19px;line-height:1;}'
-+'.fwpapp-txt{display:flex;flex-direction:column;line-height:1.2;text-align:left;}'
-+'.fwpapp-txt small{font-size:8px;color:#d1d5db;text-transform:uppercase;letter-spacing:.4px;}'
-+'.fwpapp-txt b{font-size:12.5px;font-weight:700;color:#fff;}'
-/* social follow row */
-+'.fwpsocial{border-top:2px dashed #c7d2fe;padding:12px 14px;background:#f8f9ff;text-align:center;}'
-+'.fwpsocial-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:10px;}'
-+'.fwpsocial-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}'
-+'.fwpsocial-btn{display:inline-flex;align-items:center;justify-content:center;transition:transform .15s;}'
-+'.fwpsocial-btn:hover{transform:scale(1.1);}'
-+'.fwpsocial-btn svg{display:block;}'
-+'.fwpattr{font-size:10px;color:#9ca3af;text-align:center;padding:5px 0 8px;}'
-+'.fwpattr a{color:#0A0AFF;text-decoration:none;}'
-+'.fwpattr a:hover{text-decoration:underline;}';
-  document.head.appendChild(_cs);
-}
-
-/* \u2500\u2500 One-time network warm-up: open the connections early so the first
-   Explore fetch and its images don't pay full DNS+TLS setup cost \u2500\u2500 */
-if(!document.getElementById('fwpv6preconnect')){
-  var _pc1=document.createElement('link');_pc1.id='fwpv6preconnect';_pc1.rel='preconnect';_pc1.href=B;
-  document.head.appendChild(_pc1);
-  var _pc2=document.createElement('link');_pc2.rel='preconnect';_pc2.href='https://blogger.googleusercontent.com';_pc2.crossOrigin='anonymous';
-  document.head.appendChild(_pc2);
-}
-
-/* \u2500\u2500 Offline puzzle data pool: 28 categories, 3 shown at random each day \u2500\u2500 */
 var C=[
 {t:"Riddles",s:"riddles",p:[
 {d:"easy",q:"I speak without a mouth and hear without ears. I have no body but come alive with wind. What am I?",h:"Think of sounds bouncing back in a valley.",a:"echo",c:["shadow","whisper","silence"]},
@@ -424,7 +172,7 @@ var C=[
 {d:"medium",q:"A woman had two sons at the same hour on the same day in the same year. Yet they were not twins. How?",h:"Think bigger than two.",a:"triplets",c:["twins","cousins","quadruplets"]},
 {d:"hard",q:"What word in English is always spelled incorrectly?",h:"Read the question very literally.",a:"incorrectly",c:["correctly","wrongly","misspelled"]},
 {d:"hard",q:"A woman shoots her husband then holds him underwater. They go to dinner an hour later. How?",h:"What profession shoots people harmlessly?",a:"photographer",c:["doctor","hunter","lifeguard"]},
-{d:"hard",q:"What has a head and a tail but no body? It is not alive but you find it in your pocket.",h:"You flip it to make a decision.",a:"coin",c:["dice","button","key"]},
+{d:"hard",q:"A woman gives a beggar 50 cents. The woman is the beggar's sister, but the beggar is not the woman's brother. How is that possible?",h:"Think about who else the beggar could be.",a:"the beggar is a woman",c:["the beggar is adopted","the beggar is her husband","the beggar is a stranger"]},
 {d:"hard",q:"A man who was outside in the rain without an umbrella or hat did not get a single hair wet. How?",h:"Think about hair.",a:"he was bald",c:["he wore a hat","he used an umbrella","he stayed indoors"]},
 {d:"easy",q:"What can you never eat for breakfast?",h:"Think about the meal itself, not the food.",a:"lunch",c:["dinner","toast","cereal"]},
 {d:"easy",q:"What has to be broken before you can use it?",h:"You crack it open to make an omelette.",a:"egg",c:["seal","glass","promise"]},
@@ -437,19 +185,19 @@ var C=[
 {d:"easy",q:"I have a neck but no head. What am I?",h:"You pour drinks from me.",a:"bottle",c:["jug","vase","cup"]},
 {d:"easy",q:"I fly without wings. What am I?",h:"Think about what passes every second.",a:"time",c:["wind","sound","light"]},
 {d:"easy",q:"I have teeth but cannot bite. What am I?",h:"You use me to tidy your hair.",a:"comb",c:["saw","fork","zipper"]},
-{d:"easy",q:"I have hands but cannot clap. I have a face but no eyes. What am I?",h:"You look at it to know the time.",a:"clock",c:["watch","calendar","mirror"]},
+{d:"easy",q:"I have a bark, but I never bite, and I am not a dog. What am I?",h:"You'd find me in a forest.",a:"a tree",c:["a wolf","a seal","a plant"]},
 {d:"easy",q:"I have a spine but no bones. What am I?",h:"You read me.",a:"book",c:["cactus","ladder","fence"]},
 {d:"easy",q:"I have a tongue but cannot talk. What am I?",h:"Think about footwear.",a:"shoe",c:["glove","hat","bell"]},
-{d:"medium",q:"I can travel around the world without moving from my place. What am I?",h:"Think about sending letters.",a:"stamp",c:["coin","map","photo"]},
+{d:"medium",q:"I have a golden crown but I am not a king. I grow on a tree and my center holds several seeds arranged like a star. What am I?",h:"Cut me across the middle to see the star shape.",a:"an apple",c:["a pumpkin","an orange","a pineapple"]},
 {d:"medium",q:"I have branches but no fruit, trunk or leaves. What am I?",h:"You go here to borrow books or save money.",a:"bank",c:["tree","forest","library"]},
 {d:"medium",q:"I am taken from a mine and shut in a wooden case. Used by everyone but never touched. What am I?",h:"Think about writing tools.",a:"pencil lead",c:["chalk","crayon","ink"]},
 {d:"medium",q:"I get shorter as I get older. What am I?",h:"Think about what burns down over time.",a:"candle",c:["match","lamp","torch"]},
-{d:"medium",q:"I have an eye but cannot see. I have a body but no legs. What am I?",h:"Think about severe weather.",a:"needle or hurricane",c:["storm","tornado","cyclone"]},
+{d:"medium",q:"I have an eye but cannot see. I have a spinning body but no legs. What am I?",h:"Think about severe weather.",a:"hurricane",c:["storm","tornado","cyclone"]},
 {d:"hard",q:"The person who makes me does not need me. The buyer does not use me. The user does not know. What am I?",h:"Think about a final resting place.",a:"coffin",c:["safe","chest","urn"]},
-{d:"hard",q:"You see me once in June, twice in November, not at all in May. What am I?",h:"Look at the letters of each month name.",a:"letter n",c:["letter m","letter j","letter u"]},
+{d:"hard",q:"You see me once in June, twice in November, not at all in May. What am I?",h:"Look at the letters of each month name.",a:"letter e",c:["letter m","letter j","letter u"]},
 {d:"hard",q:"I am always hungry and must always be fed. The finger I touch will soon turn red. What am I?",h:"Think about heat.",a:"fire",c:["ice","smoke","wind"]},
-{d:"easy",q:"I have a bed but never sleep, a mouth but never eat. What am I?",h:"Think about flowing water.",a:"river",c:["mountain","cave","ocean"]},
-{d:"easy",q:"I have a golden head and a golden tail, but no golden body. What am I?",h:"Flip me to make a decision.",a:"coin",c:["ring","medal","key"]},
+{d:"easy",q:"I have a face that changes shape every night but I never age. What am I?",h:"Look up after sunset.",a:"the moon",c:["a clock","a mirror","a calendar"]},
+{d:"easy",q:"I have a heart that does not beat. What am I?",h:"You might eat my heart after peeling away tough outer leaves.",a:"an artichoke",c:["a robot","a clock","a statue"]},
 {d:"medium",q:"I follow you all day but disappear at night. What am I?",h:"I appear whenever the sun is out.",a:"shadow",c:["reflection","echo","silhouette"]},
 {d:"hard",q:"I have no life, but I can die. What am I?",h:"You might find me inside a remote control.",a:"battery",c:["phone","plant","engine"]}
 ]},
@@ -465,11 +213,11 @@ var C=[
 {d:"medium",q:"What did the ocean say to the beach?",h:"Think of a wavy greeting.",a:"nothing it just waved",c:["hello ocean","see you later","have a splashy day"]},
 {d:"medium",q:"Why do scientists not trust atoms?",h:"They are guilty of something.",a:"they make up everything",c:["they are too small","they never sit still","they split too easily"]},
 {d:"medium",q:"What did one wall say to the other?",h:"Think about a corner.",a:"i will meet you at the corner",c:["nice bricks today","see you at the ceiling","watch out for cracks"]},
-{d:"medium",q:"Why did the bicycle not win the race?",h:"Think about what it was.",a:"two tired",c:["ran out of road","lost its chain","flat tyres"]},
+{d:"medium",q:"Why did the tomato turn red?",h:"Think about what it saw on the plate next to it.",a:"it saw the salad dressing",c:["it was embarrassed to be a fruit","it got too much sun","it ripened too fast"]},
 {d:"medium",q:"What is a vampire's favourite fruit?",h:"Think about the neck.",a:"a blood orange",c:["a neck-tarine","a bite-sized apple","a scream-berry"]},
 {d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human",c:["dog","spider","the sphinx"]},
 {d:"hard",q:"What word becomes shorter when you add two letters to it?",h:"Think of the word meaning not long.",a:"short",c:["small","tiny","brief"]},
-{d:"hard",q:"What runs but never walks, has a mouth but never talks, has a head but never weeps?",h:"Think about flowing water.",a:"river",c:["road","clock","wind"]},
+{d:"hard",q:"What do you call a pig that knows karate?",h:"Think about a breakfast meat with a martial-arts twist.",a:"a pork chop",c:["a ham-strike","a bacon belt","a kung-fu ham"]},
 {d:"easy",q:"Why did the golfer bring two pairs of trousers?",h:"Think about what can happen on the green.",a:"in case he got a hole in one",c:["it might rain","he likes fashion","one pair got dirty"]},
 {d:"easy",q:"What do you call a bear with no teeth?",h:"Think of a soft, cuddly word.",a:"a gummy bear",c:["a toothless bear","a soft bear","a baby bear"]},
 {d:"medium",q:"Why don't skeletons fight each other?",h:"Think about what they lack.",a:"they don't have the guts",c:["they are too old","they have no weapons","they are too tired"]},
@@ -483,11 +231,11 @@ var C=[
 {d:"easy",q:"A man is 20 years old but has only had 5 birthdays. How?",h:"Think about when his birthday falls.",a:"born on february 29",c:["born on new year's day","born on a leap second","he lied about his age"]},
 {d:"easy",q:"What has 13 hearts but no other organs?",h:"You use it to play card games.",a:"deck of cards",c:["calendar","chess set","dice set"]},
 {d:"easy",q:"What is always the last thing to make you smile?",h:"Think about a photo.",a:"your cheeks",c:["your eyes","your teeth","your ears"]},
-{d:"easy",q:"A rooster lays an egg on top of a barn. Which way does it roll?",h:"Think about whether a rooster can lay eggs.",a:"roosters dont lay eggs",c:["it rolls left","it rolls right","it stays put"]},
+{d:"easy",q:"A boy was rushed to the emergency room. The surgeon looked at him and said, 'I cannot operate on this boy, he is my son.' But the surgeon was not the boy's father. How is this possible?",h:"Think about who else the surgeon could be.",a:"the surgeon is his mother",c:["the surgeon is his uncle","the surgeon is his grandfather","the surgeon is his stepfather"]},
 {d:"medium",q:"A man pushes his car to a hotel and declares bankruptcy. Why?",h:"Think about a popular board game.",a:"monopoly",c:["chess","checkers","scrabble"]},
 {d:"medium",q:"A man is found dead by a cassette. Police press play, hear a gunshot and know it is murder. Why?",h:"Think about what the recording reveals.",a:"someone rewound it",c:["it was a recording","the tape was broken","it was slowed down"]},
 {d:"medium",q:"A woman lives on the 20th floor. On sunny days she takes the lift to the 10th and walks up. On rainy days all the way. Why?",h:"Think about what she carries on rainy days.",a:"umbrella",c:["raincoat","boots","hat"]},
-{d:"medium",q:"How can a man go 25 days without sleep?",h:"He does not need to sleep during the day.",a:"he sleeps at night",c:["he takes long naps","he never gets tired","he sleeps standing up"]},
+{d:"medium",q:"A man is found dead in a sealed room with all windows closed, lying in a puddle of water next to broken glass. No one else was in the room. How did he die?",h:"Think about what kind of creature could have been in the glass.",a:"he was a goldfish and his bowl fell",c:["he slipped and hit his head","he was electrocuted","he drowned in the puddle"]},
 {d:"hard",q:"A man found dead in a field next to an unopened package. No marks, no one around. How did he die?",h:"Think about what the package was supposed to do.",a:"parachute failed to open",c:["he was pushed","he had a heart attack","he was struck by lightning"]},
 {d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 paise per digit. She pays Rs 1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits",c:["a phone number","a street sign","a padlock code"]},
 {d:"hard",q:"3 doors: freedom behind one, lions behind others. Which do you pick?",h:"Think about lions unfed for 3 years.",a:"any they would be dead",c:["the middle door","the first door","the last door"]},
@@ -508,9 +256,9 @@ var C=[
 {d:"easy",q:"What is 1000 plus 20 plus 1000 plus 30 plus 1000 plus 1040?",h:"Add carefully step by step.",a:"4090"},
 {d:"medium",q:"I am an odd number. Take away one letter and I become even. What number am I?",h:"Think about the word not the digit.",a:"seven",c:["nine","three","five"]},
 {d:"medium",q:"A bat and ball cost Rs 110 together. The bat costs Rs 100 more than the ball. What is the cost of the ball?",h:"Do not just say Rs 10. Set up a proper equation.",a:"5"},
-{d:"medium",q:"Two ropes each burn in 60 minutes unevenly. How do you measure exactly 45 minutes?",h:"Light both ends of one rope and one end of the other.",a:"45 minutes"},
-{d:"medium",q:"If there are 3 apples and you take away 2, how many apples do you have?",h:"YOU took 2.",a:"2"},
-{d:"hard",q:"A clock loses 3 minutes every hour. Set at noon, when will it next show the correct time?",h:"It must lose exactly 12 hours.",a:"240 days"},
+{d:"medium",q:"You have two ropes that each take exactly 60 minutes to burn from end to end, but burn unevenly along their length. You light rope A at both ends and rope B at one end, at the same moment. The instant rope A finishes burning, you light the second end of rope B. How many total minutes will have passed when rope B finally finishes burning?",h:"Rope A, lit at both ends, burns out in half its normal time.",a:"45",c:["60","30","50"]},
+{d:"medium",q:"A father is currently 4 times as old as his son. In 20 years, he will be exactly twice as old as his son. How old is the son right now?",h:"Set up an equation using the son's current age as x.",a:"10"},
+{d:"hard",q:"A clock loses 3 minutes every hour. Set at noon, when will it next show the correct time?",h:"It must lose exactly 12 hours, which at 3 minutes lost per hour takes 240 hours.",a:"10 days"},
 {d:"hard",q:"8 identical balls, one slightly heavier. Using a balance only twice, find the heavy one.",h:"Divide into groups of 3, 3, and 2.",a:"two weighings",c:["three weighings","one weighing","four weighings"]},
 {d:"hard",q:"What 3 positive numbers give the same result when multiplied and when added?",h:"Try simple numbers like 1, 2, 3.",a:"1 2 3"},
 {d:"hard",q:"You have two hourglasses \u2014 a 4-minute and a 7-minute. How do you measure exactly 9 minutes?",h:"Start both, flip the 4 when done, then flip again.",a:"flip strategically",c:["flip both together","wait 11 minutes","flip only the 7"]},
@@ -590,7 +338,7 @@ var C=[
 {d:"easy",q:"ROT13: What does CHMMYR decode to?",h:"Each letter shifts 13 places forward.",a:"puzzle",c:["riddle","secret","cipher"]},
 {d:"easy",q:"If 1=A, 2=B, 3=C ... what does 6-21-14 spell?",h:"F=6, U=21, N=14.",a:"fun",c:["fan","fin","sun"]},
 {d:"easy",q:"What letter is the mirror of E in the alphabet A-Z?",h:"A=Z, B=Y, C=X ...",a:"v",c:["u","w","y"]},
-{d:"easy",q:"In the code BSBOC each letter is one ahead of the real letter. What word does it spell?",h:"Shift each letter one place back in the alphabet.",a:"brain",c:["brave","train","drain"]},
+{d:"easy",q:"In the code CSBJO each letter is one ahead of the real letter. What word does it spell?",h:"Shift each letter one place back in the alphabet.",a:"brain",c:["brave","train","drain"]},
 {d:"easy",q:"What number comes next: 2, 4, 6, 8, __?",h:"Even numbers in sequence.",a:"10"},
 {d:"easy",q:"Decode: 20-5-19-20. A=1, B=2 ...",h:"Convert each number to a letter.",a:"test",c:["rest","best","text"]},
 {d:"easy",q:"If ZAP = 26-1-16, what does CAT equal?",h:"A=1, B=2, C=3 ...",a:"3-1-20"},
@@ -598,7 +346,7 @@ var C=[
 {d:"medium",q:"In a 4-digit lock using digits 1-4 with no repeats, how many codes are possible?",h:"4 x 3 x 2 x 1.",a:"24"},
 {d:"medium",q:"Caesar cipher shift 3: decode SXCCOH",h:"Shift each letter back 3 places.",a:"puzzle",c:["riddle","secret","cipher"]},
 {d:"medium",q:"What pattern: 1, 11, 121, 1331, 14641?",h:"Think about Pascal triangle.",a:"powers of 11",c:["pascal's rows","binomial sums","fibonacci steps"]},
-{d:"hard",q:"A says B is lying. B says C is lying. C says A and B are both lying. Who tells the truth?",h:"Test each possibility. Only one is consistent.",a:"c",c:["a","b","none of them"]},
+{d:"hard",q:"A says B is lying. B says C is lying. C says A and B are both lying. Who tells the truth?",h:"Test each possibility. Only one is consistent.",a:"b",c:["a","c","none of them"]},
 {d:"hard",q:"Using a Caesar cipher with a shift of 4, what does 'KEVHIR' decode to?",h:"Shift each letter back by 4.",a:"garden",c:["forest","meadow","valley"]},
 {d:"hard",q:"Using digits 1, 2, 3, 4 each exactly once with + - x, make 10.",h:"Try 1+2+3+4.",a:"1+2+3+4"},
 {d:"hard",q:"A book has 500 pages. How many times does the digit 1 appear?",h:"Count pages: 1, 10-19, 100-199 ...",a:"200"},
@@ -622,7 +370,7 @@ var C=[
 {d:"medium",q:"Which chess piece is worth roughly 3 pawns?",h:"It moves in an L-shape or along diagonals.",a:"knight or bishop",c:["rook","pawn","king"]},
 {d:"hard",q:"What opening starts: 1.e4 e5 2.Nf3 Nc6 3.Bc4?",h:"Named after a city in Italy.",a:"italian game",c:["spanish game","french defence","sicilian defence"]},
 {d:"hard",q:"What is en passant?",h:"A pawn captures another that just moved two squares.",a:"special pawn capture",c:["a type of castling","a pawn promotion","a forced checkmate"]},
-{d:"hard",q:"How many possible games exist after each player makes 2 moves?",h:"Each side has 20 first moves and 20 second moves.",a:"400"},
+{d:"hard",q:"How many possible games exist after each player makes their first move?",h:"Each side has 20 possible first moves.",a:"400"},
 {d:"hard",q:"How many possible first moves does white have in chess?",h:"Pawns and knights can move.",a:"20"},
 {d:"easy",q:"How many bishops does each player start with?",h:"One for each starting colour square.",a:"2"},
 {d:"easy",q:"Which piece is often called the 'weakest' piece on the board?",h:"There are 8 of these at the start.",a:"pawn",c:["knight","bishop","rook"]},
@@ -655,23 +403,23 @@ var C=[
 {d:"easy",q:"A man lives on the 10th floor. He takes the lift down each morning but walks up from the 6th floor. Why?",h:"Think about a physical limitation.",a:"he is too short to reach floor 10 button",c:["the lift is broken above floor 6","he enjoys the exercise","he lives on floor 6 too"]},
 {d:"easy",q:"How can a man go 8 days without sleep?",h:"He does not need to.",a:"he sleeps at night",c:["he never needs sleep","he naps at work","he sleeps standing up"]},
 {d:"easy",q:"An electric train heads north. Which way does the smoke blow?",h:"Electric trains produce no smoke.",a:"no smoke",c:["smoke blows north","smoke blows south","smoke blows sideways"]},
-{d:"easy",q:"A woman had two sons born same time same day. Not twins. How?",h:"Think about more than two.",a:"they are triplets",c:["they are twins","they have different fathers","one was adopted"]},
-{d:"easy",q:"A man walks into a bar and asks for water. The bartender pulls a gun. The man says thanks and leaves. Why?",h:"Why would someone urgently need water?",a:"hiccups",c:["he was thirsty","he wanted ice","he was testing the bartender"]},
-{d:"easy",q:"A rooster laid an egg on a roof peak. Which way does it roll?",h:"Roosters do not lay eggs.",a:"roosters dont lay eggs",c:["it rolls left","it rolls right","it stays on the roof"]},
+{d:"easy",q:"A truck driver goes the wrong way down a one-way street, passing at least ten police officers, yet none of them stop him. Why not?",h:"Think about whether he's actually driving.",a:"he was walking, not driving",c:["the officers were off duty","he had a special permit","it was actually a two-way street"]},
+{d:"easy",q:"A man calls his dog from the opposite side of a river. The dog crosses without getting wet and without using a bridge or boat. How?",h:"Think about what a river does in winter.",a:"the river was frozen",c:["the dog swam across","the man carried the dog","the river was very shallow"]},
+{d:"easy",q:"A man is trapped in a room with two doors. One leads to a room lined with magnifying glasses that will instantly burn him alive in the sunlight; the other leads to a room full of assassins with loaded guns. How does he escape safely?",h:"Think about when sunlight isn't a threat.",a:"he waits until night, when there is no sunlight to trigger the glass room",c:["he negotiates with the assassins","he wears fireproof clothing","he breaks through a wall instead"]},
 {d:"easy",q:"How do you make the number 7 even?",h:"Think about removing a letter.",a:"remove the s",c:["add a zero","flip it upside down","cross out the top"]},
 {d:"easy",q:"A girl fell off a 20-foot ladder but was not hurt. How?",h:"Think about which rung she was on.",a:"she fell from the first rung",c:["she landed on a mattress","she wasn't on the ladder","the ladder was padded"]},
 {d:"medium",q:"A man is found hanging from the ceiling of a locked room, with no chair or furniture nearby to stand on, only a puddle of water on the floor. How did he do it?",h:"Think about what could have supported him that has since disappeared.",a:"he stood on a block of ice that melted",c:["he used a ladder someone removed","he levitated","the puddle is unrelated"]},
-{d:"medium",q:"A man dead in a field, unopened package beside him, no marks, no one around. How?",h:"What was the package supposed to do?",a:"parachute failed",c:["he had a heart attack","he was pushed","lightning struck him"]},
+{d:"medium",q:"Two fathers and two sons go fishing together. Each of them catches exactly one fish, yet they bring home only three fish in total. No fish were lost, thrown back, or given away. How is this possible?",h:"Think about how many people are actually there.",a:"they are a grandfather, father, and son \u2014 three people, not four",c:["one fish was too small to keep","they shared a fishing rod","one of them didn't catch anything"]},
 {d:"medium",q:"You are in a boat on a lake. You drop an anchor overboard. Does the lake level rise or fall?",h:"Think about weight displacement.",a:"falls",c:["rises","stays the same","overflows"]},
-{d:"medium",q:"A man is pushing his car. He stops at a hotel and says he is broke. What is he doing?",h:"Think about a board game.",a:"playing monopoly",c:["playing chess","out of fuel","waiting for a tow"]},
-{d:"hard",q:"3 switches outside control 3 bulbs in a windowless room. Enter only once. How do you identify each?",h:"Turning a switch on and off before entering leaves a physical clue behind, not just a visual one.",a:"the heat of a bulb reveals which switch was recently on",c:["only the light pattern matters","count the bulbs by brightness","the bulb positions give it away"]},
+{d:"medium",q:"A man leaves his house, makes three left turns, and ends up back at home facing two men wearing masks. Who are the two masked men?",h:"Think about a sport played on a diamond.",a:"the catcher and the umpire",c:["two burglars","his neighbours","firefighters"]},
+{d:"hard",q:"A farmer needs to cross a river with a fox, a chicken, and a bag of grain. His boat can only carry himself and one item at a time. Left alone together, the fox will eat the chicken, and the chicken will eat the grain. How does he get everything across safely?",h:"Take the chicken first \u2014 it's the only thing that's both a predator and prey here.",a:"take the chicken first, return alone, take the fox, bring the chicken back, take the grain, return alone, take the chicken again",c:["take the fox first","take the grain first","make two trips with the fox and chicken together"]},
 {d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
 {d:"hard",q:"A house has 4 sides all facing south. A bear walks by. What colour is the bear?",h:"Think about where all 4 sides can face south.",a:"white",c:["black","brown","it could be any colour"]},
 {d:"hard",q:"How can you throw a ball so it goes a short distance, comes to a complete stop, and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up",c:["throw it against a wall","throw it at an angle","roll it instead"]},
 {d:"easy",q:"A man is found dead in the middle of a field, holding half a matchstick. How did he die?",h:"Think about what he might have been holding while high in the air.",a:"he fell from a hot air balloon that ran out of fuel",c:["he lit a fire","he was struck by lightning","he was hiking"]},
 {d:"easy",q:"You see a boat filled with people, yet there isn't a single person on board. How?",h:"Think about the word 'single' differently.",a:"everyone on the boat is married so no one is single",c:["they are all invisible","the boat is a model","they all jumped off"]},
 {d:"medium",q:"A man walks into a restaurant, orders albatross soup, takes one bite, then shoots himself. Why?",h:"Think about when he might have eaten albatross before.",a:"he realised he had eaten albatross before during a shipwreck and it did not taste the same",c:["the soup was too salty","he did not like the taste","the waiter insulted him"]},
-{d:"hard",q:"A man lives on the 40th floor. Every morning he takes the lift to the ground floor. Every evening he only rides it back up to the 25th floor and walks the rest \u2014 unless it's raining, in which case he rides all the way up. Why (he is not short)?",h:"Think about what he carries only on rainy days.",a:"he uses his umbrella to press the higher button",c:["he likes the exercise","the lift breaks often","he visits a friend on 25"]}
+{d:"hard",q:"A woman is home alone at night when a man she doesn't recognize knocks on her door. He says he's her neighbor and that his power has gone out, so could he please use her phone? She becomes suspicious and refuses, then calls the police. Why didn't his story add up?",h:"Think about which type of phone still works during a power outage.",a:"a landline phone still works during a power outage, so he wouldn't need to borrow one",c:["he didn't know her neighbor's name","his clothes were too clean","she recognized his voice"]}
 ]},
 {t:"Matchstick",s:"matchstick-maths-puzzles",p:[
 {d:"easy",q:"How many matchsticks are needed to form one triangle?",h:"Each side of the triangle takes one matchstick.",a:"3"},
@@ -706,19 +454,19 @@ var C=[
 {d:"easy",q:"What does B4 represent?",h:"Say it aloud as a number and letter.",a:"before",c:["b-four","forever","before hand"]},
 {d:"medium",q:"What does this represent?\nSTAND\nI I I I",h:"What are the I's doing relative to STAND?",a:"i understand",c:["i stand alone","standing tall","i under stand"]},
 {d:"medium",q:"ONCE\n----\nTIME\nWhat does this represent?",h:"Think about position.",a:"once upon a time",c:["time after time","once in a while","time and again"]},
-{d:"medium",q:"What phrase is shown by TIMING TIM ING?",h:"One word is inside another.",a:"perfect timing",c:["timing is everything","split second","right on time"]},
+{d:"medium",q:"What phrase does 'DICE DICE' represent?",h:"Think about what a pair of dice sounds like.",a:"paradise",c:["double trouble","lucky roll","game over"]},
 {d:"medium",q:"What does this mean: DEATH LIFE?",h:"Think about what comes between the two words.",a:"life after death",c:["death before life","life and death","fear of death"]},
 {d:"hard",q:"What does MAN / BOARD represent?",h:"Think about position.",a:"man overboard",c:["board the man","overworked man","man on board"]},
 {d:"hard",q:"What does NE14 10S mean?",h:"Say each part aloud.",a:"anyone for tennis",c:["any tennis players","tennis anyone","ten tennis players"]},
 {d:"hard",q:"TIMING TIM ING \u2014 what is the hidden phrase?",h:"The word TIM is inside TIMING.",a:"split second timing",c:["perfect timing","timing is everything","dead on time"]},
-{d:"hard",q:"What does ROADS represent?",h:"Think about crossroads.",a:"crossroads",c:["road trip","cross country","dirt roads"]},
+{d:"hard",q:"What does XING represent?",h:"Think about a sign drivers see near train tracks.",a:"crossing",c:["walking","stopping","yielding"]},
 {d:"easy",q:"What does the arrangement 'CYCLE CYCLE CYCLE' represent?",h:"Think about a three-wheeled vehicle.",a:"tricycle",c:["bicycle","unicycle","recycle"]},
 {d:"easy",q:"What does 'READING' with a 'G' written below the line represent?",h:"Think about where the G has been placed.",a:"reading between the lines",c:["reading is fun","under the line","hidden reading"]},
 {d:"medium",q:"What does 'MIND' written directly above 'MATTER' represent?",h:"Read the words by their position, top over bottom.",a:"mind over matter",c:["mind games","matter of mind","state of mind"]},
 {d:"hard",q:"What does 'ECNALG' represent?",h:"Try reading the letters from the other direction.",a:"backward glance",c:["forward glance","sideways glance","quick glance"]}
 ]},
 {t:"GK",s:"general-knowledge-quizzes-and-riddles",p:[
-{d:"easy",q:"Which planet has the most moons?",h:"The largest planet in our solar system.",a:"jupiter",c:["saturn","neptune","uranus"]},
+{d:"easy",q:"Which planet currently has the most known moons?",h:"It's famous for its spectacular rings.",a:"saturn",c:["jupiter","neptune","uranus"]},
 {d:"easy",q:"What is the only country that is also a continent?",h:"Southern Hemisphere, has kangaroos.",a:"australia",c:["greenland","antarctica","new zealand"]},
 {d:"easy",q:"Which element has the chemical symbol Fe?",h:"A common metal used in construction.",a:"iron",c:["tin","zinc","lead"]},
 {d:"easy",q:"What is the capital of Japan?",h:"One of the most populated cities in the world.",a:"tokyo",c:["osaka","kyoto","seoul"]},
@@ -733,7 +481,7 @@ var C=[
 {d:"hard",q:"I am a country, language and nationality all sharing one name. Capital is Amsterdam. What am I?",h:"Famous for tulips, windmills, and cycling.",a:"netherlands",c:["denmark","belgium","luxembourg"]},
 {d:"hard",q:"What is the only number in English with the same number of letters as its value?",h:"Count the letters in the word.",a:"four",c:["one","three","six"]},
 {d:"hard",q:"Which country has the most natural lakes?",h:"It has over 60 percent of the world total.",a:"canada",c:["russia","finland","brazil"]},
-{d:"hard",q:"What is the only planet that rotates clockwise when viewed from above?",h:"It spins backwards compared to most planets.",a:"venus",c:["mercury","mars","uranus"]},
+{d:"hard",q:"What is the only planet commonly described as rotating clockwise (retrograde) when viewed from above its north pole?",h:"It spins backwards compared to most planets.",a:"venus",c:["mercury","mars","uranus"]},
 {d:"easy",q:"What is the largest planet in our solar system?",h:"It's also famous for its Great Red Spot.",a:"jupiter",c:["saturn","neptune","uranus"]},
 {d:"easy",q:"What is the tallest mountain in the world?",h:"It sits in the Himalayas.",a:"everest",c:["k2","kilimanjaro","denali"]},
 {d:"medium",q:"Which country is home to the ancient city of Machu Picchu?",h:"It's located high in the Andes mountains.",a:"peru",c:["mexico","chile","bolivia"]},
@@ -772,7 +520,7 @@ var C=[
 {d:"easy",q:"What is wrong: The earth revolve around the sun.",h:"Subject-verb agreement with a singular subject.",a:"revolve should be revolves",c:["earth should be Earth","around should be round","sun should be Sun"]},
 {d:"medium",q:"Find the deliberate mistake:\n2, 4, 8, 16, 36, 64",h:"Each number should double.",a:"36 should be 32"},
 {d:"medium",q:"Which is wrong?\nWater boils at 100C.\nIce melts at 0C.\nSun rises in East.\nMoon is a planet.",h:"The moon is NOT a planet.",a:"moon is not a planet",c:["water boils at a different temp","ice melts at a different temp","sun rises in the west"]},
-{d:"medium",q:"Find the error: There our three mistakes in this sentance.",h:"There are actually 3 errors.",a:"our should be are sentance should be sentence",c:["there should be their","three should be tree","mistakes should be mistake"]},
+{d:"medium",q:"Find the two errors: There our three mistakes in this sentance.",h:"Look for a wrong word and a misspelling.",a:"our should be are, sentance should be sentence",c:["there should be their","three should be tree","mistakes should be mistake"]},
 {d:"medium",q:"What is wrong: A triangle has 4 sides.",h:"Basic geometry.",a:"a triangle has 3 sides not 4",c:["a triangle has 5 sides not 4","a square has 3 sides not 4","a triangle has no sides"]},
 {d:"hard",q:"Spot the mistake:\n6x8=48\n7x8=54\n8x8=64\n9x8=72",h:"Check each multiplication.",a:"7x8 should be 56 not 54"},
 {d:"hard",q:"What is wrong with a triangle of sides 3, 4, and 8?",h:"Triangle inequality: sum of two sides must exceed third.",a:"not a valid triangle",c:["it's a right triangle","it's an equilateral triangle","it's a scalene triangle"]},
@@ -785,20 +533,20 @@ var C=[
 ]},
 {t:"English",s:"english-word-riddles",p:[
 {d:"easy",q:"Which word in the dictionary is always spelled incorrectly?",h:"Read the question very literally.",a:"incorrectly",c:["correctly","wrongly","misspelled"]},
-{d:"easy",q:"What 5-letter word becomes shorter when you add 2 letters?",h:"Think of the word meaning not long.",a:"short",c:["small","tiny","brief"]},
+{d:"easy",q:"What common English word still reads the same when you turn the page upside down?",h:"Think about what you do in a pool.",a:"swims",c:["pool","float","dive"]},
 {d:"easy",q:"What starts with E, ends with E, but only has one letter?",h:"It carries letters.",a:"envelope",c:["alphabet","dictionary","postcard"]},
-{d:"easy",q:"Find the hidden animal in: I visited my friend in SPARTA.",h:"Look inside the word SPARTA.",a:"rat",c:["cat","bat","ant"]},
+{d:"easy",q:"Find the hidden animal in: Please put the apples in the CRATE.",h:"Look in the middle of the word CRATE.",a:"rat",c:["cat","bat","ant"]},
 {d:"easy",q:"What word has three consecutive double letters?",h:"Think about keeping books.",a:"bookkeeper",c:["accountant","librarian","typewriter"]},
 {d:"easy",q:"What is a word that reads the same forwards and backwards?",h:"These are called palindromes.",a:"racecar",c:["rowboat","kayak","canoe"]},
-{d:"easy",q:"What comes once in a minute, twice in a moment, but never in a thousand years?",h:"Think about the letter not the concept.",a:"letter m",c:["letter e","letter s","letter t"]},
+{d:"easy",q:"What time of day, written as a 4-letter word, reads the same forwards and backwards?",h:"It's exactly midday.",a:"noon",c:["morn","dusk","dawn"]},
 {d:"easy",q:"Rearrange SILENT to make another common English word.",h:"It uses the same 6 letters.",a:"listen",c:["silent","enlist","tinsel"]},
 {d:"medium",q:"What 8-letter word contains only one vowel?",h:"Think about building material.",a:"strength",c:["length","width","depth"]},
-{d:"medium",q:"Which word contains all 5 vowels in order: a, e, i, o, u?",h:"A word meaning moderate in habits.",a:"abstemious",c:["facetious","education","auditorium"]},
+{d:"medium",q:"Which word contains all 5 vowels in order: a, e, i, o, u?",h:"A word meaning moderate in habits.",a:"abstemious",c:["fictional","emotional","auditorium"]},
 {d:"medium",q:"What is the longest common English word typed using only the top keyboard row?",h:"QWERTY row: Q W E R T Y U I O P.",a:"typewriter",c:["keyboard","monitor","printer"]},
 {d:"medium",q:"What 7-letter word has hundreds of letters in it?",h:"Think about what holds many letters.",a:"mailbox or postbox",c:["envelope","postcard","stamp album"]},
 {d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of numbers: one, two, three ...",a:"n",c:["m","t","e"]},
 {d:"hard",q:"What English word can have 4 of its 5 letters removed and still sound the same?",h:"Think about the word queue.",a:"queue",c:["quay","cue","clue"]},
-{d:"hard",q:"What word contains the letters of CINEMA in order but not consecutively?",h:"C-I-N-E-M-A spread through a longer word.",a:"ceremonial",c:["commercial","memorial","centennial"]},
+{d:"hard",q:"What common word contains the letters of CINEMA in order but not consecutively?",h:"Think about someone who builds kitchen furniture.",a:"cabinetmaker",c:["commercial","memorial","centennial"]},
 {d:"hard",q:"What is the only word in English that ends in -mt?",h:"Think about something that was not allowed to happen.",a:"dreamt",c:["dreamed","learnt","dreampt"]},
 {d:"easy",q:"What is the plural of 'mouse' (the animal)?",h:"It's an irregular plural, not just adding an 's'.",a:"mice",c:["mouses","mices","mouse"]},
 {d:"easy",q:"What is the opposite of 'ancient'?",h:"Think about something brand new.",a:"modern",c:["old","historic","antique"]},
@@ -811,9 +559,9 @@ var C=[
 {d:"easy",q:"If you multiply this number by any other number, the answer is always the same. What number is it?",h:"Think about what happens when you multiply anything by this number.",a:"0"},
 {d:"easy",q:"What can you hold in your right hand but not in your left?",h:"Think about which hand is which.",a:"your left hand",c:["your right hand","your other hand","both hands"]},
 {d:"easy",q:"What goes up when rain comes down?",h:"Think about what you use in the rain.",a:"umbrella",c:["raincoat","boots","hat"]},
-{d:"easy",q:"I have a tail and a head but no body. What am I?",h:"You flip me to make a decision.",a:"coin",c:["dice","button","key"]},
+{d:"easy",q:"What has a thumb and four fingers but is not alive?",h:"You wear it to keep your hand warm.",a:"a glove",c:["a hand","a puppet","a mitten"]},
 {d:"easy",q:"What number comes right before 100?",h:"Count backwards one number from 100.",a:"99"},
-{d:"easy",q:"A rooster lays an egg at the very top of a slanted roof. Which side does it roll off?",h:"Can a rooster lay eggs?",a:"roosters dont lay eggs",c:["it rolls left","it rolls right","it stays put"]},
+{d:"easy",q:"You're in a race and you overtake the runner in second place. What position are you in now?",h:"Think about whose spot you just took.",a:"second place",c:["first place","third place","last place"]},
 {d:"medium",q:"A man drives from A to B at 60 km/h and returns at 40 km/h. What is his average speed?",h:"Do not just average the speeds. Use total distance over total time.",a:"48 km/h"},
 {d:"medium",q:"A snail is at the bottom of a 10m well. Each day it climbs 3m but slides back 2m at night. How many days to escape?",h:"On the last day it reaches the top before sliding.",a:"8 days"},
 {d:"medium",q:"100 people in a room. 99 percent have blue eyes. How many must leave so 98 percent have blue eyes?",h:"This is a tricky percentage puzzle.",a:"50"},
@@ -828,13 +576,13 @@ var C=[
 {d:"hard",q:"A clock reads 12:00 exactly. What is the angle between the hour and minute hands?",h:"Both hands are pointing in exactly the same direction.",a:"0"}
 ]},
 {t:"Easy",s:"easy-puzzles",p:[
-{d:"easy",q:"What has a face and two hands but no arms or legs?",h:"You look at it to know the time.",a:"clock",c:["watch","calendar","mirror"]},
+{d:"easy",q:"What kind of band never plays music?",h:"You might wear it around a rolled-up newspaper.",a:"a rubber band",c:["a headband","a wedding band","a wristband"]},
 {d:"easy",q:"What is black when you buy it, red when you use it, grey when you throw it away?",h:"You use it to write on a board.",a:"charcoal",c:["chalk","crayon","pencil lead"]},
 {d:"easy",q:"What animal has a trunk but never packs for a holiday?",h:"The largest land animal.",a:"elephant",c:["giraffe","rhino","hippo"]},
-{d:"easy",q:"What gets bigger the more you take away from it?",h:"Think about digging.",a:"hole",c:["tunnel","pit","gap"]},
+{d:"easy",q:"What can you break, even if you never pick it up or touch it?",h:"Think about something you say you'll keep.",a:"a promise",c:["a record","a rule","silence"]},
 {d:"easy",q:"What kind of coat is always wet when you put it on?",h:"Think about something you apply with a brush.",a:"a coat of paint",c:["a raincoat","a fur coat","a coat of arms"]},
-{d:"easy",q:"What stays in a corner but travels all over the world?",h:"You put me on an envelope.",a:"stamp",c:["coin","map","photo"]},
-{d:"easy",q:"What has 4 legs in the morning and 4 legs all day?",h:"A simple one \u2014 not the Sphinx riddle.",a:"table",c:["chair","stool","bench"]},
+{d:"easy",q:"What kind of tree can you carry in your hand?",h:"Think about part of your hand.",a:"a palm",c:["an oak","a pine","a maple"]},
+{d:"easy",q:"What goes through cities and fields but never moves?",h:"Cars and trucks travel along it every day.",a:"a road",c:["a river","a train","the wind"]},
 {d:"easy",q:"What has a lot of keys but cannot open any door?",h:"You use it to play music.",a:"piano",c:["guitar","keyboard","organ"]},
 {d:"medium",q:"A man looks at a portrait and says: 'Brothers and sisters I have none, but this man's father is my father's son.' Whose picture is he looking at?",h:"Think about 'my father's son' when the man has no siblings.",a:"his own son",c:["his father","himself","his brother"]},
 {d:"medium",q:"What kind of room has no doors or windows?",h:"Think about the word split into two smaller words.",a:"a mushroom",c:["a bedroom","a bathroom","a classroom"]},
@@ -851,24 +599,24 @@ var C=[
 ]},
 {t:"Pyramid",s:"pyramid-maths-puzzles",p:[
 {d:"easy",q:"In a number pyramid each block = sum of two blocks below.\nWhat goes on top?\n?\n3  4",h:"Add the two bottom numbers.",a:"7"},
-{d:"easy",q:"Fill the pyramid:\n?\n5  6",h:"Add the two bottom blocks.",a:"11"},
-{d:"easy",q:"In a pyramid:\n10\n?  3\nWhat is the missing number?",h:"Top = sum of two below.",a:"7"},
-{d:"easy",q:"Pyramid: top is 15, one base is 7. What is the other base?",h:"Top = sum of two below.",a:"8"},
-{d:"easy",q:"Bottom row of pyramid: 2, 3. What is the top?",h:"Add the two bottom numbers.",a:"5"},
-{d:"easy",q:"Bottom row: 1, 4. Top = ?",h:"Add the two bottom numbers.",a:"5"},
-{d:"easy",q:"Top = 20. Bottom left = 8. Bottom right = ?",h:"Top = sum of two below.",a:"12"},
-{d:"easy",q:"3-row pyramid. Bottom row: 4, 5, 6. Middle row: 9, ?. Top: ?",h:"Each block is the sum of the two blocks below it.",a:"11 and 20"},
-{d:"medium",q:"Complete the pyramid:\n?\n?  ?\n1  2  3",h:"Build layer by layer from the bottom.",a:"9"},
+{d:"easy",q:"Fill the pyramid (top = sum of the two numbers below):\n?\n5  6",h:"Add the two bottom blocks.",a:"11"},
+{d:"easy",q:"In a pyramid (top = sum of the two numbers below):\n10\n?  3\nWhat is the missing number?",h:"Top = sum of two below.",a:"7"},
+{d:"easy",q:"Pyramid (the two base numbers add up to the top): top is 15, one base is 7. What is the other base?",h:"Top = sum of two below.",a:"8"},
+{d:"easy",q:"Bottom row of pyramid: 2, 3. What is the top (top = sum of the two numbers below)?",h:"Add the two bottom numbers.",a:"5"},
+{d:"easy",q:"Bottom row: 1, 4. Top = ? (top = sum of the two numbers below)",h:"Add the two bottom numbers.",a:"5"},
+{d:"easy",q:"Top = 20. Bottom left = 8. Bottom right = ? (the two base numbers add up to the top)",h:"Top = sum of two below.",a:"12"},
+{d:"easy",q:"3-row pyramid, each block = sum of the two blocks below it. Bottom row: 4, 5, 6. Middle row: 9, ?. Top: ?",h:"Each block is the sum of the two blocks below it.",a:"11 and 20"},
+{d:"medium",q:"Complete the pyramid (each block = sum of the two blocks below it):\n?\n?  ?\n1  2  3",h:"Build layer by layer from the bottom.",a:"8"},
 {d:"medium",q:"Bottom row: 5, 3, 8. Each block = difference of two below. What is the top?",h:"Middle row first, then top.",a:"3"},
 {d:"medium",q:"A 4-row pyramid bottom row: 1, 2, 3, 4. Each block = sum of two below. What is the top?",h:"Build row by row: 3,5,7 then 8,12 then 20.",a:"20"},
-{d:"medium",q:"Pyramid top=18. Middle row: 7, ?. Bottom row: 3, 4, ?",h:"Work downwards and upwards.",a:"11 and 7"},
-{d:"hard",q:"Pyramid top=50. Second row: 20 and ?. Third row: 8, 12, ?. Find missing values.",h:"Work both up and down.",a:"30 and 18"},
-{d:"hard",q:"5-row pyramid, bottom row all 1s. What is the top?",h:"Use Pascal triangle pattern.",a:"16"},
+{d:"medium",q:"Pyramid (each block = sum of the two blocks below it): top=18. Middle row: 7, ?. Bottom row: 3, 4, ?",h:"Work downwards and upwards.",a:"11 and 7"},
+{d:"hard",q:"Pyramid (each block = sum of the two blocks below it): top=50. Second row: 20 and ?. Third row: 8, 12, ?. Find missing values.",h:"Work both up and down.",a:"30 and 18"},
+{d:"hard",q:"5-row pyramid, bottom row all 1s, each block = sum of the two below it. What is the top?",h:"Use Pascal triangle pattern.",a:"16"},
 {d:"hard",q:"Bottom row: a, b, c. Top = a+2b+c. If top=20, a=3, c=5, find b.",h:"Top = a + 2b + c.",a:"6"},
 {d:"hard",q:"In a multiplication pyramid each block = product of two below. Bottom: 2, 3, 4. Top = ?",h:"Middle row: 6, 12. Then top = 72.",a:"72"},
-{d:"easy",q:"Bottom row of pyramid: 3, 4, 5. Middle row: 7, ?. What is the missing middle number?",h:"Each middle block is the sum of the two blocks below it.",a:"9"},
-{d:"easy",q:"Top of pyramid = 12. One base number is 5. What is the other base number?",h:"The two base numbers add up to the top number.",a:"7"},
-{d:"medium",q:"3-row pyramid: bottom row 2, 3, 4. What is the value at the very top?",h:"Build up: the middle row is 5 and 7, then add those for the top.",a:"12"},
+{d:"easy",q:"Bottom row of pyramid (each block above = sum of the two below it): 3, 4, 5. Middle row: 7, ?. What is the missing middle number?",h:"Each middle block is the sum of the two blocks below it.",a:"9"},
+{d:"easy",q:"Top of pyramid = 12 (the two base numbers add up to the top). One base number is 5. What is the other base number?",h:"The two base numbers add up to the top number.",a:"7"},
+{d:"medium",q:"3-row pyramid, each block = sum of the two blocks below it: bottom row 2, 3, 4. What is the value at the very top?",h:"Build up: the middle row is 5 and 7, then add those for the top.",a:"12"},
 {d:"hard",q:"4-row pyramid, bottom row: 1, 1, 1, 1. Each block is the sum of the two below it. What is the top value?",h:"This follows the same pattern as Pascal's triangle.",a:"8"}
 ]},
 {t:"Shapes",s:"count-shapes-puzzles",p:[
@@ -926,7 +674,7 @@ var C=[
 {d:"easy",q:"A standard 8x8 chessboard has two opposite corner squares removed, leaving 62 squares. Using dominoes that each cover exactly 2 adjacent squares, can the board be fully covered?",h:"Opposite corners are always the same colour on a chessboard \u2014 think about what that means for pairing them up.",a:"no",c:["yes","only with 30 dominoes","only if the board is rotated"]},
 {d:"medium",q:"You have 100 closed doors. On pass 1 you toggle every door. On pass 2, every 2nd door. On pass 3, every 3rd door, and so on up to pass 100. After all 100 passes, how many doors are open?",h:"A door ends up open only if it gets toggled an odd number of times \u2014 think about which door numbers have an odd number of factors.",a:"10"},
 {d:"medium",q:"How many piano tuners are in a city of 1 million people?",h:"Estimate pianos per person and tunings per year.",a:"about 200",c:["about 20","about 2000","about 20000"]},
-{d:"medium",q:"3 switches control 3 bulbs in a windowless room. Enter only once. How identify each?",h:"Turning a switch on and off before entering leaves a physical clue behind, not just a visual one.",a:"the heat of a bulb reveals which switch was recently on",c:["only the light pattern matters","count the bulbs by brightness","the bulb positions give it away"]},
+{d:"medium",q:"You have two identical eggs and access to a 100-floor building. You want to find the highest floor an egg can be dropped from without breaking, using as few drops as possible in the worst case. What's the key idea behind the optimal strategy?",h:"Don't halve the search \u2014 start with bigger jumps that shrink as you use up eggs.",a:"decreasing interval jumps, e.g. start around floor 14 then 13 12... with the first egg, then narrow down floor by floor with the second",c:["always drop from the middle floor (binary search)","drop both eggs together from every floor","test only floor 50 first"]},
 {d:"medium",q:"You have 100 lockers all open. You toggle every 2nd, then every 3rd, etc. Which are open at the end?",h:"Only lockers with an odd number of factors stay open.",a:"perfect square numbered lockers",c:["even numbered lockers","odd numbered lockers","prime numbered lockers"]},
 {d:"hard",q:"How many times do the hands of a clock overlap in 24 hours?",h:"They overlap approximately every 65.45 minutes.",a:"22"},
 {d:"hard",q:"A snail climbs up a 20-foot wall. Each day it climbs 4 feet, but slides back 3 feet at night. How many days does it take to reach the top?",h:"On the final day it reaches the top before sliding back \u2014 it does not slide on the day it escapes.",a:"17 days"},
@@ -1012,18 +760,18 @@ var C=[
 {d:"easy",q:"Find the hidden animal: HENCE, we must leave right now.",h:"Look at the start of the word hence.",a:"hen",c:["hog","cow","fox"]},
 {d:"easy",q:"Find the hidden animal: Please replace the BATTERY in the remote.",h:"Look at the start of the word battery.",a:"bat",c:["cat","rat","ant"]},
 {d:"easy",q:"Find the hidden animal: They danced the FOXTROT beautifully all night.",h:"The foxtrot is a classic ballroom dance \u2014 look at its start.",a:"fox",c:["dog","cow","hen"]},
-{d:"medium",q:"Find the hidden animal: He grew a thick BEARD over the winter.",h:"Look right after the first letter of beard.",a:"bear",c:["boar","bull","deer"]},
-{d:"medium",q:"Find the hidden animal: I love HORSERADISH sauce with my roast beef.",h:"Look at the first five letters of horseradish.",a:"horse",c:["mule","goat","deer"]},
-{d:"medium",q:"Find the hidden animal: The senate will RATIFY the new treaty tomorrow.",h:"Look at the start of the word ratify.",a:"rat",c:["cat","bat","owl"]},
-{d:"medium",q:"Find the hidden animal: The cat kept PROWLING around the garden at night.",h:"Look in the middle of the word prowling.",a:"owl",c:["crow","hawk","dove"]},
-{d:"hard",q:"Find the hidden animal: We played SCRABBLE all evening with the family.",h:"Look right after the first two letters of scrabble.",a:"crab",c:["clam","crow","carp"]},
-{d:"hard",q:"Find the hidden animal: She bought beautiful new JEWELRY for the party.",h:"Look right after the first letter of jewelry \u2014 it's a female sheep.",a:"ewe",c:["cow","ram","doe"]},
-{d:"hard",q:"Find the hidden animal: I love eating fresh GRAPES in the summer.",h:"Look at the last three letters of grape.",a:"ape",c:["cat","fox","owl"]},
-{d:"hard",q:"Find the hidden animal: Please DECODE this secret message for me.",h:"Look in the middle of the word decode \u2014 it's a type of fish.",a:"cod",c:["carp","eel","koi"]},
+{d:"medium",q:"Find the hidden animal: He grew a thick beard over the winter.",h:"Look right after the first letter of beard.",a:"bear",c:["boar","bull","deer"]},
+{d:"medium",q:"Find the hidden animal: I love horseradish sauce with my roast beef.",h:"Look at the first five letters of horseradish.",a:"horse",c:["mule","goat","deer"]},
+{d:"medium",q:"Find the hidden animal: The senate will ratify the new treaty tomorrow.",h:"Look at the start of the word ratify.",a:"rat",c:["cat","bat","owl"]},
+{d:"medium",q:"Find the hidden animal: The cat kept prowling around the garden at night.",h:"Look in the middle of the word prowling.",a:"owl",c:["crow","hawk","dove"]},
+{d:"hard",q:"Find the hidden animal: We played scrabble all evening with the family.",h:"Look right after the first two letters of scrabble.",a:"crab",c:["clam","crow","carp"]},
+{d:"hard",q:"Find the hidden animal: She bought beautiful new jewelry for the party.",h:"Look right after the first letter of jewelry \u2014 it's a female sheep.",a:"ewe",c:["cow","ram","doe"]},
+{d:"hard",q:"Find the hidden animal: I love eating fresh grapes in the summer.",h:"Look at the letters in the middle of grapes.",a:"ape",c:["cat","fox","owl"]},
+{d:"hard",q:"Find the hidden animal: Please decode this secret message for me.",h:"Look in the middle of the word decode \u2014 it's a type of fish.",a:"cod",c:["carp","eel","koi"]},
 {d:"easy",q:"Find the hidden animal: The COWBOY rode into town at sunset.",h:"Look at the start of the word cowboy.",a:"cow",c:["dog","bat","hen"]},
 {d:"easy",q:"Find the hidden animal: She wore a PIGTAIL to school today.",h:"Look at the start of the word pigtail.",a:"pig",c:["cat","fox","owl"]},
-{d:"medium",q:"Find the hidden animal: The RATIONAL explanation surprised everyone.",h:"Look at the start of the word rational.",a:"rat",c:["cat","bat","owl"]},
-{d:"hard",q:"Find the hidden animal: The CATASTROPHE was avoided at the last minute.",h:"Look at the start of the word catastrophe.",a:"cat",c:["rat","bat","ape"]}
+{d:"medium",q:"Find the hidden animal: The rational explanation surprised everyone.",h:"Look at the start of the word rational.",a:"rat",c:["cat","bat","owl"]},
+{d:"hard",q:"Find the hidden animal: The catastrophe was avoided at the last minute.",h:"Look at the start of the word catastrophe.",a:"cat",c:["rat","bat","ape"]}
 ]},
 {t:"Emoji",s:"emoji-puzzles",p:[
 {d:"easy",q:"What phrase do these emoji spell out?\n\ud83c\udf27\ufe0f\u2614",h:"Think about weather and what you'd carry outside.",a:"rainy day",c:["sunny day","cloudy sky","stormy night"]},
@@ -1261,7 +1009,7 @@ var C=[
 {d:"medium",q:"Thermometer is to Temperature as Scale is to ___?",h:"Think about what a scale measures.",a:"weight",c:["height","size","mass"]},
 {d:"medium",q:"Tadpole is to Frog as Caterpillar is to ___?",h:"Think about what a caterpillar becomes.",a:"butterfly",c:["moth","cocoon","larva"]},
 {d:"medium",q:"Ocean is to Wave as Desert is to ___?",h:"Think about a distinctive desert landform.",a:"sand dune",c:["cactus","oasis","mirage"]},
-{d:"hard",q:"Painter is to Canvas as Sculptor is to ___?",h:"Think about what a sculptor carves.",a:"stone",c:["clay","chisel","marble slab"]},
+{d:"hard",q:"Painter is to Canvas as Sculptor is to ___?",h:"Think about the raw block a sculptor starts carving from.",a:"stone",c:["chisel","clay","pedestal"]},
 {d:"hard",q:"Optimist is to Hopeful as Pessimist is to ___?",h:"Think about the pessimist's typical outlook.",a:"gloomy",c:["cheerful","neutral","excited"]},
 {d:"hard",q:"Herbivore is to Plants as Carnivore is to ___?",h:"Think about what a carnivore eats.",a:"meat",c:["insects","fish","grain"]},
 {d:"hard",q:"Sonnet is to Poem as Symphony is to ___?",h:"Think about the broader category a symphony belongs to.",a:"music",c:["opera","song","concerto"]},
@@ -1401,16 +1149,9 @@ var C=[
 ]}
 ];
 
-/* \u2500\u2500 Helpers \u2500\u2500 */
+/* ── Helpers ── */
 function _td(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 function _epochDay(d){return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);}
-/* Seeded PRNG (Mulberry32) \u2014 given the same seed it always produces the
-   same sequence (required so every visitor sees the same daily picks), but
-   with proper bit-mixing/avalanche behaviour unlike a plain LCG. This
-   matters a lot here because seeds are small, sequential, date-derived
-   integers (today's seed is yesterday's + 1) \u2014 a weak generator can stay
-   badly correlated across such nearby seeds, which is what caused certain
-   categories/puzzles to show up far more often than others. */
 function _mulberry32(seed){
   var s=seed>>>0;
   return function(){
@@ -1440,10 +1181,6 @@ function _pk(c,catStableSeed,appearanceIndex){
   return e.concat(m,h);
 }
 function _nr(s){return s.trim().toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ');}
-/* Display-only formatting: the answer/choice data is stored in lowercase for
-   easy matching, but reads oddly on screen. Capitalises the first letter of
-   the string and of any letter immediately following typical sentence-break
-   punctuation, without touching the underlying data used for comparisons. */
 function _cap(s){
   if(!s)return s;
   return s.replace(/(^|[.!?]\s+)([a-z])/g,function(m,pre,ch){return pre+ch.toUpperCase();});
@@ -1455,18 +1192,11 @@ function _fz(r,a){
   var h=cw.filter(function(w){return w.length>3&&rw.indexOf(w)!==-1;});
   return h.length>=Math.max(1,Math.floor(cw.length*0.6));
 }
-/* Flat pool of every offline puzzle answer across all categories. Only used
-   as a last-resort fallback in _mcq below, for the rare case a category is
-   too small to supply 3 distractors on its own. */
 var ALL_ANSWERS=(function(){
   var arr=[];
   C.forEach(function(cat){cat.p.forEach(function(pz){arr.push(pz.a);});});
   return arr;
 }());
-/* Generates plausible "near miss" wrong numbers for a purely-numeric answer
-   (e.g. correct answer "9" -> candidates like 7, 8, 10, 11, 18, 4/5 ...).
-   `decimals` (or null for integers) keeps the formatting consistent with
-   the original answer, e.g. "7.5" -> "6.5", "8.5", not "6", "9". */
 function _numDistractors(n,decimals){
   var deltas=[1,2,3,5,10,-1,-2,-3,-5,-10];
   var raw=[];
@@ -1482,21 +1212,6 @@ function _numDistractors(n,decimals){
   });
   return out;
 }
-/* Builds a 4-option multiple-choice set for a single puzzle. Options are
-   sourced in priority order so each question gets choices written FOR that
-   exact question wherever possible, instead of a shared pool:
-     1) p.c \u2014 hand-authored wrong answers written specifically for this
-        question (present on every non-purely-numeric puzzle). These are
-        always used first and are what most puzzles rely on.
-     2) If the correct answer starts with a number (optionally followed by
-        a unit, e.g. "3 hours", "7.5 degrees"), generate plausible nearby
-        numbers with the same suffix \u2014 created fresh for THIS question's
-        actual value, not borrowed from anywhere else.
-     3) Same-category puzzles' answers \u2014 only used as a safety net if a
-        puzzle is somehow missing authored choices and isn't numeric.
-     4) The full site-wide pool \u2014 final fallback, practically never reached.
-   The seed keeps the same 4 options stable across re-renders of the same
-   puzzle on the same day. */
 function _mcq(p,catPool,seed){
   var normCorrect=_nr(p.a);
   var wrong=[],used={};
@@ -1555,20 +1270,6 @@ function _mcq(p,catPool,seed){
 
   return _sh([p.a].concat(wrong),seed+1);
 }
-/* Normalise ANY Blogger/Google-hosted image CDN URL to a large, UNCROPPED size.
-   Google's image CDN encodes size (and sometimes a crop flag) in one of several
-   places depending on when the post was made:
-     - /s640-rw/photo.jpg              (old, slash-delimited)
-     - /w400-h266-p-k-no-nu/photo.jpg  (newer, slash-delimited)
-     - /s72-c/photo.jpg                (old thumbnail \u2014 "-c" means square-cropped)
-     - photo.jpg=w72-h72-p-k-no-nu-mo  (newest, trailing \u2014 no slashes at all)
-     - photo.jpg=s72-c                 (older trailing form)
-   Every one of these gets rewritten to a plain "s1200" token with any "-c" crop
-   flag dropped, so we always request the FULL uncropped image at a size large
-   enough to fill the card at full width on retina screens. Previously the
-   regex only handled the slash-delimited forms, so newer "=w..-h.." trailing
-   URLs passed through untouched and rendered as tiny, often square-cropped
-   thumbnails. */
 function _normImgUrl(u){
   if(!u)return u;
   if(/\/(s\d+[^/]*|w\d+-h\d+[^/]*)\//.test(u)){
@@ -1582,14 +1283,6 @@ function _normImgUrl(u){
   }
   return u;
 }
-/* extract image from blogger post html
-   Handles ALL blogger CDN URL formats \u2014 see _normImgUrl above.
-   Strategy: grab the full blogger CDN URL, then normalise its size separately. */
-/* Extracts the post's embedded image, AND its width/height attributes if the
-   source <img> tag includes them (Blogger's native uploader usually does).
-   Knowing the real aspect ratio ahead of time lets the card reserve the
-   correct height before the image even starts downloading, instead of only
-   finding out once it loads \u2014 this is what keeps layout shift to a minimum. */
 function _imgWithDims(html){
   if(!html)return null;
   var tag=null,url=null;
@@ -1614,45 +1307,184 @@ function _img(html){
   return r?r.url:null;
 }
 
-/* \u2500\u2500 Widget factory \u2500\u2500 */
+if(!document.getElementById('fwpv6css')){
+  var _cs=document.createElement('style');
+  _cs.id='fwpv6css';
+  _cs.textContent=
+'.fwpw{display:block !important;width:100%;max-width:560px;margin:0 auto;font-family:Roboto,Arial,sans-serif;font-size:13px;color:#111;line-height:1.4;}'
++'.fwpw *{box-sizing:border-box;}'
++'.fwpc{background:#fff;border-radius:14px;overflow:hidden;border:2.5px solid #0A0AFF;box-shadow:0 3px 16px rgba(10,10,255,.13);}'
++'.fwph{background:#0A0AFF;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;}'
++'.fwphl{display:flex;align-items:center;gap:9px;flex:1 1 0;min-width:0;overflow:hidden;}'
++'.fwplogo{width:36px;height:36px;min-width:36px;max-width:36px;border-radius:7px;object-fit:contain;background:rgba(255,255,255,.12);padding:2px;border:1.5px solid rgba(255,255,255,.3);flex-shrink:0;display:block;}'
++'.fwptxt{min-width:0;flex:1;overflow:hidden;}'
++'.fwpbrand{font-size:9px;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:1.3px;margin-bottom:2px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
++'.fwptitle{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}'
++'.fwpsk{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.32);border-radius:30px;padding:4px 10px;color:#fff;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}'
++'.fwpskn{font-size:13px;font-weight:800;}'
++'.fwpbar{background:#13253a;padding:5px 14px;display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}'
++'.fwpbd{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}'
++'.fwpbt{font-size:11px;color:#fff;font-weight:800;white-space:nowrap;flex-shrink:0;background:rgba(255,255,255,.18);padding:3px 9px;border-radius:20px;letter-spacing:.2px;}'
++'.fwppr{height:3px;background:#e5e7eb;}'
++'.fwppf{height:3px;background:#0A0AFF;width:0%;transition:width .4s ease;}'
++'.fwptabs{display:flex;padding:9px 10px 0;background:#f4f5ff;border-bottom:2px solid #0A0AFF;gap:4px;}'
++'.fwptab{flex:1 1 0;min-width:0;padding:6px 6px;font-size:10.5px;font-weight:700;color:#6b7280;background:#fff;border:1.5px solid #d1d5db;border-bottom:2px solid #d1d5db;border-radius:7px 7px 0 0;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:inherit;transition:all .15s;margin-bottom:-2px;position:relative;}'
++'.fwptab.on{color:#0A0AFF;border-color:#0A0AFF;border-bottom-color:#f4f5ff;background:#f4f5ff;z-index:1;}'
++'.fwptab:hover:not(.on){color:#374151;border-color:#a5b4fc;background:#eef1ff;}'
++'.fwptab.exptab{color:#7c3aed;}'
++'.fwptab.exptab.on{color:#7c3aed;border-color:#7c3aed;border-bottom-color:#f4f5ff;}'
++'.fwptab.exptab:hover:not(.on){color:#6d28d9;border-color:#c4b5fd;background:#f5f3ff;}'
++'@media (max-width:360px){.fwptab{font-size:9px;padding:6px 3px;letter-spacing:-.2px;}}'
++'.fwpbody{padding:13px 14px;touch-action:pan-y;}'
++'.fwptop{display:flex;align-items:center;gap:8px;margin-bottom:11px;}'
++'.fwpctr{flex:0 0 auto;}'
++'.fwpcatname{flex:1;min-width:0;text-align:center;font-size:12px;font-weight:800;color:#0A0AFF;white-space:normal;line-height:1.3;padding:0 4px;}'
++'.fwpnavs{flex:0 0 auto;}'
++'.fwpctr{font-size:10px;color:#9ca3af;font-weight:500;}'
++'.fwpnavs{display:flex;gap:8px;}'
++'.fwpnav{width:34px;height:34px;border-radius:50%;border:none;background:#0A0AFF;color:#fff;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;box-shadow:0 2px 6px rgba(10,10,255,.35);}'
++'.fwpnav:hover{background:#2222ff;transform:scale(1.08);}'
++'.fwpnav:active{transform:scale(.94);}'
++'.fwpqcard{position:relative;border-radius:12px;padding:14px 16px 2px;margin-bottom:2px;overflow:hidden;border:1.5px solid #e5e7eb;background:#fafafa;transition:background .2s,border-color .2s;}'
++'.fwpqcard.easy{background:linear-gradient(135deg,#EAF3DE 0%,#f7fbf2 65%);border-color:#c8e2ae;}'
++'.fwpqcard.medium{background:linear-gradient(135deg,#FAEEDA 0%,#fdf8ef 65%);border-color:#f0d9a8;}'
++'.fwpqcard.hard{background:linear-gradient(135deg,#FCEBEB 0%,#fdf5f5 65%);border-color:#f0b8b8;}'
++'.fwpqcard-deco{position:absolute;right:-10px;top:-16px;font-size:64px;opacity:.13;transform:rotate(10deg);pointer-events:none;line-height:1;}'
++'.fwpbdg{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:30px;margin-bottom:9px;position:relative;}'
++'.fwpbdg.easy{background:#EAF3DE;color:#27500A;}'
++'.fwpbdg.medium{background:#FAEEDA;color:#633806;}'
++'.fwpbdg.hard{background:#FCEBEB;color:#791F1F;}'
++'.fwpq{font-size:13px;line-height:1.75;color:#111827;white-space:pre-line;min-height:44px;margin-bottom:12px;word-break:break-word;position:relative;}'
++'.fwpq.fwpq-emoji{font-size:28px;line-height:1.6;}'
++'.fwphbtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;display:inline-flex;align-items:center;gap:4px;padding:0;font-family:inherit;font-weight:600;}'
++'.fwphbtn:hover{text-decoration:underline;}'
++'.fwphbox{background:#eef2ff;border-left:3px solid #0A0AFF;border-radius:0 7px 7px 0;padding:8px 11px;font-size:12px;color:#1e1b4b;line-height:1.6;margin-top:7px;margin-bottom:9px;display:none;word-break:break-word;}'
++'.fwpirow{display:flex;gap:6px;margin-top:11px;}'
++'.fwpinp{flex:1;min-width:0;height:40px;border:1.5px solid #e5e7eb;border-radius:8px;padding:0 11px;font-size:13px;color:#111827;background:#fff;outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s;}'
++'.fwpinp:focus{border-color:#0A0AFF;box-shadow:0 0 0 3px rgba(10,10,255,.1);}'
++'.fwpinp:disabled{background:#f9fafb;color:#6b7280;}'
++'.fwpchk{height:40px;padding:0 14px;background:#0A0AFF;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}'
++'.fwpchk:hover{background:#2222ff;}'
++'.fwpmcq{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px;align-items:stretch;}'
++'@media (max-width:400px){.fwpmcq{grid-template-columns:1fr;}}'
++'.fwpmcqbtn{text-align:left;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:9px;background:#fff;font-size:12px;line-height:1.4;color:#111827;cursor:pointer;font-family:inherit;transition:all .15s;white-space:normal;word-break:break-word;overflow-wrap:anywhere;height:auto;}'
++'.fwpmcqbtn:hover:not(:disabled){border-color:#0A0AFF;background:#eef1ff;}'
++'.fwpmcqbtn:disabled{cursor:default;}'
++'.fwpmcqbtn.correct{background:#EAF3DE;border-color:#16a34a;color:#166534;font-weight:700;}'
++'.fwpmcqbtn.wrong{background:#FCEBEB;border-color:#dc2626;color:#991b1b;}'
++'.fwpres{font-size:12px;padding:8px 11px;border-radius:8px;line-height:1.5;margin-top:9px;display:none;word-break:break-word;}'
++'.fwpres.ok{background:#EAF3DE;color:#166534;display:block;}'
++'.fwpres.no{background:#FCEBEB;color:#991b1b;display:block;}'
++'.fwprev{margin-top:9px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:7px 11px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;display:none;width:100%;text-align:left;transition:background .15s;}'
++'.fwprev:hover{background:#f9fafb;}'
++'.fwpdots{display:flex;gap:7px;justify-content:center;margin-top:13px;}'
++'.fwpdot{width:9px;height:9px;border-radius:50%;background:#e5e7eb;cursor:pointer;border:none;transition:all .2s;flex-shrink:0;padding:0;}'
++'.fwpdot:hover{transform:scale(1.3);}'
++'.fwpdot.on{background:#0A0AFF;transform:scale(1.2);}'
++'.fwpdot.done{background:#16a34a;}'
++'.fwpdot.wrong{background:#dc2626;}'
++'.fwpban{display:none;background:linear-gradient(135deg,#0A0AFF,#13253a);border-radius:10px;padding:12px 14px;margin-top:11px;text-align:center;color:#fff;}'
++'.fwpban p{font-size:13px;font-weight:700;margin-bottom:4px;color:#fff;}'
++'.fwpban small{font-size:11px;color:rgba(255,255,255,.75);}'
++'.fwpexp{display:none;padding:13px 14px;}'
++'.fwpexp-toprow{display:flex;align-items:center;gap:7px;margin-bottom:11px;}'
++'.fwpexp-sel{flex:1;min-width:0;height:36px;border:1.5px solid #d1d5db;border-radius:8px;padding:0 10px;font-size:11.5px;color:#374151;background:#fff;outline:none;font-family:inherit;cursor:pointer;transition:border-color .15s;}'
++'.fwpexp-sel:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.1);}'
++'.fwpexp-ref{height:36px;padding:0 11px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;flex-shrink:0;}'
++'.fwpexp-ref:hover{background:#6d28d9;}'
++'.fwpexp-ref:disabled{background:#a78bfa;cursor:not-allowed;}'
++'.fwpexp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;min-height:34px;}'
++'.fwpexp-ctr{font-size:10px;color:#9ca3af;font-weight:500;}'
++'.fwpexp-navs{display:flex;gap:8px;}'
++'.fwpexp-nb{width:34px;height:34px;border-radius:50%;border:none;background:#7c3aed;color:#fff;font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .15s;padding:0;font-family:inherit;box-shadow:0 2px 6px rgba(124,58,237,.35);}'
++'.fwpexp-nb:hover{background:#6d28d9;transform:scale(1.08);}'
++'.fwpexp-nb:active{transform:scale(.94);}'
++'.fwpw .fwpexp-wrap{position:relative;touch-action:pan-y;}'
++'.fwpw .fwpexp-card{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;cursor:pointer;transition:box-shadow .2s,transform .2s;text-decoration:none;display:block;background:#fff;}'
++'.fwpw .fwpexp-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px);}'
++'.fwpw .fwpexp-imgwrap{width:100% !important;max-width:none !important;max-height:420px;position:relative;background:#f8f9ff;overflow:hidden;text-align:center;line-height:0;}'
++'.fwpw .fwpexp-img{display:block !important;position:static !important;width:100% !important;height:auto !important;max-width:100% !important;max-height:420px !important;object-fit:contain !important;object-position:center;margin:0 auto !important;transition:transform .3s;}'
++'.fwpw .fwpexp-card:hover .fwpexp-img{transform:scale(1.02);}'
++'.fwpw .fwpexp-imgph{position:static !important;width:100% !important;height:220px !important;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0e7ff,#f5f3ff);}'
++'.fwpw .fwpexp-imgph img{width:52px;height:52px;opacity:.35;object-fit:contain;}'
++'.fwpexp-cbody{padding:11px 13px 13px;}'
++'.fwpexp-cat{display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:20px;background:#f5f3ff;color:#7c3aed;margin-bottom:7px;}'
++'.fwpexp-title{font-size:13px;font-weight:700;color:#111827;line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}'
++'.fwpexp-solve{display:flex;align-items:center;justify-content:space-between;background:#7c3aed;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;font-weight:700;}'
++'.fwpexp-solve span{font-size:15px;}'
++'.fwpexp-skel{border-radius:10px;overflow:hidden;border:1.5px solid #e5e7eb;background:#fff;}'
++'.fwpexp-skel-img{width:100%;padding-top:56.25%;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
++'.fwpexp-skel-body{padding:11px 13px 13px;}'
++'.fwpexp-skel-tag{height:16px;width:90px;border-radius:8px;margin-bottom:10px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
++'.fwpexp-skel-l{height:13px;border-radius:6px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;margin-bottom:7px;}'
++'.fwpexp-skel-btn{height:36px;border-radius:8px;margin-top:10px;background:linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%);background-size:200% 100%;animation:fwpsh 1.3s infinite;}'
++'@keyframes fwpsh{0%{background-position:200% 0}100%{background-position:-200% 0}}'
++'.fwpexp-err{text-align:center;padding:30px 14px;color:#6b7280;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}'
++'.fwpexp-err p{font-size:13px;margin:0;}'
++'.fwpexp-err a{color:#7c3aed;font-weight:700;font-size:12px;text-decoration:none;}'
++'.fwpexp-err a:hover{text-decoration:underline;}'
++'.fwpexp-dots{display:flex;gap:7px;justify-content:center;margin-top:11px;min-height:16px;}'
++'.fwpexp-dot{width:9px;height:9px;border-radius:50%;background:#e5e7eb;cursor:pointer;border:none;transition:all .2s;flex-shrink:0;padding:0;}'
++'.fwpexp-dot.on{background:#7c3aed;transform:scale(1.2);}'
++'.fwpexp-dot:hover{transform:scale(1.3);}'
++'.fwpfoot{border-top:1px solid #e5e7eb;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#f8f9ff;gap:10px;flex-wrap:nowrap;position:relative;}'
++'.fwpmore{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:46%;flex:0 1 auto;}'
++'.fwpac{font-size:11px;font-weight:700;color:#0A0AFF;text-decoration:none;white-space:nowrap;flex:0 0 auto;}'
++'.fwpmore:hover{text-decoration:underline;}'
++'.fwpac:hover{text-decoration:underline;}'
++'.fwpsh{display:flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #e5e7eb;border-radius:8px;padding:5px 10px;font-size:11px;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;transition:all .15s;flex-shrink:0;flex:0 0 auto;}'
++'.fwpsh svg{flex-shrink:0;}'
++'.fwpsh:hover{background:#eef2ff;color:#0A0AFF;border-color:#0A0AFF;}'
++'.fwpsharemenu{position:absolute;bottom:46px;right:14px;background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.16);padding:6px;display:none;flex-direction:column;gap:2px;z-index:20;min-width:170px;}'
++'.fwpsharemenu button{background:none;border:none;text-align:left;padding:7px 9px;font-size:12px;color:#111827;cursor:pointer;border-radius:6px;font-family:inherit;display:flex;align-items:center;gap:9px;width:100%;}'
++'.fwpsharemenu button svg{flex-shrink:0;}'
++'.fwpsharemenu button span{font-weight:600;}'
++'.fwpsharemenu button:hover{background:#f4f5ff;}'
++'.fwpadd{border-top:2px dashed #c7d2fe;padding:9px 14px;background:#f0f2ff;}'
++'.fwpabtn{background:none;border:none;cursor:pointer;font-size:11px;color:#0A0AFF;font-family:inherit;font-weight:700;display:flex;align-items:center;gap:5px;padding:0;width:100%;text-align:left;}'
++'.fwpabtn:hover{text-decoration:underline;}'
++'.fwpebox{margin-top:10px;display:none;}'
++'.fwpebox p{font-size:11px;color:#374151;margin-bottom:8px;line-height:1.55;}'
++'.fwpec{display:block;background:#1e293b;color:#7dd3fc;font-family:monospace;font-size:10.5px;padding:10px 12px;border-radius:8px;white-space:pre;overflow-x:auto;line-height:1.7;border:1px solid #334155;}'
++'.fwpcb{margin-top:7px;background:#0A0AFF;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}'
++'.fwpcb:hover{background:#2222ff;}'
++'.fwpcb.copied{background:#16a34a;}'
++'.fwpapps{border-top:2px dashed #c7d2fe;padding:12px 14px;background:#f8f9ff;text-align:center;}'
++'.fwpapps-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:9px;}'
++'.fwpapps-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}'
++'.fwpapp-badge{display:flex;align-items:center;gap:7px;background:#111827;color:#fff;border-radius:8px;padding:7px 13px;text-decoration:none;transition:opacity .15s,transform .15s;}'
++'.fwpapp-badge:hover{opacity:.85;transform:translateY(-1px);}'
++'.fwpapp-ic{font-size:19px;line-height:1;}'
++'.fwpapp-txt{display:flex;flex-direction:column;line-height:1.2;text-align:left;}'
++'.fwpapp-txt small{font-size:8px;color:#d1d5db;text-transform:uppercase;letter-spacing:.4px;}'
++'.fwpapp-txt b{font-size:12.5px;font-weight:700;color:#fff;}'
++'.fwpsocial{border-top:2px dashed #c7d2fe;padding:12px 14px;background:#f8f9ff;text-align:center;}'
++'.fwpsocial-label{font-size:11px;font-weight:700;color:#374151;margin-bottom:10px;}'
++'.fwpsocial-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}'
++'.fwpsocial-btn{display:inline-flex;align-items:center;justify-content:center;transition:transform .15s;}'
++'.fwpsocial-btn:hover{transform:scale(1.1);}'
++'.fwpsocial-btn svg{display:block;}'
++'.fwpattr{font-size:10px;color:#9ca3af;text-align:center;padding:5px 0 8px;}'
++'.fwpattr a{color:#0A0AFF;text-decoration:none;}'
++'.fwpattr a:hover{text-decoration:underline;}';
+  document.head.appendChild(_cs);
+}
+
+if(!document.getElementById('fwpv6preconnect')){
+  var _pc1=document.createElement('link');_pc1.id='fwpv6preconnect';_pc1.rel='preconnect';_pc1.href=B;
+  document.head.appendChild(_pc1);
+  var _pc2=document.createElement('link');_pc2.rel='preconnect';_pc2.href='https://blogger.googleusercontent.com';_pc2.crossOrigin='anonymous';
+  document.head.appendChild(_pc2);
+}
+
+/* ── Offline puzzle data pool is in C (defined above) ── */
+
+/* ── Widget factory ── */
 function _boot(tid,_SK,_TK){
   var el=document.getElementById(tid);if(!el)return;
   var ds=_ds(),td=_td();
-  /* shuffle offline cats daily so the order rotates */
-  /* Show only 3 offline tabs per day, picked from the full category pool (C).
-     _sh(C,ds) shuffles the ENTIRE pool deterministically using today's date
-     as the seed, so every visitor sees the same 3 categories today \u2014 and a
-     different 3 tomorrow, since ds changes daily. Slicing to 3 keeps the
-     tab bar to "3 tabs + Explore" no matter how large the pool grows. */
   var TABS_PER_DAY=3;
   var eligibleC=C.filter(function(cat){return BLOCKED_CATEGORIES.indexOf(cat.t)===-1;});
-  /* Categories rotate through ONE FIXED shuffle of the eligible pool,
-     computed with a constant seed (never reshuffled per day or per cycle),
-     sliced sequentially TABS_PER_DAY at a time as the days advance. This is
-     the simplest construction that's correct by definition: since it's a
-     single permutation with no duplicate entries, no two different slices
-     of it can ever contain the same category \u2014 so every category is
-     guaranteed to appear exactly once per full pass through the deck
-     (12 days for the default 36 categories), with literally no possibility
-     of a repeat until the deck fully wraps around and starts over. The
-     deck itself is regenerated fresh every cycle (a new shuffle every ~12
-     days) rather than being one fixed order forever, so which 3 categories
-     land together \u2014 and their order \u2014 keeps varying long-term instead of
-     settling into an identical repeating pattern.
-     (Two earlier approaches were tried and had bugs: reshuffling freshly
-     every day only checked against the immediately previous day, which
-     drifted from reality since "yesterday" itself depended on an exclusion
-     chain going back indefinitely; an early attempt at reshuffling once
-     per cycle patched the day-0 seam by pulling a replacement from a
-     SEPARATE independent shuffle, which could duplicate a category the
-     main deck had already reserved for a later day in that same cycle.
-     The fix below avoids both: it reorders elements WITHIN the one
-     permutation already built for this cycle \u2014 never adds or removes
-     anything \u2014 so "every category exactly once per cycle" holds no matter
-     what the fix does, and it's restricted to the middle of the deck
-     (never the deck's own last day), so each cycle's last-day content
-     stays fixed and safe for the NEXT cycle to check against without
-     needing to know about any fix that happened before it.) */
   var poolSize=eligibleC.length;
   var daysPerCycle=Math.max(1,Math.ceil(poolSize/TABS_PER_DAY));
   var todayEpoch=_epochDay(new Date());
@@ -1661,7 +1493,7 @@ function _boot(tid,_SK,_TK){
   function _cycleDeck(cycleIdx){
     var perm=_sh(eligibleC,cycleIdx+1);
     if(cycleIdx>0&&perm.length>=3*TABS_PER_DAY){
-      var prevPerm=_sh(eligibleC,cycleIdx); /* previous cycle's OWN base shuffle; its last-day slice is never touched by this fix, so this is always safe to read directly */
+      var prevPerm=_sh(eligibleC,cycleIdx);
       var prevLastTitles=prevPerm.slice(prevPerm.length-TABS_PER_DAY).map(function(cc){return cc.t;});
       for(var slot=0;slot<TABS_PER_DAY;slot++){
         if(prevLastTitles.indexOf(perm[slot].t)!==-1){
@@ -1678,30 +1510,17 @@ function _boot(tid,_SK,_TK){
   }
   var deck=_cycleDeck(cycleIndex);
   var ac=deck.slice(dayInCycle*TABS_PER_DAY,dayInCycle*TABS_PER_DAY+TABS_PER_DAY);
-  /* Only relevant if BLOCKED_CATEGORIES trims the pool to a non-multiple of
-     TABS_PER_DAY, leaving the deck's final slice short \u2014 top up by
-     wrapping to the start of the SAME cycle's deck rather than ever
-     showing fewer than 3 tabs. */
   if(ac.length<TABS_PER_DAY){
     var haveTitles=ac.map(function(cc){return cc.t;});
     for(var _ti=0;_ti<deck.length&&ac.length<TABS_PER_DAY;_ti++){
       if(haveTitles.indexOf(deck[_ti].t)===-1)ac.push(deck[_ti]);
     }
   }
-  /* Puzzle selection within a category uses a fixed per-tier shuffle (see
-     _pk) sliced by how many times this category has appeared before \u2014
-     which, since each category appears exactly once per cycle, is simply
-     cycleIndex. catSeed just needs to be a stable number per category so
-     different categories don't all use an identical shuffle order. */
   function _catStableSeed(cat){return C.indexOf(cat)*97+11;}
-  var EXPLORE_IDX=ac.length; /* Explore tab always sits right after the offline category tabs */
+  var EXPLORE_IDX=ac.length;
   var st;
   try{var _r=JSON.parse(localStorage.getItem(_SK)||'null');st=_r&&_r.date===td?_r:null;}catch(e){st=null;}
   if(!st)st={date:td,tab:0,puzz:0,ans:{},rev:{}};
-  /* Guard against a saved tab index that no longer maps to an offline category
-     (e.g. the visitor left the widget on the Explore tab, or a previous
-     version had a different number of offline tabs). Without this clamp,
-     ac[st.tab] is undefined and rend() throws when reading its properties. */
   if(typeof st.tab!=='number'||st.tab<0||st.tab>=ac.length){st.tab=0;st.puzz=0;}
   var sk=1;
   try{
@@ -1721,19 +1540,14 @@ function _boot(tid,_SK,_TK){
   var px='v6_'+tid.replace(/[^a-z0-9]/gi,'_');
   function g(id){return document.getElementById(px+'_'+id);}
 
-  /* Explore state */
-  /* Shuffle the REAL categories' order daily; "Random Puzzles" (pulls from
-     the whole site, no label filter) always stays first and is unaffected
-     by the shuffle or by which 3 offline tabs are showing today. */
   var RANDOM_LABEL={d:'\uD83C\uDFB2 Random Puzzles',l:null,h:''};
   var shuffledLabels=_sh(LABELS.slice(),ds+99);
   var allExpOptions=[RANDOM_LABEL].concat(shuffledLabels);
   var expLabelObj=allExpOptions[0];
   var expPosts=[],expIdx=0,expLoading=false;
   var expCache={};
-  var expTotals={}; /* label -> total post count in that category, so a repeat visit/refresh skips the count lookup */
+  var expTotals={};
 
-  /* \u2500\u2500 Build HTML \u2500\u2500 */
   el.innerHTML=
     '<div class="fwpw"><div class="fwpc">'
     +'<div class="fwph">'
@@ -1746,7 +1560,6 @@ function _boot(tid,_SK,_TK){
     +'<div class="fwpbar"><span class="fwpbd" id="'+px+'_date"></span><span class="fwpbt">\u2728 New every day</span></div>'
     +'<div class="fwppr"><div class="fwppf" id="'+px+'_prog"></div></div>'
     +'<div class="fwptabs" id="'+px+'_tabs" role="tablist"></div>'
-    /* offline section */
     +'<div class="fwpbody" id="'+px+'_offline">'
       +'<div class="fwptop"><span class="fwpctr" id="'+px+'_ctr"></span>'
         +'<span class="fwpcatname" id="'+px+'_catname"></span>'
@@ -1764,7 +1577,6 @@ function _boot(tid,_SK,_TK){
       +'<div class="fwpdots" id="'+px+'_dots"></div>'
       +'<div class="fwpban" id="'+px+'_ban"><p>\uD83C\uDF89 All puzzles complete!</p><small>Come back tomorrow for fresh challenges!</small></div>'
     +'</div>'
-    /* explore section */
     +'<div class="fwpexp" id="'+px+'_exp">'
       +'<div class="fwpexp-toprow">'
         +'<select class="fwpexp-sel" id="'+px+'_expsel"></select>'
@@ -1777,7 +1589,6 @@ function _boot(tid,_SK,_TK){
       +'<div class="fwpexp-wrap" id="'+px+'_expwrap"><div id="'+px+'_expcard"></div></div>'
       +'<div class="fwpexp-dots" id="'+px+'_expdots"></div>'
     +'</div>'
-    /* footer */
     +'<div class="fwpfoot">'
       +'<a class="fwpmore" id="'+px+'_more" href="'+B+'/p/index.html" target="_blank" rel="noopener">More puzzles</a>'
       +'<a class="fwpac" href="'+B+'/p/index.html" target="_blank" rel="noopener">All categories</a>'
@@ -1804,7 +1615,6 @@ function _boot(tid,_SK,_TK){
     +'<div class="fwpattr">Powered by <a href="'+B+'" target="_blank" rel="noopener">funwithpuzzles.com</a></div>'
     +'</div></div>';
 
-  /* populate dropdown \u2014 Random Puzzles first, then daily-shuffled categories */
   var sel=g('expsel');
   allExpOptions.forEach(function(lb,i){
     var o=document.createElement('option');
@@ -1817,11 +1627,11 @@ function _boot(tid,_SK,_TK){
   g('date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
   g('sk').textContent=sk;
 
-  /* \u2500\u2500 Offline render \u2500\u2500 */
   function rend(){
     var p=cp[st.puzz],kk=k(st.tab,st.puzz),ans=st.ans[kk],rev=st.rev[kk];
     g('catname').textContent=CATEGORY_FULL_NAMES[ac[st.tab].t]||ac[st.tab].t;
     g('q').textContent=p.q;
+    g('q').classList.toggle('fwpq-emoji', ac[st.tab].t==='Emoji');
     g('hbox').textContent=p.h;
     g('hbox').style.display='none';
     g('hbtn').textContent='\uD83D\uDCA1 Show hint';
@@ -1915,9 +1725,6 @@ function _boot(tid,_SK,_TK){
       g('exp').style.display='block';
       g('more').textContent=_moreLinkText(expLabelObj);
       g('more').href=B+'/'+expLabelObj.h;
-      /* posts may already be sitting in memory from the idle-time
-         background prefetch done right after boot \u2014 render immediately
-         instead of re-fetching, so the tab feels instant */
       if(expPosts.length>0)_expRender();
       else if(!expLoading)_expFetch(expLabelObj,false);
     }else{
@@ -1928,7 +1735,6 @@ function _boot(tid,_SK,_TK){
     }
   }
 
-  /* \u2500\u2500 Explore render \u2500\u2500 */
   function _expRender(){
     if(expPosts.length===0){
       g('expcard').innerHTML=
@@ -1942,12 +1748,6 @@ function _boot(tid,_SK,_TK){
     }
     var p=expPosts[expIdx];
     g('expctr').textContent='Puzzle '+(expIdx+1)+' of '+expPosts.length;
-    /* build card. When we know the image's real aspect ratio (from width/
-       height attributes on the source <img> tag), set it inline via the
-       CSS aspect-ratio property so the box is already the right height
-       before the image starts downloading \u2014 this is what removes most of
-       the layout shift. Falls back to the fixed min-height when unknown
-       (some older/external posts don't include width/height attributes). */
     var wrapStyle=(p.aspect&&isFinite(p.aspect))?(' style="aspect-ratio:'+p.aspect.toFixed(4)+'"'):(' style="min-height:220px"');
     var imgHtml=p.img
       ?'<div class="fwpexp-imgwrap"'+wrapStyle+'><img class="fwpexp-img" src="'+p.img+'" alt="'+p.title.replace(/[<>"]/g,'')+'" onerror="this.parentNode.innerHTML=\'<div class=fwpexp-imgph><img src='+LG+' /></div>\'"/></div>'
@@ -1962,7 +1762,6 @@ function _boot(tid,_SK,_TK){
           +'<div class="fwpexp-solve">'+ctaText+' \u2192 <span>\uD83D\uDCA1</span></div>'
         +'</div>'
       +'</a>';
-    /* dots */
     var de=g('expdots');de.innerHTML='';
     expPosts.forEach(function(_,i){
       var d=document.createElement('button');
@@ -1973,13 +1772,6 @@ function _boot(tid,_SK,_TK){
     });
   }
 
-  /* \u2500\u2500 Explore fetch via JSONP \u2500\u2500
-     Two-step strategy instead of pulling the 150 newest posts every time:
-       1) ask Blogger for just the total post count in the category (tiny reply)
-       2) fetch a small window (up to 20 posts) starting at a UNIFORMLY RANDOM
-          offset across the category's whole history, then sample 5 from it
-     This makes every post \u2014 including the very oldest \u2014 equally likely to be
-     picked, and downloads far less JSON than before, so it loads faster. */
   function _jsonp(url,onData,onFail){
     var cbName='fwpjp_'+px+'_'+Date.now()+'_'+Math.floor(Math.random()*1e6);
     var script=document.createElement('script');
@@ -2002,10 +1794,6 @@ function _boot(tid,_SK,_TK){
     var pUrl='';
     if(e.link){for(var i=0;i<e.link.length;i++){if(e.link[i].rel==='alternate'){pUrl=e.link[i].href;break;}}}
     var content=(e.content&&e.content.$t)||(e.summary&&e.summary.$t)||'';
-    /* Prefer the image embedded in the post content \u2014 it's the real, full
-       picture at its natural aspect ratio. media$thumbnail is a fallback
-       only, because Blogger pre-crops thumbnails to a square ("-c" flag),
-       which is why images used to render tiny/off-centre inside the card. */
     var img=null,aspect=null;
     var contentImg=_imgWithDims(content);
     if(contentImg){
@@ -2014,14 +1802,7 @@ function _boot(tid,_SK,_TK){
     }
     if(!img&&e.media$thumbnail&&e.media$thumbnail.url){
       img=_normImgUrl(e.media$thumbnail.url);
-      /* NOT using the thumbnail's own width/height here \u2014 it's a square
-         crop, so its aspect ratio does not represent the real picture. */
     }
-    /* Blogger's JSON feed lists each post's labels under entry.category as
-       [{term:"Label Name"}, ...]. Collected here so posts that only carry
-       housekeeping labels (see EXCLUDED_RANDOM_LABELS near the top of the
-       file) can be filtered out of Random Puzzles instead of showing a
-       non-puzzle page with no relevant image. */
     var labels=[];
     if(e.category){
       for(var k=0;k<e.category.length;k++){
@@ -2035,15 +1816,6 @@ function _boot(tid,_SK,_TK){
     return{title:title,url:pUrl,img:img,aspect:aspect,labels:labels,hasAnswer:hasAnswer};
   }
   var EXCLUDED_RANDOM_LABELS_NORM=EXCLUDED_RANDOM_LABELS.map(function(l){return l.trim().toLowerCase();});
-  /* Strict match: if a post carries ANY label from EXCLUDED_RANDOM_LABELS,
-     it's excluded from Random Puzzles, full stop \u2014 regardless of what
-     other labels it also has. This list is now reserved for labels that
-     are structurally never real puzzle content (index/listing pages,
-     admin notices, championship recaps, videos, syndicated content), so
-     there's no legitimate case where a match here should be overridden.
-     (The genuinely ambiguous labels \u2014 missing-answer posts, tutorials,
-     printables, events, illusions \u2014 live in MISSING_ANSWER_LABELS instead,
-     which changes the card's call-to-action rather than hiding the post.) */
   function _isExcludedPost(p){
     if(!p.labels||!p.labels.length)return false;
     for(var i=0;i<p.labels.length;i++){
@@ -2052,9 +1824,6 @@ function _boot(tid,_SK,_TK){
     return false;
   }
 
-  /* preload the images for the current post set in the background so that
-     paging with the next/prev arrows shows an already-cached image instead
-     of waiting on a fresh download each click */
   function _expPreload(){
     expPosts.forEach(function(p){
       if(p.img){var im=new Image();im.src=p.img;}
@@ -2072,34 +1841,16 @@ function _boot(tid,_SK,_TK){
     g('expctr').textContent='';g('expdots').innerHTML='';
   }
 
-  /* Builds the Blogger feed URL for a category. When labelObj.l is null (the
-     "Random Puzzles" entry), the /-/LABEL segment is omitted entirely so the
-     feed returns posts from across the WHOLE site, not one category. */
   function _feedUrl(labelObj,params){
     var base=labelObj.l?(B+'/feeds/posts/default/-/'+encodeURIComponent(labelObj.l)):(B+'/feeds/posts/default');
     return base+'?alt=json'+params;
   }
 
-  /* Fetches WANT_COUNT puzzles spread across the category's ENTIRE history,
-     instead of picking them all from one random contiguous window (which
-     kept giving 5 puzzles clustered close together in posting time, even
-     though the window's position changed on every refresh). We split the
-     full 1..total range into WANT_COUNT equal segments and fetch ONE random
-     post from each segment, in parallel \u2014 so every refresh gives 5 puzzles
-     spread from oldest to newest, each drawn independently at random within
-     its own slice of the timeline. */
   var WANT_COUNT=5;
   function _expFetchStratified(labelObj,total,cacheKey){
-    /* EXCLUDED_RANDOM_LABELS is only meant to keep non-puzzle housekeeping
-       posts out of "Random Puzzles" (the whole-site feed with no label
-       filter). When a specific real category is selected, that label
-       filter from Blogger already guarantees relevance \u2014 a post shouldn't
-       be hidden from ITS OWN category just because it also happens to
-       carry an unrelated secondary label. */
     var isRandomFeed=(labelObj.l===null);
     function keep(p){return p.url&&(!isRandomFeed||!_isExcludedPost(p));}
     if(total<=WANT_COUNT){
-      /* Small category: nothing to stratify, just grab everything available. */
       var url=_feedUrl(labelObj,'&max-results='+total);
       _jsonp(url,function(data){
         expLoading=false;
@@ -2116,13 +1867,6 @@ function _boot(tid,_SK,_TK){
       return;
     }
 
-    /* Each segment fetches a small WINDOW of posts (not just one) and picks
-       a random valid one from within it, so a single excluded pick doesn't
-       leave that slot empty. On top of that, if the whole batch still comes
-       up short of WANT_COUNT (a whole window landing on excluded content is
-       rare but possible), a top-up pass fetches additional random windows
-       to fill the remaining slots, up to a couple of rounds \u2014 this is what
-       makes the final count consistently hit 5 instead of wandering. */
     var SEGMENT_WINDOW=4;
     var MAX_TOPUP_ROUNDS=2;
 
@@ -2204,7 +1948,7 @@ function _boot(tid,_SK,_TK){
 
   function _expFetch(labelObj,forceRefresh){
     if(expLoading)return;
-    var cacheKey=labelObj.l||'__random__'; /* the Random entry has no label string, so use a fixed key */
+    var cacheKey=labelObj.l||'__random__';
     if(!forceRefresh&&expCache[cacheKey]){
       expPosts=expCache[cacheKey];
       expIdx=0;_expRender();_expPreload();return;
@@ -2232,7 +1976,6 @@ function _boot(tid,_SK,_TK){
     +'</div>';
   }
 
-  /* \u2500\u2500 Build tabs \u2500\u2500 */
   var te=g('tabs');
   ac.forEach(function(cat,i){
     var btn=document.createElement('button');
@@ -2249,7 +1992,6 @@ function _boot(tid,_SK,_TK){
   expBtn.onclick=function(){_sw(EXPLORE_IDX);};
   te.appendChild(expBtn);
 
-  /* \u2500\u2500 Wire offline events \u2500\u2500 */
   g('prev').onclick=function(){
     if(st.puzz>0){
       st.puzz--;sv();rend();
@@ -2274,12 +2016,6 @@ function _boot(tid,_SK,_TK){
     rend();
   };
 
-  /* \u2500\u2500 Swipe-to-navigate (touch devices) \u2500\u2500
-     Generic helper: watches touchstart/touchend on `el` and calls
-     `onPrev`/`onNext` when a predominantly-horizontal swipe of at least
-     40px is detected within 600ms \u2014 used for both the offline puzzle body
-     and the Explore card so users can flick left/right to move between
-     puzzles instead of only tapping the arrow buttons. */
   function _addSwipe(el,onPrev,onNext){
     if(!el)return;
     var sx=0,sy=0,st0=0;
@@ -2298,7 +2034,6 @@ function _boot(tid,_SK,_TK){
   _addSwipe(g('offline'),function(){g('prev').click();},function(){g('next').click();});
   _addSwipe(g('expwrap'),function(){g('expprev').click();},function(){g('expnext').click();});
 
-  /* \u2500\u2500 Share menu (WhatsApp / X / Facebook / Telegram / Copy / native) \u2500\u2500 */
   var smEl=g('sharemenu');
   function _shareText(){
     if(st.tab===EXPLORE_IDX){
@@ -2331,7 +2066,7 @@ function _boot(tid,_SK,_TK){
       var socialHtml='<div class="fwpsocial-label">\uD83E\uDDE9 Join our puzzle-loving community</div><div class="fwpsocial-row">';
       SOCIAL_LINKS.forEach(function(link){
         var icon=SOCIAL_ICONS[link.id];
-        if(!icon)return; /* unknown id, skip rather than break */
+        if(!icon)return;
         var label=SOCIAL_LABELS[link.id]||link.id;
         socialHtml+='<a class="fwpsocial-btn" href="'+link.url+'" target="_blank" rel="noopener" aria-label="Follow us on '+label+'">'+icon+'</a>';
       });
@@ -2387,7 +2122,6 @@ function _boot(tid,_SK,_TK){
   smEl.addEventListener('click',function(e){e.stopPropagation();});
   document.addEventListener('click',function(){smEl.style.display='none';});
 
-  /* \u2500\u2500 Wire explore events \u2500\u2500 */
   g('expsel').onchange=function(){
     expLabelObj=allExpOptions[parseInt(this.value,10)];
     expPosts=[];expIdx=0;
@@ -2399,7 +2133,6 @@ function _boot(tid,_SK,_TK){
   g('expprev').onclick=function(){if(!expPosts.length)return;expIdx=(expIdx-1+expPosts.length)%expPosts.length;_expRender();};
   g('expnext').onclick=function(){if(!expPosts.length)return;expIdx=(expIdx+1)%expPosts.length;_expRender();};
 
-  /* add-to-site */
   if(SHOW_ADD_TO_SITE){
     var eo=false;
     g('abtn').onclick=function(){
@@ -2415,47 +2148,15 @@ function _boot(tid,_SK,_TK){
     };
   }
 
-  /* \u2500\u2500 Boot \u2500\u2500 */
   cp=_pk(ac[st.tab],_catStableSeed(ac[st.tab]),cycleIndex);
   rend();
 
-  /* Warm the Explore tab in the background during idle time so that if the
-     visitor clicks Explore, the first post is already in memory instead of
-     waiting on a network round trip. Only runs if nothing is loaded yet. */
   function _idlePrefetch(){
     if(expPosts.length===0&&!expLoading)_expFetch(expLabelObj,false);
   }
   if('requestIdleCallback' in window){requestIdleCallback(_idlePrefetch,{timeout:4000});}
   else{setTimeout(_idlePrefetch,1500);}
 
-  /* If the page is left open across midnight, the widget would otherwise
-     keep showing yesterday's puzzles until the visitor manually reloads
-     (everything above was computed once, at boot, from that day's date).
-     Fix: periodically re-check today's date string against the one this
-     boot was computed with, and if it has changed, tear down and rebuild
-     the whole widget in place by re-running _boot \u2014 picking up the new
-     day's categories/puzzles automatically.
-     Checked via several independent triggers so this is robust both in
-     regular browser tabs and inside mobile app WebViews (Cordova/Capacitor/
-     React Native WebView wrappers don't always route their "app resumed"
-     signal through the standard Page Visibility API the same way a plain
-     browser tab does):
-       - a 30-minute timer, as a background catch-all for the rare case a
-         tab stays continuously foregrounded and active right through
-         midnight without ever losing/regaining focus (mobile OSes often
-         throttle/suspend timers while actually backgrounded anyway, so
-         this is a best-effort net rather than a guarantee while hidden \u2014
-         the visibility/focus/pageshow triggers below do the real work for
-         the common "reopen the app the next day" case, firing instantly
-         rather than waiting on this timer at all)
-       - 'visibilitychange' \u2014 the standard signal, supported by both
-         Android WebView and iOS WKWebView since they're Chromium/WebKit
-         based, fires as soon as the app/tab is foregrounded again
-       - 'focus' on window \u2014 an older, even more widely supported signal
-         that many hybrid app shells still fire on resume even when they
-         don't fully implement Page Visibility
-       - 'pageshow' on window \u2014 fires on navigation/back-forward-cache
-         restores, another common resume path in embedded WebViews */
   var _dateWatcherId=setInterval(_checkForDateChange,1800000);
   document.addEventListener('visibilitychange',_onVisibilityChange);
   window.addEventListener('focus',_checkForDateChange);
@@ -2474,7 +2175,6 @@ function _boot(tid,_SK,_TK){
   }
 }
 
-/* Auto-discover all widget divs */
 var _found=[];
 document.querySelectorAll('[id^="fwp-daily-widget"]').forEach(function(el){_found.push(el.id);});
 if(!_found.length&&document.getElementById('fwp-daily-widget'))_found=['fwp-daily-widget'];
