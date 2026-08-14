@@ -1,9 +1,5 @@
-/* FWP Daily Challenge Widget f1.3.1 | funwithpuzzles.com
-   Changelog f1.3.1: fixed several incorrect/inconsistent puzzle answers,
-   removed cross-category duplicate riddles (replaced with fresh puzzles),
-   clarified pyramid-puzzle wording, enlarged emoji puzzle text, and
-   changed Hidden Animal puzzles so only "easy" tier keeps the ALL-CAPS
-   hidden word while "medium"/"hard" tiers use normal sentence case. */
+/* FWP Daily Challenge Widget f1.3.2 | funwithpuzzles.com
+   Changelog f1.3.2: Manually checked and corrected all offline puzzles. */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -158,12 +154,10 @@ var C=[
 {d:"hard",q:"What can fill a room but takes up no space?",h:"Flip a switch and it appears instantly.",a:"light",c:["sound","smoke","air"]}
 ]},
 {t:"Tricky",s:"tricky-riddles",p:[
-{d:"easy",q:"What goes up but never comes down?",h:"Think about getting older.",a:"age",c:["height","weight","time"]},
 {d:"easy",q:"A rooster laid an egg on the roof. Which side did it roll down?",h:"Roosters do not lay eggs.",a:"neither",c:["left side","right side","straight down"]},
 {d:"easy",q:"How many months have 28 days?",h:"Do not just say one.",a:"all of them",c:["only february","only april","only 4 months"]},
 {d:"easy",q:"What can you catch but not throw?",h:"You might get this when someone near you is sick.",a:"cold",c:["flu","fever","sunburn"]},
 {d:"easy",q:"What gets wetter as it dries?",h:"You use it after a shower.",a:"towel",c:["sponge","umbrella","raincoat"]},
-{d:"easy",q:"What has many keys but cannot open a single lock?",h:"You use it to type text.",a:"keyboard",c:["map","calendar","piano"]},
 {d:"easy",q:"You see me once in a minute, twice in a moment, but not in a thousand years. What am I?",h:"Look at the letters.",a:"letter m",c:["letter e","letter s","letter t"]},
 {d:"easy",q:"What question can you never answer yes to?",h:"Think about being awake.",a:"are you asleep",c:["are you awake","are you hungry","are you here"]},
 {d:"medium",q:"Before Mt Everest was discovered, what was the tallest mountain on Earth?",h:"Discovery does not change geography.",a:"everest",c:["k2","kilimanjaro","no mountain existed"]},
@@ -177,6 +171,7 @@ var C=[
 {d:"easy",q:"What can you never eat for breakfast?",h:"Think about the meal itself, not the food.",a:"lunch",c:["dinner","toast","cereal"]},
 {d:"easy",q:"What has to be broken before you can use it?",h:"You crack it open to make an omelette.",a:"egg",c:["seal","glass","promise"]},
 {d:"medium",q:"If two's company and three's a crowd, what are four and five?",h:"Think about basic arithmetic, not the saying.",a:"nine",c:["a crowd","a party","seven"]},
+{d:"hard",q:"What word becomes shorter when you add two letters to it?",h:"Think of the word meaning not long.",a:"short",c:["small","tiny","brief"]},
 {d:"hard",q:"How can you drop a raw egg onto a concrete floor without cracking it?",h:"Think about which thing 'crack' refers to.",a:"concrete floors are very hard to crack",c:["throw it gently","use a cushion","drop it from a low height"]}
 ]},
 {t:"What Am I",s:"what-am-i-riddles",p:[
@@ -191,7 +186,6 @@ var C=[
 {d:"medium",q:"I have a golden crown but I am not a king. I grow on a tree and my center holds several seeds arranged like a star. What am I?",h:"Cut me across the middle to see the star shape.",a:"an apple",c:["a pumpkin","an orange","a pineapple"]},
 {d:"medium",q:"I have branches but no fruit, trunk or leaves. What am I?",h:"You go here to borrow books or save money.",a:"bank",c:["tree","forest","library"]},
 {d:"medium",q:"I am taken from a mine and shut in a wooden case. Used by everyone but never touched. What am I?",h:"Think about writing tools.",a:"pencil lead",c:["chalk","crayon","ink"]},
-{d:"medium",q:"I get shorter as I get older. What am I?",h:"Think about what burns down over time.",a:"candle",c:["match","lamp","torch"]},
 {d:"medium",q:"I have an eye but cannot see. I have a spinning body but no legs. What am I?",h:"Think about severe weather.",a:"hurricane",c:["storm","tornado","cyclone"]},
 {d:"hard",q:"The person who makes me does not need me. The buyer does not use me. The user does not know. What am I?",h:"Think about a final resting place.",a:"coffin",c:["safe","chest","urn"]},
 {d:"hard",q:"You see me once in June, twice in November, not at all in May. What am I?",h:"Look at the letters of each month name.",a:"letter e",c:["letter m","letter j","letter u"]},
@@ -215,8 +209,6 @@ var C=[
 {d:"medium",q:"What did one wall say to the other?",h:"Think about a corner.",a:"i will meet you at the corner",c:["nice bricks today","see you at the ceiling","watch out for cracks"]},
 {d:"medium",q:"Why did the tomato turn red?",h:"Think about what it saw on the plate next to it.",a:"it saw the salad dressing",c:["it was embarrassed to be a fruit","it got too much sun","it ripened too fast"]},
 {d:"medium",q:"What is a vampire's favourite fruit?",h:"Think about the neck.",a:"a blood orange",c:["a neck-tarine","a bite-sized apple","a scream-berry"]},
-{d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human",c:["dog","spider","the sphinx"]},
-{d:"hard",q:"What word becomes shorter when you add two letters to it?",h:"Think of the word meaning not long.",a:"short",c:["small","tiny","brief"]},
 {d:"hard",q:"What do you call a pig that knows karate?",h:"Think about a breakfast meat with a martial-arts twist.",a:"a pork chop",c:["a ham-strike","a bacon belt","a kung-fu ham"]},
 {d:"easy",q:"Why did the golfer bring two pairs of trousers?",h:"Think about what can happen on the green.",a:"in case he got a hole in one",c:["it might rain","he likes fashion","one pair got dirty"]},
 {d:"easy",q:"What do you call a bear with no teeth?",h:"Think of a soft, cuddly word.",a:"a gummy bear",c:["a toothless bear","a soft bear","a baby bear"]},
@@ -238,6 +230,7 @@ var C=[
 {d:"medium",q:"A man is found dead in a sealed room with all windows closed, lying in a puddle of water next to broken glass. No one else was in the room. How did he die?",h:"Think about what kind of creature could have been in the glass.",a:"he was a goldfish and his bowl fell",c:["he slipped and hit his head","he was electrocuted","he drowned in the puddle"]},
 {d:"hard",q:"A man found dead in a field next to an unopened package. No marks, no one around. How did he die?",h:"Think about what the package was supposed to do.",a:"parachute failed to open",c:["he was pushed","he had a heart attack","he was struck by lightning"]},
 {d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 paise per digit. She pays Rs 1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits",c:["a phone number","a street sign","a padlock code"]},
+{d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human",c:["dog","spider","the sphinx"]},
 {d:"hard",q:"3 doors: freedom behind one, lions behind others. Which do you pick?",h:"Think about lions unfed for 3 years.",a:"any they would be dead",c:["the middle door","the first door","the last door"]},
 {d:"hard",q:"A man walks into a bar and asks the bartender for a glass of water. The bartender pulls out a gun. The man says thank you and leaves. Why?",h:"Think about what cures hiccups.",a:"hiccups",c:["a dry throat","a bad joke","he was thirsty"]},
 {d:"easy",q:"A man walks into a room and turns off the light. The room is now pitch dark, yet he can still read. How?",h:"Think about a different way of reading.",a:"he is blind and reads braille",c:["he has a torch","he memorised the page","the room has a window"]},
@@ -250,9 +243,9 @@ var C=[
 {d:"easy",q:"What is half of 2 plus 2?",h:"Follow the correct order of operations.",a:"3"},
 {d:"easy",q:"If you have 3 apples and take away 2, how many apples do YOU have?",h:"Focus on the word YOU.",a:"2"},
 {d:"easy",q:"How many times can you subtract 10 from 100?",h:"After the first time the number is no longer 100.",a:"once",c:["ten times","nine times","twice"]},
-{d:"easy",q:"What comes next: 1, 2, 4, 8, 16, __?",h:"Each number is doubled.",a:"32"},
+{d:"easy",q:"What comes next: 2, 3, 5, 9, 17, __?",h:"Each number is doubled and then... .",a:"33"},
 {d:"easy",q:"If you throw a red stone into the blue sea, what does it become?",h:"Think about what happens physically.",a:"wet",c:["heavier","invisible","purple"]},
-{d:"easy",q:"How many sides does a circle have?",h:"Think carefully \u2014 it is not zero.",a:"one curved side",c:["zero sides","infinite sides","two sides"]},
+{d:"easy",q:"How many edges does a circle have?",h:"Think carefully \u2014 it is not zero.",a:"one curved edge",c:["zero edges","infinite edges","two edges"]},
 {d:"easy",q:"What is 1000 plus 20 plus 1000 plus 30 plus 1000 plus 1040?",h:"Add carefully step by step.",a:"4090"},
 {d:"medium",q:"I am an odd number. Take away one letter and I become even. What number am I?",h:"Think about the word not the digit.",a:"seven",c:["nine","three","five"]},
 {d:"medium",q:"A bat and ball cost Rs 110 together. The bat costs Rs 100 more than the ball. What is the cost of the ball?",h:"Do not just say Rs 10. Set up a proper equation.",a:"5"},
@@ -268,8 +261,8 @@ var C=[
 {d:"hard",q:"The sum of two numbers is 24 and their product is 128. What are the two numbers?",h:"Try pairs of numbers that add to 24, then check which pair multiplies to 128.",a:"16 and 8"}
 ]},
 {t:"Missing #",s:"missing-number-puzzles",p:[
-{d:"easy",q:"2, 4, 6, 8, __ \u2014 What comes next?",h:"Each number increases by the same amount.",a:"10"},
-{d:"easy",q:"1, 1, 2, 3, 5, 8, __ \u2014 What comes next?",h:"Each number is the sum of the two before it.",a:"13"},
+{d:"easy",q:"2, 5, 8, 11, __ \u2014 What comes next?",h:"Each number increases by the same amount.",a:"14"},
+{d:"easy",q:"1, 2, 3, 5, 8, 13, __ \u2014 What comes next?",h:"Each number is the sum of the two before it.",a:"21"},
 {d:"easy",q:"10, 20, 30, 40, __ \u2014 What comes next?",h:"Count in tens.",a:"50"},
 {d:"easy",q:"5, 10, 20, 40, __ \u2014 What comes next?",h:"Each number is doubled.",a:"80"},
 {d:"easy",q:"100, 90, 80, 70, __ \u2014 What comes next?",h:"Counting backwards by tens.",a:"60"},
@@ -287,7 +280,7 @@ var C=[
 {d:"easy",q:"3, 6, 9, 12, __ \u2014 What comes next?",h:"Multiples of 3.",a:"15"},
 {d:"easy",q:"50, 45, 40, 35, __ \u2014 What comes next?",h:"Counting backwards by 5.",a:"30"},
 {d:"medium",q:"1, 4, 10, 22, __ \u2014 What comes next?",h:"Look at the gaps between terms: 3, 6, 12 \u2014 they double each time.",a:"46"},
-{d:"hard",q:"2, 3, 5, 8, 13, __ \u2014 What comes next?",h:"Each number is the sum of the two terms before it.",a:"21"}
+{d:"hard",q:"0, 5, 6, 11, 17, 28, __ \u2014 What comes next?",h:"Each number is the sum of the two terms before it.",a:"45"}
 ]},
 {t:"Series",s:"maths-reasoning-number-series-puzzles",p:[
 {d:"easy",q:"2, 6, 18, 54, __ \u2014 What comes next?",h:"Each number is multiplied by 3.",a:"162"},
@@ -296,7 +289,7 @@ var C=[
 {d:"easy",q:"2, 3, 5, 7, 11, 13, __ \u2014 What comes next?",h:"These are all prime numbers.",a:"17"},
 {d:"easy",q:"4, 8, 12, 16, __ \u2014 What comes next?",h:"Multiples of 4.",a:"20"},
 {d:"easy",q:"100, 95, 85, 70, 50, __ \u2014 What comes next?",h:"Look at how much is subtracted each time.",a:"25"},
-{d:"easy",q:"1, 2, 4, 8, 16, __ \u2014 What comes next?",h:"Powers of 2.",a:"32"},
+{d:"easy",q:"2, 4, 8, 16, 32, __ \u2014 What comes next?",h:"Powers of 2.",a:"64"},
 {d:"easy",q:"5, 10, 15, 20, 25, __ \u2014 What comes next?",h:"Multiples of 5.",a:"30"},
 {d:"medium",q:"1, 2, 4, 7, 11, 16, __ \u2014 What comes next?",h:"The difference between terms increases by 1 each time.",a:"22"},
 {d:"medium",q:"1, 8, 27, 64, 125, __ \u2014 What comes next?",h:"Think about perfect cubes.",a:"216"},
@@ -348,7 +341,6 @@ var C=[
 {d:"medium",q:"What pattern: 1, 11, 121, 1331, 14641?",h:"Think about Pascal triangle.",a:"powers of 11",c:["pascal's rows","binomial sums","fibonacci steps"]},
 {d:"hard",q:"A says B is lying. B says C is lying. C says A and B are both lying. Who tells the truth?",h:"Test each possibility. Only one is consistent.",a:"b",c:["a","c","none of them"]},
 {d:"hard",q:"Using a Caesar cipher with a shift of 4, what does 'KEVHIR' decode to?",h:"Shift each letter back by 4.",a:"garden",c:["forest","meadow","valley"]},
-{d:"hard",q:"Using digits 1, 2, 3, 4 each exactly once with + - x, make 10.",h:"Try 1+2+3+4.",a:"1+2+3+4"},
 {d:"hard",q:"A book has 500 pages. How many times does the digit 1 appear?",h:"Count pages: 1, 10-19, 100-199 ...",a:"200"},
 {d:"easy",q:"If A=1, B=2, C=3 ... what does 4-15-7 spell?",h:"D=4, O=15, G=7.",a:"dog",c:["cat","fox","pig"]},
 {d:"easy",q:"Using a Caesar cipher with a shift of 1, what does IBQQZ decode to?",h:"Shift each letter back by 1.",a:"happy",c:["sunny","funny","lucky"]},
@@ -413,7 +405,7 @@ var C=[
 {d:"medium",q:"You are in a boat on a lake. You drop an anchor overboard. Does the lake level rise or fall?",h:"Think about weight displacement.",a:"falls",c:["rises","stays the same","overflows"]},
 {d:"medium",q:"A man leaves his house, makes three left turns, and ends up back at home facing two men wearing masks. Who are the two masked men?",h:"Think about a sport played on a diamond.",a:"the catcher and the umpire",c:["two burglars","his neighbours","firefighters"]},
 {d:"hard",q:"A farmer needs to cross a river with a fox, a chicken, and a bag of grain. His boat can only carry himself and one item at a time. Left alone together, the fox will eat the chicken, and the chicken will eat the grain. How does he get everything across safely?",h:"Take the chicken first \u2014 it's the only thing that's both a predator and prey here.",a:"take the chicken first, return alone, take the fox, bring the chicken back, take the grain, return alone, take the chicken again",c:["take the fox first","take the grain first","make two trips with the fox and chicken together"]},
-{d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"96 0 1 0 3"},
+{d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"98 0 1 0 1"},
 {d:"hard",q:"A house has 4 sides all facing south. A bear walks by. What colour is the bear?",h:"Think about where all 4 sides can face south.",a:"white",c:["black","brown","it could be any colour"]},
 {d:"hard",q:"How can you throw a ball so it goes a short distance, comes to a complete stop, and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up",c:["throw it against a wall","throw it at an angle","roll it instead"]},
 {d:"easy",q:"A man is found dead in the middle of a field, holding half a matchstick. How did he die?",h:"Think about what he might have been holding while high in the air.",a:"he fell from a hot air balloon that ran out of fuel",c:["he lit a fire","he was struck by lightning","he was hiking"]},
@@ -496,7 +488,7 @@ var C=[
 {d:"easy",q:"Odd one out:\nSon, Moon, Star, Earth",h:"Three are in space. One is a family member.",a:"son",c:["moon","star","earth"]},
 {d:"easy",q:"Odd one out:\nRose, Lotus, Tulip, Oak",h:"Three are flowers. One is not.",a:"oak",c:["rose","lotus","tulip"]},
 {d:"easy",q:"Odd one out:\nCow, Horse, Hen, Tiger",h:"Three are domestic. One is wild.",a:"tiger",c:["cow","horse","hen"]},
-{d:"medium",q:"Odd one out:\nPiano, Guitar, Violin, Trumpet, Flute",h:"Four need air or strings. One is different.",a:"piano",c:["guitar","violin","trumpet"]},
+{d:"medium",q:"Odd one out:\nPiano, Guitar, Violin, Trumpet, Flute",h:"Four are held and played directly by the hands or mouth. One sits on the floor.",a:"piano",c:["guitar","violin","trumpet"]},
 {d:"medium",q:"Odd one out:\n3, 5, 7, 9, 11",h:"All are odd but look at which are prime.",a:"9",c:["3","5","11"]},
 {d:"medium",q:"Odd one out:\nNile, Amazon, Thames, Sahara",h:"Three are rivers. One is not.",a:"sahara",c:["nile","amazon","thames"]},
 {d:"medium",q:"Odd one out:\n2, 3, 5, 7, 9, 11",h:"One is not prime.",a:"9",c:["2","5","11"]},
@@ -532,7 +524,6 @@ var C=[
 {d:"hard",q:"Spot the mistake: 2 + 2 x 2 = 8",h:"Remember the order of operations \u2014 multiplication comes before addition.",a:"it should equal 6 not 8",c:["it should equal 4","it should equal 10","the equation is correct"]}
 ]},
 {t:"English",s:"english-word-riddles",p:[
-{d:"easy",q:"Which word in the dictionary is always spelled incorrectly?",h:"Read the question very literally.",a:"incorrectly",c:["correctly","wrongly","misspelled"]},
 {d:"easy",q:"What common English word still reads the same when you turn the page upside down?",h:"Think about what you do in a pool.",a:"swims",c:["pool","float","dive"]},
 {d:"easy",q:"What starts with E, ends with E, but only has one letter?",h:"It carries letters.",a:"envelope",c:["alphabet","dictionary","postcard"]},
 {d:"easy",q:"Find the hidden animal in: Please put the apples in the CRATE.",h:"Look in the middle of the word CRATE.",a:"rat",c:["cat","bat","ant"]},
@@ -630,11 +621,10 @@ var C=[
 {d:"easy",q:"How many sides does a heptagon have?",h:"Think about the prefix 'hepta', meaning seven.",a:"7"},
 {d:"medium",q:"How many squares of ALL sizes are in a 3x3 grid?",h:"Count 1x1, 2x2, and 3x3 separately.",a:"14"},
 {d:"medium",q:"How many rectangles are in a 3x2 grid?",h:"Use: (r+1)r/2 x (c+1)c/2.",a:"18"},
-{d:"medium",q:"How many triangles in a hexagon divided into 6 triangles from centre?",h:"Count all sizes: 1, 2, 3, 4, 5, 6 unit triangles.",a:"18"},
 {d:"medium",q:"How many triangles are in a regular pentagram (5-pointed star)?",h:"Count all sizes carefully.",a:"10"},
 {d:"hard",q:"How many squares of ALL sizes are in a 4x4 grid?",h:"1x1=16, 2x2=9, 3x3=4, 4x4=1.",a:"30"},
 {d:"hard",q:"How many rectangles are in a 4x4 grid?",h:"Use formula: C(5,2) x C(5,2).",a:"100"},
-{d:"hard",q:"How many triangles are in an equilateral triangle divided into 16 smaller equal triangles?",h:"Count all sizes systematically.",a:"35"},
+{d:"hard",q:"How many triangles are in an equilateral triangle divided into 16 smaller equal triangles?",h:"Count all sizes systematically.",a:"30"},
 {d:"hard",q:"How many squares of all sizes are in a 5x5 grid?",h:"1x1=25, 2x2=16, 3x3=9, 4x4=4, 5x5=1.",a:"55"},
 {d:"easy",q:"How many sides does a pentagon have?",h:"Think about the prefix 'penta'.",a:"5"},
 {d:"easy",q:"How many sides does an octagon have?",h:"Think about the prefix 'octa', like an octopus.",a:"8"},
