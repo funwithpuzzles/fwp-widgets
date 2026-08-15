@@ -1,9 +1,9 @@
-/* FWP Daily Challenge Widget f1.3.2 | funwithpuzzles.com
-   Changelog f1.3.2: Manually checked and corrected all offline puzzles. */
+/* FWP Daily Challenge Widget f1.3.3 | funwithpuzzles.com
+   Changelog f1.3.3: Changed App Logo */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
-var LG='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYDi4jf-HGfN5sLOhCuMHA1VaBiuRCIS6rKVxp8buhYkncs5IdKzHWN6gQoH35k95LKE76A6Xl35xk4Bwv-L6S3EGhJ-ulrutR1BGoEz5qNRoRD9s9_R0JPOiw5WOK3CUeeCxERYjaBlA/s64/apple-touch-icon.png';
+var LG='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiNT1J_Bdegqg4Fsyc5LINJN0BYy8GgG4fryitVyQf9yJVq6EzKH-ZHaPZNcLp2YgrlDOLxIkJdXXWDichzYVKTsWmsRbNQO10nAqxlQ3oHM7oDN56HgzYwavRw8sMnRvi60pCBsaFu6GKFljkGH4nt9LzPBgSmqw0HBs-hyRTNFC-4jh61-8hmy-R89f0/s64/daily-puzzles-logo-64.png';
 var SK='fwpv6s',TK='fwpv6t';
 var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.net/gh/funwithpuzzles/fwp-widgets@latest/fwp-daily.js"><\/scr'+'ipt>';
 
