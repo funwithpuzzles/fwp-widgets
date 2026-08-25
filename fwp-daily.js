@@ -1,5 +1,6 @@
-/* FWP Daily Challenge Widget f1.3.3 | funwithpuzzles.com
-   Changelog f1.3.3: Changed App Logo */
+/* FWP Daily Challenge Widget f1.3.4 | funwithpuzzles.com
+   Changelog f1.3.4: Corrected many offline puzzles
+   Added Download from Microsoft */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -11,6 +12,9 @@ var SHOW_ADD_TO_SITE = true;
 
 var SHOW_GOOGLE_PLAY_PROMO = false;
 var SHOW_APPLE_APP_PROMO = false;
+var SHOW_MICROSOFT_STORE_PROMO = true;
+
+  var MICROSOFT_STORE_URL = 'https://apps.microsoft.com/detail/9NRVH669BL1R';
 var GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.funwithpuzzles.dailychallenges';
 var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';
 
@@ -229,7 +233,7 @@ var C=[
 {d:"medium",q:"A woman lives on the 20th floor. On sunny days she takes the lift to the 10th and walks up. On rainy days all the way. Why?",h:"Think about what she carries on rainy days.",a:"umbrella",c:["raincoat","boots","hat"]},
 {d:"medium",q:"A man is found dead in a sealed room with all windows closed, lying in a puddle of water next to broken glass. No one else was in the room. How did he die?",h:"Think about what kind of creature could have been in the glass.",a:"he was a goldfish and his bowl fell",c:["he slipped and hit his head","he was electrocuted","he drowned in the puddle"]},
 {d:"hard",q:"A man found dead in a field next to an unopened package. No marks, no one around. How did he die?",h:"Think about what the package was supposed to do.",a:"parachute failed to open",c:["he was pushed","he had a heart attack","he was struck by lightning"]},
-{d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 paise per digit. She pays Rs 1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits",c:["a phone number","a street sign","a padlock code"]},
+{d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 cents per digit. She pays $1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits",c:["a phone number","a street sign","a padlock code"]},
 {d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human",c:["dog","spider","the sphinx"]},
 {d:"hard",q:"3 doors: freedom behind one, lions behind others. Which do you pick?",h:"Think about lions unfed for 3 years.",a:"any they would be dead",c:["the middle door","the first door","the last door"]},
 {d:"hard",q:"A man walks into a bar and asks the bartender for a glass of water. The bartender pulls out a gun. The man says thank you and leaves. Why?",h:"Think about what cures hiccups.",a:"hiccups",c:["a dry throat","a bad joke","he was thirsty"]},
@@ -248,7 +252,7 @@ var C=[
 {d:"easy",q:"How many edges does a circle have?",h:"Think carefully \u2014 it is not zero.",a:"one curved edge",c:["zero edges","infinite edges","two edges"]},
 {d:"easy",q:"What is 1000 plus 20 plus 1000 plus 30 plus 1000 plus 1040?",h:"Add carefully step by step.",a:"4090"},
 {d:"medium",q:"I am an odd number. Take away one letter and I become even. What number am I?",h:"Think about the word not the digit.",a:"seven",c:["nine","three","five"]},
-{d:"medium",q:"A bat and ball cost Rs 110 together. The bat costs Rs 100 more than the ball. What is the cost of the ball?",h:"Do not just say Rs 10. Set up a proper equation.",a:"5"},
+{d:"medium",q:"A bat and ball cost $110 together. The bat costs $100 more than the ball. What is the cost of the ball?",h:"Do not just say $ 10. Set up a proper equation.",a:"5"},
 {d:"medium",q:"You have two ropes that each take exactly 60 minutes to burn from end to end, but burn unevenly along their length. You light rope A at both ends and rope B at one end, at the same moment. The instant rope A finishes burning, you light the second end of rope B. How many total minutes will have passed when rope B finally finishes burning?",h:"Rope A, lit at both ends, burns out in half its normal time.",a:"45",c:["60","30","50"]},
 {d:"medium",q:"A father is currently 4 times as old as his son. In 20 years, he will be exactly twice as old as his son. How old is the son right now?",h:"Set up an equation using the son's current age as x.",a:"10"},
 {d:"hard",q:"A clock loses 3 minutes every hour. Set at noon, when will it next show the correct time?",h:"It must lose exactly 12 hours, which at 3 minutes lost per hour takes 240 hours.",a:"10 days"},
@@ -270,11 +274,11 @@ var C=[
 {d:"easy",q:"3, 9, 27, 81, __ \u2014 What comes next?",h:"Each number is multiplied by 3.",a:"243"},
 {d:"easy",q:"2, 4, 8, 16, __ \u2014 What comes next?",h:"Each number doubles.",a:"32"},
 {d:"medium",q:"3, 6, 12, 24, __ \u2014 What comes next?",h:"Each number is multiplied by the same value.",a:"48"},
-{d:"medium",q:"Grid:\n2  4  8\n3  9  27\n4  16  ?\nWhat replaces the ?",h:"Look at the pattern across each row.",a:"64"},
+{d:"medium",q:"What number replaces the ? in this grid?\n2&nbsp;&nbsp;4&nbsp;&nbsp;8\n3&nbsp;&nbsp;9&nbsp;&nbsp;27\n4&nbsp;&nbsp;16&nbsp;&nbsp;?",h:"Look at the pattern across each row.",a:"64"},
 {d:"medium",q:"7, 14, 21, 28, __ \u2014 What comes next?",h:"Multiples of 7.",a:"35"},
 {d:"medium",q:"1, 3, 6, 10, 15, __ \u2014 What comes next?",h:"These are triangle numbers.",a:"21"},
 {d:"hard",q:"1, 2, 6, 24, 120, __ \u2014 What comes next?",h:"Each term equals previous term multiplied by its position.",a:"720"},
-{d:"hard",q:"Find the missing number:\n6  13  25\n11 23  45\n16 33  __",h:"Look at the relationship across each row.",a:"65"},
+{d:"hard",q:"Find the missing number in this grid:\n6&nbsp;&nbsp;&nbsp;13&nbsp;&nbsp;25\n11&nbsp;&nbsp;23&nbsp;&nbsp;45\n16&nbsp;&nbsp;33&nbsp;&nbsp;__",h:"Look at the relationship across each row.",a:"65"},
 {d:"hard",q:"What is the sum of the first 100 natural numbers?",h:"Use the formula n x (n+1) divided by 2.",a:"5050"},
 {d:"hard",q:"What comes next: 0, 1, 1, 2, 3, 5, 8, 13, 21, __?",h:"Each number is the sum of the two before it.",a:"34"},
 {d:"easy",q:"3, 6, 9, 12, __ \u2014 What comes next?",h:"Multiples of 3.",a:"15"},
@@ -308,19 +312,20 @@ var C=[
 {d:"easy",q:"If Apple=5, Banana=6, Cherry=6, then Mango=?",h:"Count the letters in each word.",a:"5"},
 {d:"easy",q:"If Cat=3, Dog=3, Elephant=8, then Ant=?",h:"Count the letters in each word.",a:"3"},
 {d:"easy",q:"Circle + Circle = 10. Circle x Circle = ?",h:"Find the value of Circle first.",a:"25"},
-{d:"easy",q:"1+4=5, 2+5=12, 3+6=21. Then 5+8=?",h:"Result = first x (first + second).",a:"65"},
+{d:"easy",q:"Cat + Cat = 10, Cat + Dog = 12, Dog - Cat = ?",h:"Find the value of each animal first.",a:"2"},
 {d:"easy",q:"If 2+2=8, 3+3=18, 4+4=32, then 5+5=?",h:"Look at the pattern carefully.",a:"50"},
 {d:"easy",q:"If MILK=3, WATER=4, JUICE=4, then TEA=?",h:"Count the vowels in each word.",a:"2"},
 {d:"easy",q:"If 1=5, 2=10, 3=15, 4=20, then 5=?",h:"Look at what 1=5 tells you about 5.",a:"1"},
 {d:"easy",q:"Sun=3, Moon=4, Star=4. Earth=?",h:"Count the letters.",a:"5"},
-{d:"medium",q:"Cat + Cat = 10, Cat + Dog = 12, Dog - Cat = ?",h:"Find the value of each animal first.",a:"2"},
+{d:"medium",q:"If 2+3=10, 4+5=36, and 6+7=78, what is 8+9?",h:"Multiply the sum of the two numbers by the first number.",a:"136",c:["144","162","128"]},
+{d:"medium",q:"1+4=5, 2+5=12, 3+6=21. Then 5+8=?",h:"Result = first + (first x second).",a:"45"},
 {d:"medium",q:"If RED=27, BLUE=40, then GREEN=?",h:"A=1, B=2 ... add all letter values.",a:"49"},
 {d:"medium",q:"5 people shake hands with each other exactly once. How many handshakes total?",h:"n x (n-1) divided by 2.",a:"10"},
 {d:"medium",q:"If A+B=10, B+C=15, A+C=13, what is A+B+C?",h:"Add all three equations then halve.",a:"19"},
 {d:"hard",q:"All Bloops are Razzles. All Razzles are Lazzles. Are all Bloops definitely Lazzles?",h:"If A implies B and B implies C ...",a:"yes",c:["no","maybe","not necessarily"]},
 {d:"hard",q:"If the day before yesterday was Thursday, what day is the day after tomorrow?",h:"Map out the days carefully.",a:"monday",c:["sunday","tuesday","saturday"]},
 {d:"hard",q:"In a group of 23 people, roughly what is the chance two share a birthday?",h:"This is the famous birthday problem.",a:"about 50 percent",c:["about 10 percent","about 90 percent","about 25 percent"]},
-{d:"hard",q:"Three friends split a Rs 300 bill. They each pay Rs 100. The waiter returns Rs 50. They each get Rs 10 back. Where did the missing Rs 10 go?",h:"There is no missing Rs 10. Recount carefully.",a:"there is no missing rupee",c:["the waiter kept it","the maths is wrong","they were shortchanged"]},
+{d:"hard",q:"Three friends split a $300 bill. They each pay $100. The waiter returns $50. They each get $10 back. Where did the missing $10 go?",h:"There is no missing $10. Recount carefully.",a:"there is no missing $",c:["the waiter kept it","the maths is wrong","they were shortchanged"]},
 {d:"easy",q:"If all squares are rectangles, and this shape is a square, is it also a rectangle?",h:"Apply the rule directly to this shape.",a:"yes",c:["no","maybe","only if it's not a square"]},
 {d:"easy",q:"Tom is taller than Jerry. Jerry is taller than Spike. Who is the tallest?",h:"Line them up from tallest to shortest.",a:"tom",c:["jerry","spike","cannot be determined"]},
 {d:"medium",q:"If no reptiles are mammals, and a snake is a reptile, is a snake a mammal?",h:"Apply the rule about reptiles directly to the snake.",a:"no",c:["yes","maybe","only some snakes"]},
@@ -436,13 +441,13 @@ var C=[
 {d:"hard",q:"A 2x2 grid of 4 small squares is built entirely from matchsticks. How many matchsticks are used in total?",h:"There are 3 horizontal lines and 3 vertical lines, each 2 sticks long.",a:"12"}
 ]},
 {t:"Rebus",s:"rebus-riddles",p:[
-{d:"easy",q:"What phrase does HE + ART represent?",h:"Read the letters and their position.",a:"heart",c:["heartbeat","sweetheart","art gallery"]},
+{d:"easy",q:"What phrase does HE + ART represent?",h:"Read the letters and their position.",a:"heart",c:["hearth","earth","hardware"]},
 {d:"easy",q:"HIJKLMNO \u2014 What one word does this represent?",h:"These letters span H to O.",a:"water",c:["alphabet","letters","ocean"]},
 {d:"easy",q:"What does BAN + ANA represent?",h:"Put the sounds together.",a:"banana",c:["bandana","banjo","banana split"]},
 {d:"easy",q:"What does EZ represent?",h:"Say the letters aloud.",a:"easy",c:["breezy","peasy","zesty"]},
 {d:"easy",q:"What phrase does HEAD over HEELS represent?",h:"One word is above another.",a:"head over heels",c:["heels over head","upside down","top to bottom"]},
 {d:"easy",q:"What word is hidden inside: PRAISECTION?",h:"Look for a smaller word inside.",a:"raise",c:["praise","erase","phrase"]},
-{d:"easy",q:"What does GR + 8 represent?",h:"Say each part aloud.",a:"great",c:["grate","gr8t","greater"]},
+{d:"easy",q:"What does GR + 8 represent?",h:"Say each part aloud.",a:"great",c:["greet","grease","grief"]},
 {d:"easy",q:"What does B4 represent?",h:"Say it aloud as a number and letter.",a:"before",c:["b-four","forever","before hand"]},
 {d:"medium",q:"What does this represent?\nSTAND\nI I I I",h:"What are the I's doing relative to STAND?",a:"i understand",c:["i stand alone","standing tall","i under stand"]},
 {d:"medium",q:"ONCE\n----\nTIME\nWhat does this represent?",h:"Think about position.",a:"once upon a time",c:["time after time","once in a while","time and again"]},
@@ -471,9 +476,9 @@ var C=[
 {d:"medium",q:"What is the speed of light in a vacuum, approximately?",h:"About 300 million metres per second.",a:"300000 km per second"},
 {d:"medium",q:"What is the largest desert in the world?",h:"It is not the Sahara.",a:"antarctica",c:["sahara","gobi","arabian"]},
 {d:"hard",q:"I am a country, language and nationality all sharing one name. Capital is Amsterdam. What am I?",h:"Famous for tulips, windmills, and cycling.",a:"netherlands",c:["denmark","belgium","luxembourg"]},
-{d:"hard",q:"What is the only number in English with the same number of letters as its value?",h:"Count the letters in the word.",a:"four",c:["one","three","six"]},
+{d:"hard",q:"What is the only country in the world that is named after a historical woman?",h:"It is an island nation in the Caribbean, named after Saint Lucy by the French.",a:"saint lucia",c:["saint vincent","saint kitts","saint helena"]},
 {d:"hard",q:"Which country has the most natural lakes?",h:"It has over 60 percent of the world total.",a:"canada",c:["russia","finland","brazil"]},
-{d:"hard",q:"What is the only planet commonly described as rotating clockwise (retrograde) when viewed from above its north pole?",h:"It spins backwards compared to most planets.",a:"venus",c:["mercury","mars","uranus"]},
+{d:"hard",q:"Which planet is most famous for spinning backwards (clockwise) compared to the direction of most other planets?",h:"It spins in the opposite direction to Earth.",a:"venus",c:["mercury","mars","jupiter"]},
 {d:"easy",q:"What is the largest planet in our solar system?",h:"It's also famous for its Great Red Spot.",a:"jupiter",c:["saturn","neptune","uranus"]},
 {d:"easy",q:"What is the tallest mountain in the world?",h:"It sits in the Himalayas.",a:"everest",c:["k2","kilimanjaro","denali"]},
 {d:"medium",q:"Which country is home to the ancient city of Machu Picchu?",h:"It's located high in the Andes mountains.",a:"peru",c:["mexico","chile","bolivia"]},
@@ -528,17 +533,17 @@ var C=[
 {d:"easy",q:"What starts with E, ends with E, but only has one letter?",h:"It carries letters.",a:"envelope",c:["alphabet","dictionary","postcard"]},
 {d:"easy",q:"Find the hidden animal in: Please put the apples in the CRATE.",h:"Look in the middle of the word CRATE.",a:"rat",c:["cat","bat","ant"]},
 {d:"easy",q:"What word has three consecutive double letters?",h:"Think about keeping books.",a:"bookkeeper",c:["accountant","librarian","typewriter"]},
-{d:"easy",q:"What is a word that reads the same forwards and backwards?",h:"These are called palindromes.",a:"racecar",c:["rowboat","kayak","canoe"]},
+{d:"easy",q:"What is a word that reads the same forwards and backwards?",h:"These are called palindromes.",a:"racecar",c:["rowboat","speedboat","canoe"]},
 {d:"easy",q:"What time of day, written as a 4-letter word, reads the same forwards and backwards?",h:"It's exactly midday.",a:"noon",c:["morn","dusk","dawn"]},
 {d:"easy",q:"Rearrange SILENT to make another common English word.",h:"It uses the same 6 letters.",a:"listen",c:["silent","enlist","tinsel"]},
-{d:"medium",q:"What 8-letter word contains only one vowel?",h:"Think about building material.",a:"strength",c:["length","width","depth"]},
+{d:"medium",q:"What 8-letter word contains only one vowel?",h:"Think about building material.",a:"strength",c:["alphabet","splendid","keyboard"]},
 {d:"medium",q:"Which word contains all 5 vowels in order: a, e, i, o, u?",h:"A word meaning moderate in habits.",a:"abstemious",c:["fictional","emotional","auditorium"]},
 {d:"medium",q:"What is the longest common English word typed using only the top keyboard row?",h:"QWERTY row: Q W E R T Y U I O P.",a:"typewriter",c:["keyboard","monitor","printer"]},
 {d:"medium",q:"What 7-letter word has hundreds of letters in it?",h:"Think about what holds many letters.",a:"mailbox or postbox",c:["envelope","postcard","stamp album"]},
 {d:"hard",q:"What is the next letter: O, T, T, F, F, S, S, E, __?",h:"First letters of numbers: one, two, three ...",a:"n",c:["m","t","e"]},
-{d:"hard",q:"What English word can have 4 of its 5 letters removed and still sound the same?",h:"Think about the word queue.",a:"queue",c:["quay","cue","clue"]},
-{d:"hard",q:"What common word contains the letters of CINEMA in order but not consecutively?",h:"Think about someone who builds kitchen furniture.",a:"cabinetmaker",c:["commercial","memorial","centennial"]},
-{d:"hard",q:"What is the only word in English that ends in -mt?",h:"Think about something that was not allowed to happen.",a:"dreamt",c:["dreamed","learnt","dreampt"]},
+{d:"hard",q:"What is the longest common English word that does not contain a standard vowel (A, E, I, O, U)?",h:"Think about words related to poetry, music, or ancient times.",a:"rhythms",c:["syzygy","crypts","glyphs"]},
+{d:"hard",q:"What common word contains the letters of CINEMA in order but not consecutively?",h:"Think about someone who builds kitchen furniture.",a:"cabinetmaker",c:["magazine","camerawoman","facemaker"]},
+{d:"hard",q:"What is the only number spelled out in English whose letters are in alphabetical order?",h:"Think about the numbers Fifty, Sixty, and Seventy.",a:"forty",c:["fifty","sixty","eighty"]},
 {d:"easy",q:"What is the plural of 'mouse' (the animal)?",h:"It's an irregular plural, not just adding an 's'.",a:"mice",c:["mouses","mices","mouse"]},
 {d:"easy",q:"What is the opposite of 'ancient'?",h:"Think about something brand new.",a:"modern",c:["old","historic","antique"]},
 {d:"medium",q:"What figure of speech compares two things using 'like' or 'as'?",h:"It directly signals the comparison with those words.",a:"simile",c:["metaphor","hyperbole","alliteration"]},
@@ -597,7 +602,7 @@ var C=[
 {d:"easy",q:"Bottom row: 1, 4. Top = ? (top = sum of the two numbers below)",h:"Add the two bottom numbers.",a:"5"},
 {d:"easy",q:"Top = 20. Bottom left = 8. Bottom right = ? (the two base numbers add up to the top)",h:"Top = sum of two below.",a:"12"},
 {d:"easy",q:"3-row pyramid, each block = sum of the two blocks below it. Bottom row: 4, 5, 6. Middle row: 9, ?. Top: ?",h:"Each block is the sum of the two blocks below it.",a:"11 and 20"},
-{d:"medium",q:"Complete the pyramid (each block = sum of the two blocks below it):\n?\n?  ?\n1  2  3",h:"Build layer by layer from the bottom.",a:"8"},
+{d:"medium",q:"What number goes at the very top of this pyramid? (Each block is the sum of the two below it)\n&nbsp;&nbsp;&nbsp;&nbsp;?\n&nbsp;&nbsp;?&nbsp;&nbsp;?\n1&nbsp;&nbsp;2&nbsp;&nbsp;3",h:"Build layer by layer from the bottom.",a:"8"},
 {d:"medium",q:"Bottom row: 5, 3, 8. Each block = difference of two below. What is the top?",h:"Middle row first, then top.",a:"3"},
 {d:"medium",q:"A 4-row pyramid bottom row: 1, 2, 3, 4. Each block = sum of two below. What is the top?",h:"Build row by row: 3,5,7 then 8,12 then 20.",a:"20"},
 {d:"medium",q:"Pyramid (each block = sum of the two blocks below it): top=18. Middle row: 7, ?. Bottom row: 3, 4, ?",h:"Work downwards and upwards.",a:"11 and 7"},
@@ -614,11 +619,14 @@ var C=[
 {d:"easy",q:"How many triangles are in a large triangle divided into 4 smaller equal triangles?",h:"Count the small ones and the large one.",a:"5"},
 {d:"easy",q:"How many squares are in a 2x2 grid of squares?",h:"Count 1x1 and 2x2 squares.",a:"5"},
 {d:"easy",q:"How many lines make a triangle?",h:"A triangle has 3 sides.",a:"3"},
+{d:"easy",q:"What is the name of a 6-sided polygon?",h:"Think about the prefix 'hexa', meaning six.",a:"hexagon",c:["octagon","pentagon","heptagon"]},
+{d:"easy",q:"What 3D shape has a circular flat base and tapers to a single point at the top?",h:"Think about a party hat.",a:"cone",c:["sphere","cylinder","pyramid"]},
+{d:"easy",q:"What do you call a polygon where all sides are exactly the same length and all angles are exactly the same size?",h:"It is the most symmetric type of polygon.",a:"regular polygon",c:["irregular polygon","concave polygon","convex polygon"]},  
 {d:"easy",q:"How many triangles are in a Star of David?",h:"Count all sizes including overlapping ones.",a:"8"},
 {d:"easy",q:"How many rectangles are in a 1x3 grid of squares?",h:"Count all rectangles including the squares themselves.",a:"6"},
 {d:"easy",q:"How many sides does a nonagon have?",h:"Think about the prefix 'nona', meaning nine.",a:"9"},
-{d:"easy",q:"How many sides does a decagon have?",h:"Think about the prefix 'deca', meaning ten.",a:"10"},
-{d:"easy",q:"How many sides does a heptagon have?",h:"Think about the prefix 'hepta', meaning seven.",a:"7"},
+{d:"easy",q:"How many sides does a decagon have?",h:"Similar to the word decade.",a:"10"},
+{d:"easy",q:"How many sides does a heptagon have?",h:"Think about roots of words related to geometry.",a:"7"},
 {d:"medium",q:"How many squares of ALL sizes are in a 3x3 grid?",h:"Count 1x1, 2x2, and 3x3 separately.",a:"14"},
 {d:"medium",q:"How many rectangles are in a 3x2 grid?",h:"Use: (r+1)r/2 x (c+1)c/2.",a:"18"},
 {d:"medium",q:"How many triangles are in a regular pentagram (5-pointed star)?",h:"Count all sizes carefully.",a:"10"},
@@ -648,7 +656,7 @@ var C=[
 {d:"hard",q:"A solid has 6 faces, 12 edges, and 8 vertices. What solid is this?",h:"Use Euler formula: F + V - E = 2.",a:"cube",c:["cuboid","prism","pyramid"]},
 {d:"hard",q:"How many cubes in a 3x3x3 cube have at least one face painted on the outside?",h:"Total cubes minus inner cubes.",a:"26"},
 {d:"hard",q:"A cube has its corner cut off. How many faces does the new solid have?",h:"The cut adds a new triangular face.",a:"7"},
-{d:"easy",q:"How many faces does a rectangular box (cuboid) have?",h:"Think about a shoebox.",a:"6"},
+{d:"easy",q:"What 3D shape is formed by rotating a flat circle around one of its straight edges?",h:"Think about a shape that is round everywhere.",a:"sphere",c:["cone","cylinder","cube"]},
 {d:"easy",q:"What 3D shape looks like a ball?",h:"Every point on its surface is the same distance from the centre.",a:"sphere",c:["circle","cylinder","oval"]},
 {d:"medium",q:"How many edges does a triangular pyramid (tetrahedron) have?",h:"Count the edges of all 4 triangular faces, without double-counting shared ones.",a:"6"},
 {d:"hard",q:"A cube is painted on all sides and cut into 8 equal smaller cubes. How many of the small cubes have exactly 3 painted faces?",h:"Think about the corner cubes.",a:"8"}
@@ -698,7 +706,7 @@ var C=[
 {d:"hard",q:"Pipe A alone fills a tank in 6 hours. Because of a leak, it actually takes 8 hours. How long would the leak alone take to empty a full tank?",h:"Find the combined rate with the leak, then subtract it from Pipe A's rate.",a:"24 hours"}
 ]},
 {t:"Number Logic",s:"number-logic-puzzles",p:[
-{d:"easy",q:"The sum of two numbers is 15 and their difference is 5. What are the two numbers?",h:"Add the sum and difference, then halve for the larger number.",a:"10 and 5"},
+{d:"easy",q:"The sum of two numbers is 15 and their difference is 5. What are the two numbers?",h:"Add the sum and difference, then halve for the larger number.",a:"10 and 5",c:["12 and 3","9 and 6","11 and 4"]},
 {d:"easy",q:"A number decreased by 5 equals 20. What is the number?",h:"Add 5 to 20.",a:"25"},
 {d:"easy",q:"Twice a number is 18. What is the number?",h:"Divide 18 by 2.",a:"9"},
 {d:"easy",q:"The sum of a number and 7 is 20. What is the number?",h:"Subtract 7 from 20.",a:"13"},
@@ -710,9 +718,9 @@ var C=[
 {d:"medium",q:"The sum of three consecutive numbers is 72. What are the numbers?",h:"Divide 72 by 3 to find the middle number.",a:"23 24 25"},
 {d:"medium",q:"A number is such that adding 9 to it gives the same result as doubling it. What is the number?",h:"Set up: x + 9 = 2x.",a:"9"},
 {d:"medium",q:"The digits of a two-digit number add up to 9. The number itself is 9 times its units digit. What is the number?",h:"Try two-digit numbers whose digits sum to 9 and check the condition.",a:"45"},
-{d:"hard",q:"The sum of the ages of a father and son is 60. Six years ago, the father was 5 times as old as the son. Find their current ages.",h:"Set up two equations using their current ages and their ages 6 years ago.",a:"father 46 son 14",c:["father 40 son 20","father 45 son 15","father 50 son 10"]},
+{d:"hard",q:"The sum of the ages of a father and son is 60. Six years ago, the father was 5 times as old as the son. How old is the father?",h:"Set up two equations using their current ages and their ages 6 years ago.",a:"46",c:["40","45","50"]},
 {d:"hard",q:"A two-digit number is 4 times the sum of its digits. If 27 is added to the number, its digits reverse. Find the number.",h:"Let the number be 10t+u, then use both conditions to solve for t and u.",a:"36"},
-{d:"hard",q:"Two numbers are in the ratio 3:5. If 10 is subtracted from each, the new ratio becomes 1:3. Find the numbers.",h:"Let the numbers be 3x and 5x, then solve using the new ratio.",a:"15 and 25"},
+{d:"hard",q:"Two numbers are in the ratio 3:5. If 10 is subtracted from each, the new ratio becomes 1:3. Find the numbers.",h:"Let the numbers be 3x and 5x, then solve using the new ratio.",a:"15 and 25",c:["9 and 15","18 and 30","12 and 20"]},
 {d:"hard",q:"A clock shows 4:20. What is the angle between the hour and minute hands?",h:"The hour hand moves too \u2014 it is not exactly on the 4.",a:"10 degrees"},
 {d:"easy",q:"A number increased by 15 equals 40. What is the number?",h:"Subtract 15 from 40.",a:"25"},
 {d:"easy",q:"Three times a number equals 27. What is the number?",h:"Divide 27 by 3.",a:"9"},
@@ -839,38 +847,39 @@ var C=[
 {d:"medium",q:"What do you call a straight line that touches a circle at exactly one point?",h:"It grazes the circle without crossing into it.",a:"tangent",c:["radius","chord","secant"]},
 {d:"hard",q:"If the diameter of a circle is 14, approximately what is its circumference (using pi = 22/7)?",h:"Circumference = pi times the diameter.",a:"44"},
 {d:"hard",q:"Two circles overlap. At most how many points can they intersect at?",h:"Picture two overlapping rings \u2014 count where their edges cross.",a:"2"},
+{d:"easy",q:"What is the longest possible chord you can draw inside a circle?",h:"It must pass directly through the very centre.",a:"diameter",c:["radius","arc","secant"]},
+{d:"easy",q:"How many degrees are in exactly one-quarter of a full circle?",h:"A full circle is 360 degrees.",a:"90",c:["45","180","270"]},
+{d:"easy",q:"What shape do you get if you cut a circle exactly in half?",h:"It looks like a half-moon.",a:"semicircle",c:["hemisphere","cylinder","sphere"]},  
 {d:"easy",q:"What do you call a straight line segment that joins two points on a circle's edge?",h:"If it passes through the centre, it becomes the diameter.",a:"chord",c:["radius","tangent","arc"]},
 {d:"easy",q:"What do you call the outer boundary of a circle?",h:"It's the 'perimeter' of a circle, just with a different name.",a:"circumference",c:["diameter","radius","chord"]},
-{d:"easy",q:"If a circle's diameter is 20, what is its radius?",h:"Radius is always half the diameter.",a:"10"},
 {d:"medium",q:"A circle is divided into 6 equal slices. How many degrees is each slice?",h:"Divide 360 degrees by the number of slices.",a:"60"},
 {d:"medium",q:"What do you call a part of a circle's boundary, like a curved section of its edge?",h:"Think of it as a curved slice of the circumference.",a:"arc",c:["chord","tangent","sector"]},
 {d:"hard",q:"If the radius of a circle is 7, approximately what is its area (using pi = 22/7)?",h:"Area = pi times radius squared.",a:"154"},
 {d:"hard",q:"A circle is inscribed exactly inside a square with a side length of 10. What is the circle's diameter?",h:"The circle touches all four sides, so its diameter equals the square's side.",a:"10"},
 {d:"easy",q:"What is another word for the boundary of a circle?",h:"It's the circle's total distance around the outside.",a:"circumference",c:["radius","diameter","chord"]},
-{d:"easy",q:"If a circle's radius is 3, what is its diameter?",h:"Diameter is always double the radius.",a:"6"},
 {d:"medium",q:"A circle is divided into 4 equal quadrants. How many degrees is each quadrant?",h:"Divide 360 degrees by 4.",a:"90"},
 {d:"hard",q:"A circular table has a radius of 21. Using pi = 22/7, what is its approximate area?",h:"Area = pi times radius squared.",a:"1386"}
 ]},
 {t:"Maths Riddles",s:"maths-riddles",p:[
 {d:"easy",q:"I am a number. Double me and add 4, and you get 10. What number am I?",h:"Work backwards from 10: subtract 4, then halve.",a:"3"},
-{d:"easy",q:"I am an even number between 10 and 20. My digits add up to 3. What number am I?",h:"Try the even numbers in that range one by one.",a:"12"},
+{d:"easy",q:"I am an even number between 10 and 20. My digits add up to 3. What number am I?",h:"Try the even numbers in that range one by one.",a:"12",c:["14","16","18"]},
 {d:"easy",q:"Half of me is 8. What number am I?",h:"If half of me is 8, double it to find me.",a:"16"},
 {d:"easy",q:"I am a number. If you square me, you get 25. What number am I?",h:"Think about which number times itself gives 25.",a:"5"},
 {d:"easy",q:"I am the smallest prime number. What number am I?",h:"A prime number has exactly two factors: 1 and itself.",a:"2"},
 {d:"medium",q:"I am a number. Add 5 to me, then double the result, and you get 30. What number am I?",h:"Work backwards: halve 30 first, then subtract 5.",a:"10"},
-{d:"medium",q:"I am a three-digit number. All my digits are the same, and I am divisible by 3. What is the smallest number I could be?",h:"Try the smallest repeated-digit numbers, starting from 111.",a:"111"},
-{d:"hard",q:"I am a number less than 100. I am divisible by both 6 and 9, and I am the largest such number below 100. What number am I?",h:"Find the lowest common multiple of 6 and 9, then find the largest multiple of it under 100.",a:"90"},
+{d:"medium",q:"I am a three-digit number. All my digits are the same, and I am divisible by 3. What is the smallest number I could be?",h:"Try the smallest repeated-digit numbers, starting from 111.",a:"111",c:["222","333","444"]},
+{d:"hard",q:"I am a number less than 100. I am divisible by both 6 and 9, and I am the largest such number below 100. What number am I?",h:"Find the lowest common multiple of 6 and 9, then find the largest multiple of it under 100.",a:"90",c:["72","54","36"]},
 {d:"hard",q:"I am a number. If you multiply me by myself and then subtract me, you get 20. What number am I?",h:"Try small whole numbers: does 5 times 5 minus 5 work?",a:"5"},
 {d:"easy",q:"I am a number. Triple me and you get 21. What number am I?",h:"Divide 21 by 3.",a:"7"},
 {d:"easy",q:"I am a number. Take away 6 and I become 6. What number am I?",h:"Add 6 back to 6.",a:"12"},
 {d:"easy",q:"I am the only even prime number. What number am I?",h:"Every other even number can be divided by 2 and something else.",a:"2"},
 {d:"medium",q:"I am a number. If you add my digits together, you get 9, and I am a multiple of 9 less than 50. What number am I?",h:"Try multiples of 9 under 50: 9, 18, 27, 36, 45.",a:"45"},
 {d:"medium",q:"I am a number. Half of me, plus 3, equals 10. What number am I?",h:"Work backwards: subtract 3 from 10, then double it.",a:"14"},
-{d:"hard",q:"I am a two-digit number. I am one more than a multiple of 5, and one less than a multiple of 4. The smallest number I could be is?",h:"Try small two-digit numbers that fit both conditions.",a:"11"},
+{d:"hard",q:"I am a two-digit number. I am one more than a multiple of 5, and one less than a multiple of 4. The smallest number I could be is?",h:"Try small two-digit numbers that fit both conditions.",a:"11",c:["21","31","41"]},
 {d:"hard",q:"I am a number. My square is 12 more than 4 times myself. What number am I?",h:"Try small numbers: does 6 times 6 equal 12 more than 4 times 6?",a:"6"},
 {d:"easy",q:"I am a number. Add 8 to me and you get 15. What number am I?",h:"Subtract 8 from 15.",a:"7"},
 {d:"easy",q:"I am double 9. What number am I?",h:"Multiply 9 by 2.",a:"18"},
-{d:"medium",q:"I am a two-digit number. Both my digits are the same, and I am divisible by 6. What is the smallest number I could be?",h:"Try the smallest repeated-digit numbers, checking divisibility by 6.",a:"66"},
+{d:"medium",q:"I am a two-digit number. Both my digits are the same, and I am divisible by 6. What is the smallest number I could be?",h:"Try the smallest repeated-digit numbers, checking divisibility by 6.",a:"66",c:["22","44","88"]},
 {d:"hard",q:"I am a number. If you subtract me from 50 and then double the result, you get 60. What number am I?",h:"Work backwards: halve 60 first, then work out what was subtracted from 50.",a:"20"}
 ]},
 {t:"Hidden Letters",s:"hidden-letter-puzzles",p:[
@@ -915,7 +924,7 @@ var C=[
 {d:"easy",q:"Which number comes next: 10, 20, 30, __?",h:"Each number increases by 10.",a:"40"},
 {d:"easy",q:"If a triangle has 3 sides, how many sides do 2 triangles have in total?",h:"Multiply 3 sides by 2 triangles.",a:"6"},
 {d:"medium",q:"A is the brother of B. B is the sister of C. What is A to C?",h:"Think about A's gender in relation to C.",a:"brother",c:["sister","cousin","uncle"]},
-{d:"hard",q:"If you rearrange the letters 'CIFAIPC', you get the name of a(n) ______.",h:"Think of a large body of water.",a:"ocean",c:["continent","country","sea"]}
+{d:"hard",q:"If you rearrange the letters 'CIFAIPC', you get the name of a(n) ______.",h:"Think of a large body of water.",a:"ocean",c:["mountain","volcano","desert"]}
 ]},
 {t:"Arithmetic",s:"arithmetic-maths-puzzles",p:[
 {d:"easy",q:"6 + 2 x 3 = ?",h:"Multiply before you add.",a:"12"},
@@ -941,15 +950,15 @@ var C=[
 ]},
 {t:"Algebra",s:"algebra-math-puzzles",p:[
 {d:"easy",q:"If x + 5 = 12, what is x?",h:"Subtract 5 from both sides.",a:"7"},
-{d:"easy",q:"If x - 3 = 10, what is x?",h:"Add 3 to both sides.",a:"13"},
 {d:"easy",q:"If 2x = 16, what is x?",h:"Divide both sides by 2.",a:"8"},
 {d:"easy",q:"If x / 4 = 5, what is x?",h:"Multiply both sides by 4.",a:"20"},
-{d:"easy",q:"If 3x = 21, what is x?",h:"Divide both sides by 3.",a:"7"},
-{d:"easy",q:"If x + 9 = 20, what is x?",h:"Subtract 9 from both sides.",a:"11"},
+{d:"easy",q:"If x minus 7 equals 9, what is x?",h:"Add 7 to 9 to find x.",a:"16",c:["2","14","18"]},
+{d:"easy",q:"If 4 times a number is 32, what is the number?",h:"Divide 32 by 4.",a:"8",c:["6","28","36"]},
+{d:"easy",q:"If a number divided by 5 equals 4, what is the number?",h:"Multiply 5 by 4.",a:"20",c:["9","15","25"]},
+{d:"easy",q:"If you triple a number and get 27, what is the number?",h:"Divide 27 by 3.",a:"9",c:["3","81","24"]},
+{d:"easy",q:"If you add 12 to a number, you get 20. What is the number?",h:"Subtract 12 from 20.",a:"8",c:["12","32","18"]},
 {d:"easy",q:"If 5x = 45, what is x?",h:"Divide both sides by 5.",a:"9"},
-{d:"easy",q:"If x - 8 = 2, what is x?",h:"Add 8 to both sides.",a:"10"},
 {d:"easy",q:"If x / 3 = 6, what is x?",h:"Multiply both sides by 3.",a:"18"},
-{d:"easy",q:"If 4x = 36, what is x?",h:"Divide both sides by 4.",a:"9"},
 {d:"medium",q:"If 2x + 3 = 11, what is x?",h:"Subtract 3 first, then divide by 2.",a:"4"},
 {d:"medium",q:"If 3x - 4 = 14, what is x?",h:"Add 4 first, then divide by 3.",a:"6"},
 {d:"medium",q:"If x/2 + 3 = 8, what is x?",h:"Subtract 3 first, then multiply by 2.",a:"10"},
@@ -1098,7 +1107,10 @@ var C=[
 {d:"easy",q:"What is the Roman numeral for 10?",h:"It looks like an X shape.",a:"x",c:["v","l","c"]},
 {d:"easy",q:"What is the Roman numeral for 1?",h:"It is a single vertical stroke.",a:"i",c:["v","x","l"]},
 {d:"easy",q:"What number does the Roman numeral 'X' represent?",h:"It's one of the most recognisable Roman numerals.",a:"10"},
-{d:"easy",q:"What number does the Roman numeral 'V' represent?",h:"It looks like a checkmark shape.",a:"5"},
+{d:"easy",q:"What is the Roman numeral for 40?",h:"Think about 10 less than 50.",a:"xl",c:["lx","cx","vl"]},
+{d:"easy",q:"What is the Roman numeral for 90?",h:"Think about 10 less than 100.",a:"xc",c:["cx","lx","ic"]},
+{d:"easy",q:"What is the Roman numeral for 15?",h:"Add the symbol for 10 and the symbol for 5.",a:"xv",c:["vx","v","x"]},
+{d:"easy",q:"What is the Roman numeral for 500?",h:"It is the letter that comes after C in value.",a:"d",c:["m","c","l"]},
 {d:"easy",q:"What is the Roman numeral for 50?",h:"It looks like an upside-down V with a flat top.",a:"l",c:["c","d","x"]},
 {d:"easy",q:"What number does the Roman numeral 'L' represent?",h:"It sits between X and C in value.",a:"50"},
 {d:"easy",q:"What is the Roman numeral for 100?",h:"It looks like a C shape, matching 'centum', Latin for hundred.",a:"c",c:["d","m","l"]},
@@ -1110,9 +1122,9 @@ var C=[
 {d:"medium",q:"What number does the Roman numeral 'XL' represent?",h:"Ten less than 50, written by placing X before L.",a:"40"},
 {d:"medium",q:"What number does the Roman numeral 'XC' represent?",h:"Ten less than 100, written by placing X before C.",a:"90"},
 {d:"hard",q:"What number does the Roman numeral 'MCMXCIV' represent?",h:"Break it down: M=1000, CM=900, XC=90, IV=4.",a:"1994"},
-{d:"hard",q:"What is the Roman numeral for 49?",h:"Think about XL for 40, then add the ones for 9.",a:"xlix",c:["xxxxix","xlvix","ixl"]},
+{d:"hard",q:"What is the Roman numeral for 49?",h:"Think about XL for 40, then add the ones for 9.",a:"xlix",c:["xliv","lxix","xlv"]},
 {d:"hard",q:"What number does the Roman numeral 'LVIII' represent?",h:"L=50, V=5, III=3.",a:"58"},
-{d:"hard",q:"What is the Roman numeral for 2024?",h:"Break it into 2000 plus 24.",a:"mmxxiv",c:["mmxxvi","mmxiv","mmxxiiii"]},
+{d:"hard",q:"What is the Roman numeral for 2024?",h:"Break it into 2000 plus 24.",a:"mmxxiv",c:["mmxxv","mcmxxiv","mmxiv"]},
 {d:"hard",q:"What number does the Roman numeral 'CDXLIV' represent?",h:"CD=400, XL=40, IV=4.",a:"444"}
 ]},
 {t:"Time & Calendar",s:"maths-puzzles",p:[
@@ -1121,8 +1133,11 @@ var C=[
 {d:"easy",q:"How many minutes are there in an hour?",h:"A standard clock face has this many minute marks.",a:"60"},
 {d:"easy",q:"How many months are there in a year?",h:"Think of the months from January to December.",a:"12"},
 {d:"easy",q:"How many seconds are there in a minute?",h:"Same as the number of minutes in an hour.",a:"60"},
-{d:"easy",q:"What day comes right after Monday?",h:"Count forward one day from Monday.",a:"tuesday",c:["wednesday","sunday","friday"]},
-{d:"easy",q:"What day comes right before Sunday?",h:"Count backward one day from Sunday.",a:"saturday",c:["friday","monday","thursday"]},
+{d:"easy",q:"How many months in a year have exactly 30 days?",h:"Think about September, April, June, and November.",a:"4",c:["5","6","11"]},
+{d:"easy",q:"What day of the week is immediately after Tuesday?",h:"Count forward one day from Tuesday.",a:"wednesday",c:["monday","thursday","friday"]},
+{d:"easy",q:"If today is Saturday, what day was it exactly 3 days ago?",h:"Count backwards three days from Saturday.",a:"wednesday",c:["tuesday","thursday","sunday"]},
+{d:"easy",q:"Which month comes immediately before August?",h:"It is the middle of the summer holidays.",a:"july",c:["june","september","october"]},
+{d:"easy",q:"How many days are in the month of February during a leap year?",h:"Leap years add one extra day to this short month.",a:"29",c:["28","30","31"]},
 {d:"easy",q:"How many weeks are there, approximately, in a year?",h:"Divide 365 days by 7.",a:"52"},
 {d:"easy",q:"What is the last month of the year?",h:"It comes right after November.",a:"december",c:["november","january","october"]},
 {d:"easy",q:"What is the first month of the year?",h:"It comes right before February.",a:"january",c:["december","february","march"]},
@@ -1593,12 +1608,17 @@ function _boot(tid,_SK,_TK){
         +'<button class="fwpcb" id="'+px+'_cb">Copy code</button>'
       +'</div>'
     +'</div>'):'')
-    +((SHOW_GOOGLE_PLAY_PROMO||SHOW_APPLE_APP_PROMO)?(
+    +((SHOW_GOOGLE_PLAY_PROMO||SHOW_APPLE_APP_PROMO||SHOW_MICROSOFT_STORE_PROMO)?(
     '<div class="fwpapps">'
-      +'<div class="fwpapps-label">\uD83D\uDCF1 Get the Fun With Puzzles app</div>'
+      +'<div class="fwpapps-label">\uD83D\uDCF1 Get the Daily Puzzle Challenges app</div>'
       +'<div class="fwpapps-row">'
-        +(SHOW_GOOGLE_PLAY_PROMO?('<a class="fwpapp-badge" href="'+GOOGLE_PLAY_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic">\u25B6\uFE0F</span><span class="fwpapp-txt"><small>Get it on</small><b>Google Play</b></span></a>'):'')
-        +(SHOW_APPLE_APP_PROMO?('<a class="fwpapp-badge" href="'+APPLE_APP_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic">\uD83C\uDF4E</span><span class="fwpapp-txt"><small>Download on the</small><b>App Store</b></span></a>'):'')
+        
+        +(SHOW_GOOGLE_PLAY_PROMO?('<a class="fwpapp-badge" href="'+GOOGLE_PLAY_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic"><svg viewBox="0 0 24 24" width="19" height="19"><path fill="#4285F4" d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12L3.84 21.85C3.34 21.61 3 21.09 3 20.5Z"/><path fill="#34A853" d="M16.81 15.12L6.05 21.34L13.69 12L16.81 15.12Z"/><path fill="#FBBC05" d="M20.16 10.81C20.5 11.08 20.75 11.5 20.75 12C20.75 12.5 20.53 12.9 20.18 13.18L17.89 14.5L14.5 12L17.89 9.5L20.16 10.81Z"/><path fill="#EA4335" d="M6.05 2.66L16.81 8.88L13.69 12L6.05 2.66Z"/></svg></span><span class="fwpapp-txt"><small>Get it on</small><b>Google Play</b></span></a>'):'')
+        
+        +(SHOW_APPLE_APP_PROMO?('<a class="fwpapp-badge" href="'+APPLE_APP_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="#A2AAAD"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg></span><span class="fwpapp-txt"><small>Download on the</small><b>App Store</b></span></a>'):'')
+        
+        +(SHOW_MICROSOFT_STORE_PROMO?('<a class="fwpapp-badge" href="'+MICROSOFT_STORE_URL+'" target="_blank" rel="noopener"><span class="fwpapp-ic"><svg viewBox="0 0 24 24" width="19" height="19"><path fill="#F25022" d="M1 1h10v10H1z"/><path fill="#7FBA00" d="M13 1h10v10H13z"/><path fill="#00A4EF" d="M1 13h10v10H1z"/><path fill="#FFB900" d="M13 13h10v10H13z"/></svg></span><span class="fwpapp-txt"><small>Get it from</small><b>Microsoft</b></span></a>'):'')
+        
       +'</div>'
     +'</div>'):'')
     +(SHOW_FOLLOW_SOCIAL?('<div class="fwpsocial" id="'+px+'_social"></div>'):'')
