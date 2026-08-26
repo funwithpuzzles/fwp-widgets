@@ -1,6 +1,6 @@
-/* FWP Daily Challenge Widget f1.3.4 | funwithpuzzles.com
-   Changelog f1.3.4: Corrected many offline puzzles
-   Added Download from Microsoft */
+/* FWP Daily Challenge Widget f1.3.5 | funwithpuzzles.com
+   Changelog f1.3.4: Corrected a few offline puzzles
+   Added Download from Google Play Store */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -10,7 +10,7 @@ var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.ne
 
 var SHOW_ADD_TO_SITE = true;
 
-var SHOW_GOOGLE_PLAY_PROMO = false;
+var SHOW_GOOGLE_PLAY_PROMO = true;
 var SHOW_APPLE_APP_PROMO = false;
 var SHOW_MICROSOFT_STORE_PROMO = true;
 
@@ -231,11 +231,11 @@ var C=[
 {d:"medium",q:"A man pushes his car to a hotel and declares bankruptcy. Why?",h:"Think about a popular board game.",a:"monopoly",c:["chess","checkers","scrabble"]},
 {d:"medium",q:"A man is found dead by a cassette. Police press play, hear a gunshot and know it is murder. Why?",h:"Think about what the recording reveals.",a:"someone rewound it",c:["it was a recording","the tape was broken","it was slowed down"]},
 {d:"medium",q:"A woman lives on the 20th floor. On sunny days she takes the lift to the 10th and walks up. On rainy days all the way. Why?",h:"Think about what she carries on rainy days.",a:"umbrella",c:["raincoat","boots","hat"]},
-{d:"medium",q:"A man is found dead in a sealed room with all windows closed, lying in a puddle of water next to broken glass. No one else was in the room. How did he die?",h:"Think about what kind of creature could have been in the glass.",a:"he was a goldfish and his bowl fell",c:["he slipped and hit his head","he was electrocuted","he drowned in the puddle"]},
+{d:"medium",q:"A woman buys a brand new pair of red shoes, goes to work, and tragically dies. What happened?",h:"Think about her specific profession and the danger it involves.",a:"she was a tightrope walker and lost her balance",c:["she was a chef and slipped on a wet floor","she was a clown and had an allergic reaction to the makeup","she was a pilot and the shoes interfered with the pedals"]},
 {d:"hard",q:"A man found dead in a field next to an unopened package. No marks, no one around. How did he die?",h:"Think about what the package was supposed to do.",a:"parachute failed to open",c:["he was pushed","he had a heart attack","he was struck by lightning"]},
 {d:"hard",q:"A woman asks a hardware store for a number. Clerk says 75 cents per digit. She pays $1.50. What did she buy?",h:"Think about house numbers.",a:"house number with 2 digits",c:["a phone number","a street sign","a padlock code"]},
 {d:"hard",q:"I have 4 legs in the morning, 2 at noon, and 3 in the evening. What am I?",h:"This is the riddle of the Sphinx.",a:"human",c:["dog","spider","the sphinx"]},
-{d:"hard",q:"3 doors: freedom behind one, lions behind others. Which do you pick?",h:"Think about lions unfed for 3 years.",a:"any they would be dead",c:["the middle door","the first door","the last door"]},
+{d:"hard",q:"A man is wearing all black clothing. Black shoes, black pants, black jacket, and a black ski mask. He is walking down a completely black street with no streetlights. A black car with no headlights on speeds toward him, but the driver manages to swerve and miss him in time. How did the driver see him?",h:"Think about the most basic setting of this scene.",a:"it was daytime",c:["the car had night vision","the man had a flashlight","he was standing under a streetlamp"]},
 {d:"hard",q:"A man walks into a bar and asks the bartender for a glass of water. The bartender pulls out a gun. The man says thank you and leaves. Why?",h:"Think about what cures hiccups.",a:"hiccups",c:["a dry throat","a bad joke","he was thirsty"]},
 {d:"easy",q:"A man walks into a room and turns off the light. The room is now pitch dark, yet he can still read. How?",h:"Think about a different way of reading.",a:"he is blind and reads braille",c:["he has a torch","he memorised the page","the room has a window"]},
 {d:"easy",q:"How can a pocket be empty but still have something in it?",h:"Think about what a hole does to a pocket.",a:"it has a hole in it",c:["it has lint in it","it has a coin in it","it is turned inside out"]},
@@ -413,7 +413,7 @@ var C=[
 {d:"hard",q:"5 pirates divide 100 coins by majority vote. What does the most senior propose?",h:"Work backwards from 2 pirates.",a:"98 0 1 0 1"},
 {d:"hard",q:"A house has 4 sides all facing south. A bear walks by. What colour is the bear?",h:"Think about where all 4 sides can face south.",a:"white",c:["black","brown","it could be any colour"]},
 {d:"hard",q:"How can you throw a ball so it goes a short distance, comes to a complete stop, and returns to you without bouncing or hitting anything?",h:"Think about throwing direction.",a:"throw it straight up",c:["throw it against a wall","throw it at an angle","roll it instead"]},
-{d:"easy",q:"A man is found dead in the middle of a field, holding half a matchstick. How did he die?",h:"Think about what he might have been holding while high in the air.",a:"he fell from a hot air balloon that ran out of fuel",c:["he lit a fire","he was struck by lightning","he was hiking"]},
+{d:"easy",q:"A man falls out of a 20-story building and lands on solid concrete, yet he survives without a single injury. How?",h:"Think about exactly where he started his fall.",a:"he fell out of a first-floor window",c:["he had a parachute","he landed on a trampoline","he was lowered down by a rope"]},
 {d:"easy",q:"You see a boat filled with people, yet there isn't a single person on board. How?",h:"Think about the word 'single' differently.",a:"everyone on the boat is married so no one is single",c:["they are all invisible","the boat is a model","they all jumped off"]},
 {d:"medium",q:"A man walks into a restaurant, orders albatross soup, takes one bite, then shoots himself. Why?",h:"Think about when he might have eaten albatross before.",a:"he realised he had eaten albatross before during a shipwreck and it did not taste the same",c:["the soup was too salty","he did not like the taste","the waiter insulted him"]},
 {d:"hard",q:"A woman is home alone at night when a man she doesn't recognize knocks on her door. He says he's her neighbor and that his power has gone out, so could he please use her phone? She becomes suspicious and refuses, then calls the police. Why didn't his story add up?",h:"Think about which type of phone still works during a power outage.",a:"a landline phone still works during a power outage, so he wouldn't need to borrow one",c:["he didn't know her neighbor's name","his clothes were too clean","she recognized his voice"]}
