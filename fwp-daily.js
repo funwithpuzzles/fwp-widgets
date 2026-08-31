@@ -1,6 +1,5 @@
-/* FWP Daily Challenge Widget f1.3.5 | funwithpuzzles.com
-   Changelog f1.3.4: Corrected a few offline puzzles
-   Added Download from Google Play Store */
+/* FWP Daily Challenge Widget f1.3.6 | funwithpuzzles.com
+Removed some incorrect puzzles */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -274,11 +273,9 @@ var C=[
 {d:"easy",q:"3, 9, 27, 81, __ \u2014 What comes next?",h:"Each number is multiplied by 3.",a:"243"},
 {d:"easy",q:"2, 4, 8, 16, __ \u2014 What comes next?",h:"Each number doubles.",a:"32"},
 {d:"medium",q:"3, 6, 12, 24, __ \u2014 What comes next?",h:"Each number is multiplied by the same value.",a:"48"},
-{d:"medium",q:"What number replaces the ? in this grid?\n2&nbsp;&nbsp;4&nbsp;&nbsp;8\n3&nbsp;&nbsp;9&nbsp;&nbsp;27\n4&nbsp;&nbsp;16&nbsp;&nbsp;?",h:"Look at the pattern across each row.",a:"64"},
 {d:"medium",q:"7, 14, 21, 28, __ \u2014 What comes next?",h:"Multiples of 7.",a:"35"},
 {d:"medium",q:"1, 3, 6, 10, 15, __ \u2014 What comes next?",h:"These are triangle numbers.",a:"21"},
 {d:"hard",q:"1, 2, 6, 24, 120, __ \u2014 What comes next?",h:"Each term equals previous term multiplied by its position.",a:"720"},
-{d:"hard",q:"Find the missing number in this grid:\n6&nbsp;&nbsp;&nbsp;13&nbsp;&nbsp;25\n11&nbsp;&nbsp;23&nbsp;&nbsp;45\n16&nbsp;&nbsp;33&nbsp;&nbsp;__",h:"Look at the relationship across each row.",a:"65"},
 {d:"hard",q:"What is the sum of the first 100 natural numbers?",h:"Use the formula n x (n+1) divided by 2.",a:"5050"},
 {d:"hard",q:"What comes next: 0, 1, 1, 2, 3, 5, 8, 13, 21, __?",h:"Each number is the sum of the two before it.",a:"34"},
 {d:"easy",q:"3, 6, 9, 12, __ \u2014 What comes next?",h:"Multiples of 3.",a:"15"},
@@ -602,7 +599,6 @@ var C=[
 {d:"easy",q:"Bottom row: 1, 4. Top = ? (top = sum of the two numbers below)",h:"Add the two bottom numbers.",a:"5"},
 {d:"easy",q:"Top = 20. Bottom left = 8. Bottom right = ? (the two base numbers add up to the top)",h:"Top = sum of two below.",a:"12"},
 {d:"easy",q:"3-row pyramid, each block = sum of the two blocks below it. Bottom row: 4, 5, 6. Middle row: 9, ?. Top: ?",h:"Each block is the sum of the two blocks below it.",a:"11 and 20"},
-{d:"medium",q:"What number goes at the very top of this pyramid? (Each block is the sum of the two below it)\n&nbsp;&nbsp;&nbsp;&nbsp;?\n&nbsp;&nbsp;?&nbsp;&nbsp;?\n1&nbsp;&nbsp;2&nbsp;&nbsp;3",h:"Build layer by layer from the bottom.",a:"8"},
 {d:"medium",q:"Bottom row: 5, 3, 8. Each block = difference of two below. What is the top?",h:"Middle row first, then top.",a:"3"},
 {d:"medium",q:"A 4-row pyramid bottom row: 1, 2, 3, 4. Each block = sum of two below. What is the top?",h:"Build row by row: 3,5,7 then 8,12 then 20.",a:"20"},
 {d:"medium",q:"Pyramid (each block = sum of the two blocks below it): top=18. Middle row: 7, ?. Bottom row: 3, 4, ?",h:"Work downwards and upwards.",a:"11 and 7"},
