@@ -1,5 +1,5 @@
-/* FWP Daily Challenge Widget f1.3.6 | funwithpuzzles.com
-Removed some incorrect puzzles */
+/* FWP Daily Challenge Widget f1.3.7 | funwithpuzzles.com
+Added Apple Store link */
 (function(){
 'use strict';
 var B='https://www.funwithpuzzles.com';
@@ -10,12 +10,12 @@ var EC='<div id="fwp-daily-widget"><\/div>\n<script src="https://cdn.jsdelivr.ne
 var SHOW_ADD_TO_SITE = true;
 
 var SHOW_GOOGLE_PLAY_PROMO = true;
-var SHOW_APPLE_APP_PROMO = false;
+var SHOW_APPLE_APP_PROMO = true;
 var SHOW_MICROSOFT_STORE_PROMO = true;
 
   var MICROSOFT_STORE_URL = 'https://apps.microsoft.com/detail/9NRVH669BL1R';
 var GOOGLE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.funwithpuzzles.dailychallenges';
-var APPLE_APP_URL   = 'PUT_APPLE_APP_STORE_URL_HERE';
+var APPLE_APP_URL   = 'https://apps.apple.com/us/app/daily-puzzle-challenges/id6802558475';
 
 var SHOW_FOLLOW_SOCIAL = true;
 var SOCIAL_LINKS = [
